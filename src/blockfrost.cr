@@ -1,6 +1,5 @@
-# TODO: Write documentation for `Blockfrost`
-module Blockfrost
-  VERSION = "0.1.0"
-
-  # TODO: Put your code here
-end
+require "./blockfrost/ext/*"
+require "./blockfrost/json/*"
+require "./blockfrost/config"
+require "./blockfrost/resource"
+require "./blockfrost/**"
