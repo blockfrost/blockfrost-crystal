@@ -13,13 +13,23 @@ A Crystal SDK for the Blockfrost.io API.
 
 2. Run `shards install`
 
-## Usage
+## Configuration
 
 ```crystal
 require "blockfrost"
 ```
 
-TODO: Write usage instructions here
+Create and initializer to configure the API key:
+
+```crystal
+Blockfrost.configure do |config|
+  config.api_key = ENV.fetch("BLOCKFROST_API_KEY")
+end
+```
+
+## Usage
+
+TODO: Coming soon!
 
 ## Development
 
