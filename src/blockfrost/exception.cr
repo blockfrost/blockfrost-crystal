@@ -24,10 +24,6 @@ module Blockfrost
     end
   end
 
-  struct Config
-    class InvalidApiKeyException < ::Exception; end
-  end
-
   struct Client
     class NotFoundException < Blockfrost::RequestException; end
 

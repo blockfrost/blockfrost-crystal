@@ -1,5 +1,6 @@
-require "./blockfrost/ext/*"
+require "json"
+require "habitat"
 require "./blockfrost/json/*"
-require "./blockfrost/config"
+require "./blockfrost/settings"
 require "./blockfrost/resource"
 require "./blockfrost/**"
