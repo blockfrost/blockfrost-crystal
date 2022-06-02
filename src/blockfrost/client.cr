@@ -2,14 +2,14 @@ struct Blockfrost::Client
   def get(
     resource : String,
     query : Hash? = nil
-  )
+  ) : String
     perform_http_call("GET", resource, query: query)
   end
 
   def post(
     resource : String,
     payload : Hash
-  )
+  ) : String
     perform_http_call("POST", resource, body: payload)
   end
 
@@ -18,7 +18,7 @@ struct Blockfrost::Client
     path : String,
     body : Hash = {} of String => String,
     query = {} of String => String
-  )
+  ) : String
     uri = URI.parse(Blockfrost.config.host)
     uri.path = File.join("/api", Blockfrost.config.api_version, path)
     query_string(query).tap { |q| uri.query = q unless q.nil? }
@@ -41,7 +41,7 @@ struct Blockfrost::Client
     end
   end
 
-  private def headers
+  private def headers : HTTP::Headers
     HTTP::Headers{
       "Accept"       => "application/json",
       "Content-Type" => "application/json",
@@ -54,7 +54,7 @@ struct Blockfrost::Client
     URI::Params.encode(query) unless query.nil?
   end
 
-  private def render(response : HTTP::Client::Response)
+  private def render(response : HTTP::Client::Response) : String
     case response.status_code
     when 200, 201
       response.body
