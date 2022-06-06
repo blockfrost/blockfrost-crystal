@@ -1,7 +1,11 @@
-struct Blockfrost::Unit
+abstract struct Blockfrost::Unit
   include JSON::Serializable
 
-  @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
-  getter quantity : Int64
+  @[JSON::Field(key: "quantity", converter: Blockfrost::Json::Int64FromString)]
+  getter value : Int64
   getter unit : String
+
+  use_json_discriminator "unit", {
+    lovelace: Lovelace,
+  }
 end
