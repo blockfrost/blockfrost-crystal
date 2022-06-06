@@ -43,6 +43,30 @@ describe Blockfrost do
     end
   end
 
+  describe ".testnet?" do
+    it "tests if the current network is testnet or not" do
+      Blockfrost.temp_config(api_key: "testnetVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE") do
+        Blockfrost.testnet?.should be_truthy
+      end
+
+      Blockfrost.temp_config(api_key: "mainnetVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE") do
+        Blockfrost.testnet?.should be_falsey
+      end
+    end
+  end
+
+  describe ".mainnet?" do
+    it "tests if the current network is mainnet or not" do
+      Blockfrost.temp_config(api_key: "mainnetVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE") do
+        Blockfrost.mainnet?.should be_truthy
+      end
+
+      Blockfrost.temp_config(api_key: "testnetVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE") do
+        Blockfrost.mainnet?.should be_falsey
+      end
+    end
+  end
+
   describe ".host" do
     Blockfrost.configure do |settings|
       settings.api_key = "mainnetVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE"

@@ -6,13 +6,13 @@ module Blockfrost
     setting api_version : String = "v0", validation: :validate_api_version
   end
 
-  def network
+  def network : String
     Habitat.raise_if_missing_settings!
 
-    settings.api_key.match(/^((main|test)net)/).try(&.[1])
+    settings.api_key.match(/^((main|test)net)/).try(&.[1]).to_s
   end
 
-  def host
+  def host : String
     "https://cardano-#{network}.blockfrost.io"
   end
 
@@ -29,4 +29,10 @@ module Blockfrost
         "Not a valid API version"
       )
   end
+
+  {% for method in %w[testnet mainnet] %}
+    def {{method.id}}? : Bool
+      network == {{method}}
+    end
+  {% end %}
 end
