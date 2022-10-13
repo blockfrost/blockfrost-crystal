@@ -101,4 +101,42 @@ describe Blockfrost::Epoch do
         .should be_a(Blockfrost::Epoch)
     end
   end
+
+  describe ".stakes" do
+    it "fetches the stakes for an epoch" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/stakes")
+        .to_return(body: read_fixture("epoch/stakes.200.json"))
+
+      Blockfrost::Epoch.stakes(225).tap do |stakes|
+        stakes.should be_a(Array(Blockfrost::Epoch::Stake))
+
+        stakes.first.stake_address.should eq("stake1u9l5q5jwgelgagzyt6nuaasefgmn8pd25c8e9qpeprq0tdcp0e3uk")
+        stakes.first.pool_id.should eq("pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy")
+        stakes.first.amount.should eq(4440295078)
+      end
+    end
+
+    it "fetches the stakes with pagination parameters" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/stakes?count=3&page=2")
+        .to_return(body: read_fixture("epoch/stakes.200.json"))
+
+      Blockfrost::Epoch.stakes(225, count: 3, page: 2)
+        .should be_a(Array(Blockfrost::Epoch::Stake))
+    end
+  end
+
+  describe ".stakes_by_pool" do
+    it "fetches the stakes by pool with pagination parameters" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/stakes/pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy?count=3&page=2")
+        .to_return(body: read_fixture("epoch/stakes.200.json"))
+
+      pool_id = "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy"
+
+      Blockfrost::Epoch.stakes_by_pool(225, pool_id, count: 3, page: 2)
+        .should be_a(Array(Blockfrost::Epoch::Stake))
+    end
+  end
 end

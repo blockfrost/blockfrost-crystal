@@ -17,8 +17,8 @@ struct Blockfrost::Epoch < Blockfrost::Resource
   @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
   getter active_stake : Int64
 
-  def self.get(number : Int32) : Epoch
-    Epoch.from_json(client.get("epochs/#{number}"))
+  def self.get(epoch_number : Int32) : Epoch
+    Epoch.from_json(client.get("epochs/#{epoch_number}"))
   end
 
   def self.latest : Epoch
@@ -27,12 +27,12 @@ struct Blockfrost::Epoch < Blockfrost::Resource
 
   {% for key in %w[next previous] %}
     def self.{{key.id}}(
-      number : Int32,
+      epoch_number : Int32,
       count : QueryCount? = nil,
       page : QueryPage? = nil
     ) : Array(Epoch)
       Array(Epoch).from_json(
-        client.get("epochs/#{number}/{{key.id}}", {
+        client.get("epochs/#{epoch_number}/{{key.id}}", {
           "count" => count,
           "page" => page
         })
@@ -46,4 +46,40 @@ struct Blockfrost::Epoch < Blockfrost::Resource
       Epoch.{{key.id}}(epoch, count: count, page: page)
     end
   {% end %}
+
+  def self.stakes(
+    epoch_number : Int32,
+    count : QueryCount? = nil,
+    page : QueryPage? = nil
+  ) : Array(Stake)
+    Array(Stake).from_json(
+      client.get("epochs/#{epoch_number}/stakes", {
+        "count" => count,
+        "page"  => page,
+      })
+    )
+  end
+
+  def self.stakes_by_pool(
+    epoch_number : Int32,
+    pool_id : String,
+    count : QueryCount? = nil,
+    page : QueryPage? = nil
+  ) : Array(Stake)
+    Array(Stake).from_json(
+      client.get("epochs/#{epoch_number}/stakes/#{pool_id}", {
+        "count" => count,
+        "page"  => page,
+      })
+    )
+  end
+
+  struct Stake
+    include JSON::Serializable
+
+    getter stake_address : String
+    getter pool_id : String
+    @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+    getter amount : Int64
+  end
 end
