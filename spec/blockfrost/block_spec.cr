@@ -63,4 +63,92 @@ describe Blockfrost::Block do
       end
     end
   end
+
+  describe ".next" do
+    it "fetches the next block for a given hash" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/5ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a/next")
+        .to_return(body: read_fixture("block/next.200.json"))
+
+      hash = "5ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a"
+
+      Blockfrost::Block.next(hash).first.should be_a(Blockfrost::Block)
+    end
+
+    it "fetches the next block for a given block height" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/15243592/next")
+        .to_return(body: read_fixture("block/next.200.json"))
+
+      Blockfrost::Block.next(15243592).first.should be_a(Blockfrost::Block)
+    end
+
+    it "fetches the next number of blocks at a given page" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/15243592/next?count=3&page=2")
+        .to_return(body: read_fixture("block/next.200.json"))
+
+      Blockfrost::Block.next(15243592, count: 3, page: 2).first
+        .should be_a(Blockfrost::Block)
+    end
+  end
+
+  describe "#next" do
+    it "fetches the next block in relation to the current block" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/15243592")
+        .to_return(body: read_fixture("block/block.200.json"))
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/4ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a/next")
+        .to_return(body: read_fixture("block/next.200.json"))
+
+      Blockfrost::Block.get(15243592).next.first
+        .should be_a(Blockfrost::Block)
+    end
+  end
+
+  describe ".previous" do
+    it "fetches the previous block for a given hash" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/5ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a/previous")
+        .to_return(body: read_fixture("block/previous.200.json"))
+
+      hash = "5ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a"
+
+      Blockfrost::Block.previous(hash).first.should be_a(Blockfrost::Block)
+    end
+
+    it "fetches the previous block for a given block height" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/15243592/previous")
+        .to_return(body: read_fixture("block/previous.200.json"))
+
+      height = 15243592
+
+      Blockfrost::Block.previous(height).first.should be_a(Blockfrost::Block)
+    end
+
+    it "fetches the previous number of blocks at a given page" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/15243592/previous?count=3&page=2")
+        .to_return(body: read_fixture("block/previous.200.json"))
+
+      Blockfrost::Block.previous(15243592, count: 3, page: 2).first
+        .should be_a(Blockfrost::Block)
+    end
+  end
+
+  describe "#previous" do
+    it "fetches the previous block in relation to the current block" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/15243592")
+        .to_return(body: read_fixture("block/block.200.json"))
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/4ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a/previous")
+        .to_return(body: read_fixture("block/previous.200.json"))
+
+      Blockfrost::Block.get(15243592).previous.first
+        .should be_a(Blockfrost::Block)
+    end
+  end
 end

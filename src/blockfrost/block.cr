@@ -1,6 +1,4 @@
 struct Blockfrost::Block < Blockfrost::Resource
-  MAX_BLOCK_SIZE_IN_BYTES = 88 * 1024
-
   @[JSON::Field(converter: Blockfrost::Json::TimeFromInt)]
   getter time : Time
   getter height : Int32?
@@ -28,7 +26,7 @@ struct Blockfrost::Block < Blockfrost::Resource
   end
 
   def self.latest : Block
-    get("latest")
+    Block.from_json(client.get("blocks/latest"))
   end
 
   {% for key in %w[next previous] %}
@@ -37,7 +35,7 @@ struct Blockfrost::Block < Blockfrost::Resource
       count : Int32? = nil,
       page : Int32? = nil
     ) : Array(Block)
-      query = {"count" => count, "page" => page} of String => Int32?
+      query = Utils.sanitize_query({"count" => count, "page" => page})
       response = client.get("blocks/#{hash_or_number}/{{key.id}}", query)
       Array(Block).from_json(response)
     end
