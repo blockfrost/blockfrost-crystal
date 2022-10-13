@@ -236,4 +236,14 @@ describe Blockfrost::Block do
         .should be_a(Blockfrost::Block)
     end
   end
+
+  describe ".in_slot" do
+    it "fetches the block for a given slot number" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/slot/30895909")
+        .to_return(body: read_fixture("block/block.200.json"))
+
+      Blockfrost::Block.in_slot(30895909).should be_a(Blockfrost::Block)
+    end
+  end
 end

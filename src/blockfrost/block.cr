@@ -95,4 +95,8 @@ struct Blockfrost::Block < Blockfrost::Resource
       Block.{{key.id}}(hash, count: count, page: page)
     end
   {% end %}
+
+  def self.in_slot(slot_number : Int32) : Block
+    Block.from_json(client.get("blocks/slot/#{slot_number}"))
+  end
 end
