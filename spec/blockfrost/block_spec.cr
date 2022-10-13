@@ -8,7 +8,7 @@ describe Blockfrost::Block do
   describe ".latest" do
     it "loads the latest block" do
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v9/blocks/latest"
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/latest"
       ).to_return(body: read_fixture("block/latest.200.json"))
 
       Blockfrost::Block.latest.tap do |block|
@@ -38,7 +38,7 @@ describe Blockfrost::Block do
                                .args.first %}
         it "handels {{status}} exceptions" do
           WebMock.stub(
-            :get, "https://cardano-testnet.blockfrost.io/api/v9/blocks/latest"
+            :get, "https://cardano-testnet.blockfrost.io/api/v0/blocks/latest"
           ).to_return(
             body: read_fixture("block/latest.{{status}}.json"), status: {{status}}
           )
@@ -52,7 +52,7 @@ describe Blockfrost::Block do
 
     it "handels forbidden exceptions" do
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v9/blocks/latest"
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/latest"
       ).to_return(body: read_fixture("block/latest.403.json"), status: 403)
 
       expect_raises(

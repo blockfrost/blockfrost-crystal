@@ -9,7 +9,7 @@ end
 def configure_api_key(api_key : String? = fake_api_key) : Void
   Blockfrost.configure do |settings|
     settings.api_key = fake_api_key
-    settings.api_version = "v9"
+    settings.api_version = "v0"
   end
 end
 
