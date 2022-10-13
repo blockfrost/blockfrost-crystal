@@ -1,0 +1,5 @@
+{
+  "status_code": 418,
+  "error": "Requested Banned",
+  "message": "IP has been auto-banned for flooding."
+}
