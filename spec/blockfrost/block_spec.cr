@@ -87,7 +87,7 @@ describe Blockfrost::Block do
     it "fetches transaction ids for the latest transaction" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/latest/txs")
-        .to_return(body: read_fixture("block/latest_tx_ids.200.json"))
+        .to_return(body: read_fixture("block/tx_ids.200.json"))
 
       Blockfrost::Block.latest_tx_ids.should eq([
         "8788591983aa73981fc92d6cddbbe643959f5a784e84b8bee0db15823f575a5b",
@@ -100,7 +100,7 @@ describe Blockfrost::Block do
     it "accepts query parameters for pagination and ordering" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/latest/txs?count=4&page=1&order=asc")
-        .to_return(body: read_fixture("block/latest_tx_ids.200.json"))
+        .to_return(body: read_fixture("block/tx_ids.200.json"))
 
       Blockfrost::Block.latest_tx_ids(
         count: 4,
@@ -112,7 +112,7 @@ describe Blockfrost::Block do
     it "accepts a string as query parameter for ordering" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/latest/txs?order=desc")
-        .to_return(body: read_fixture("block/latest_tx_ids.200.json"))
+        .to_return(body: read_fixture("block/tx_ids.200.json"))
 
       Blockfrost::Block.latest_tx_ids(order: "desc")
     end
@@ -120,7 +120,7 @@ describe Blockfrost::Block do
     it "uses default ordering if the order query parameter is invalid" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/latest/txs?order=asc")
-        .to_return(body: read_fixture("block/latest_tx_ids.200.json"))
+        .to_return(body: read_fixture("block/tx_ids.200.json"))
 
       Blockfrost::Block.latest_tx_ids(order: "forward")
     end
@@ -130,7 +130,7 @@ describe Blockfrost::Block do
     it "fetches the latest transaction ids for the given block" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/15243592/txs")
-        .to_return(body: read_fixture("block/latest_tx_ids.200.json"))
+        .to_return(body: read_fixture("block/tx_ids.200.json"))
 
       Blockfrost::Block.tx_ids(15243592).should be_a(Array(String))
     end
@@ -143,7 +143,7 @@ describe Blockfrost::Block do
         .to_return(body: read_fixture("block/block.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/4ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a/txs")
-        .to_return(body: read_fixture("block/latest_tx_ids.200.json"))
+        .to_return(body: read_fixture("block/tx_ids.200.json"))
 
       Blockfrost::Block.latest.tx_ids.should be_a(Array(String))
     end
@@ -255,6 +255,48 @@ describe Blockfrost::Block do
 
       Blockfrost::Block.in_epoch_in_slot(219, 30895909)
         .should be_a(Blockfrost::Block)
+    end
+  end
+
+  describe ".addresses" do
+    it "fetches addresses with transactions for a given block height" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/15243593/addresses")
+        .to_return(body: read_fixture("block/addresses.200.json"))
+
+      Blockfrost::Block.addresses(15243593)
+        .should be_a(Array(Blockfrost::Block::Address))
+    end
+
+    it "accepts pagination parameters" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/15243593/addresses?count=3&page=2")
+        .to_return(body: read_fixture("block/addresses.200.json"))
+
+      Blockfrost::Block.addresses(15243593, count: 3, page: 2)
+        .should be_a(Array(Blockfrost::Block::Address))
+    end
+  end
+
+  describe "#addresses" do
+    it "fetches addresses with transactions for the current block" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/latest")
+        .to_return(body: read_fixture("block/block.200.json"))
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/4ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a/addresses")
+        .to_return(body: read_fixture("block/addresses.200.json"))
+
+      Blockfrost::Block.latest.addresses.tap do |addresses|
+        addresses.should be_a(Array(Blockfrost::Block::Address))
+        addresses.first.address
+          .should eq("addr1q9ld26v2lv8wvrxxmvg90pn8n8n5k6tdst06q2s856rwmvnueldzuuqmnsye359fqrk8hwvenjnqultn7djtrlft7jnq7dy7wv")
+
+        transactions = addresses.first.transactions
+        transactions.should be_a(Array(Blockfrost::Block::Transaction))
+        transactions.first.tx_hash
+          .should eq("1a0570af966fb355a7160e4f82d5a80b8681b7955f5d44bec0dce628516157f0")
+      end
     end
   end
 end

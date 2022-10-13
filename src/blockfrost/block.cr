@@ -110,4 +110,37 @@ struct Blockfrost::Block < Blockfrost::Resource
       client.get("blocks/epoch/#{epoch_number}/slot/#{slot_number}")
     )
   end
+
+  def self.addresses(
+    hash_or_number : Int32 | String,
+    count : QueryCount? = nil,
+    page : QueryPage? = nil
+  ) : Array(Address)
+    Array(Address).from_json(
+      client.get("blocks/#{hash_or_number}/addresses", {
+        "count" => count,
+        "page"  => page,
+      })
+    )
+  end
+
+  def addresses(
+    count : QueryCount? = nil,
+    page : QueryPage? = nil
+  ) : Array(Address)
+    Block.addresses(hash, count, page)
+  end
+
+  struct Address
+    include JSON::Serializable
+
+    getter address : String
+    getter transactions : Array(Transaction)
+  end
+
+  struct Transaction
+    include JSON::Serializable
+
+    getter tx_hash : String
+  end
 end
