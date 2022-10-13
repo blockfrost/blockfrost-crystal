@@ -55,6 +55,21 @@ describe Blockfrost do
     end
   end
 
+  {% for network in Blockfrost.annotation(Blockfrost::Networks)
+                      .args.first.reject { |n| n == :testnet }.map(&.id) %}
+    describe ".{{network.id}}?" do
+      it "tests if the current network is {{network.id}} or not" do
+        Blockfrost.temp_config(api_key: "{{network.id}}Vas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE") do
+          Blockfrost.{{network.id}}?.should be_truthy
+        end
+
+        Blockfrost.temp_config(api_key: "testnetVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE") do
+          Blockfrost.{{network.id}}?.should be_falsey
+        end
+      end
+    end
+  {% end %}
+
   describe ".mainnet?" do
     it "tests if the current network is mainnet or not" do
       Blockfrost.temp_config(api_key: "mainnetVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE") do
@@ -68,16 +83,32 @@ describe Blockfrost do
   end
 
   describe ".host" do
-    Blockfrost.configure do |settings|
-      settings.api_key = "mainnetVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE"
+    it "builds a cardano host name" do
+      {% for network in %w[mainnet preprod preview testnet] %}
+        Blockfrost.configure do |settings|
+          settings.api_key = "{{network.id}}Vas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE"
+        end
+
+        Blockfrost.host.should eq("https://cardano-{{network.id}}.blockfrost.io")
+      {% end %}
     end
 
-    Blockfrost.host.should eq("https://cardano-mainnet.blockfrost.io")
+    it "builds a milkomeda host name" do
+      {% for network in %w[mainnet testnet] %}
+        Blockfrost.configure do |settings|
+          settings.api_key = "milk{{network.id}}Vas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE"
+        end
 
-    Blockfrost.configure do |settings|
-      settings.api_key = "testnetVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE"
+        Blockfrost.host.should eq("https://milkomeda-{{network.id}}.blockfrost.io")
+      {% end %}
     end
 
-    Blockfrost.host.should eq("https://cardano-testnet.blockfrost.io")
+    it "builds an ipfs hostname" do
+      Blockfrost.configure do |settings|
+        settings.api_key = "ipfsVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE"
+      end
+
+      Blockfrost.host.should eq("https://ipfs.blockfrost.io")
+    end
   end
 end
