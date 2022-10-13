@@ -19,7 +19,7 @@ A Crystal SDK for the Blockfrost.io API.
 require "blockfrost"
 ```
 
-Create and initializer to configure the API key:
+Create an initializer to configure the API key:
 
 ```crystal
 Blockfrost.configure do |config|
