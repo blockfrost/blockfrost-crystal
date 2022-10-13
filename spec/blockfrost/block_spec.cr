@@ -5,6 +5,25 @@ describe Blockfrost::Block do
     configure_api_key
   end
 
+  describe ".get" do
+    it "loads the block for a given hash" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/5ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a")
+        .to_return(body: read_fixture("block/block.200.json"))
+
+      Blockfrost::Block.get("5ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a")
+        .should be_a(Blockfrost::Block)
+    end
+
+    it "loads the block for a given height" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/15243593")
+        .to_return(body: read_fixture("block/block.200.json"))
+
+      Blockfrost::Block.get(15243593).should be_a(Blockfrost::Block)
+    end
+  end
+
   describe ".latest" do
     it "loads the latest block" do
       WebMock.stub(:get,
@@ -104,6 +123,29 @@ describe Blockfrost::Block do
         .to_return(body: read_fixture("block/latest_tx_ids.200.json"))
 
       Blockfrost::Block.latest_tx_ids(order: "forward")
+    end
+  end
+
+  describe ".tx_ids" do
+    it "fetches the latest transaction ids for the given block" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/15243592/txs")
+        .to_return(body: read_fixture("block/latest_tx_ids.200.json"))
+
+      Blockfrost::Block.tx_ids(15243592).should be_a(Array(String))
+    end
+  end
+
+  describe "#tx_ids" do
+    it "fetches the latest transaction ids for the current block" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/latest")
+        .to_return(body: read_fixture("block/block.200.json"))
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/4ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a/txs")
+        .to_return(body: read_fixture("block/latest_tx_ids.200.json"))
+
+      Blockfrost::Block.latest.tx_ids.should be_a(Array(String))
     end
   end
 
