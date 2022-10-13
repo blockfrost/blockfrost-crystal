@@ -1,5 +1,6 @@
 require "json"
 require "habitat"
+require "./blockfrost/annotations"
 require "./blockfrost/json/*"
 require "./blockfrost/settings"
 require "./blockfrost/resource"
