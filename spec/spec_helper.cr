@@ -3,12 +3,13 @@ require "webmock"
 require "../src/blockfrost"
 
 def fake_api_key
-  "mainnetVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE"
+  "testnetVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE"
 end
 
 def configure_api_key(api_key : String? = fake_api_key) : Void
-  Blockfrost.configure do |config|
-    config.api_key = api_key
+  Blockfrost.configure do |settings|
+    settings.api_key = fake_api_key
+    settings.api_version = "v9"
   end
 end
 
