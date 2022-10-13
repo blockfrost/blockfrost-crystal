@@ -162,11 +162,19 @@ describe Blockfrost::Epoch do
 
       pool_id = "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy"
 
-      Blockfrost::Epoch.block_ids_by_pool(225, pool_id, count: 3, page: 2).should eq([
-        "d0fa315687e99ccdc96b14cc2ea74a767405d64427b648c470731a9b69e4606e",
-        "38bc6efb92a830a0ed22a64f979d120d26483fd3c811f6622a8c62175f530878",
-        "f3258fcd8b975c061b4fcdcfcbb438807134d6961ec278c200151274893b6b7d",
-      ])
+      Blockfrost::Epoch.block_ids_by_pool(225, pool_id, count: 3, page: 2)
+        .should be_a(Array(String))
+    end
+  end
+
+  describe ".parameters" do
+    it "fetches the parameters for the given epoch" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/parameters")
+        .to_return(body: read_fixture("epoch/parameters.200.json"))
+
+      Blockfrost::Epoch.parameters(225)
+        .should be_a(Blockfrost::Epoch::Parameters)
     end
   end
 end

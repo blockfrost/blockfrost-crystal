@@ -1,0 +1,43 @@
+{
+  "epoch": 225,
+  "min_fee_a": 44,
+  "min_fee_b": 155381,
+  "max_block_size": 65536,
+  "max_tx_size": 16384,
+  "max_block_header_size": 1100,
+  "key_deposit": "2000000",
+  "pool_deposit": "500000000",
+  "e_max": 18,
+  "n_opt": 150,
+  "a0": 0.3,
+  "rho": 0.003,
+  "tau": 0.2,
+  "decentralisation_param": 0.5,
+  "extra_entropy": null,
+  "protocol_major_ver": 2,
+  "protocol_minor_ver": 0,
+  "min_utxo": "1000000",
+  "min_pool_cost": "340000000",
+  "nonce": "1a3be38bcbb7911969283716ad7aa550250226b76a61fc51cc9a9a35d9276d81",
+  "cost_models": {
+    "PlutusV1": {
+      "addInteger-cpu-arguments-intercept": 197209,
+      "addInteger-cpu-arguments-slope": 0
+    },
+    "PlutusV2": {
+      "addInteger-cpu-arguments-intercept": 197209,
+      "addInteger-cpu-arguments-slope": 0
+    }
+  },
+  "price_mem": 0.0577,
+  "price_step": 0.0000721,
+  "max_tx_ex_mem": "10000000",
+  "max_tx_ex_steps": "10000000000",
+  "max_block_ex_mem": "50000000",
+  "max_block_ex_steps": "40000000000",
+  "max_val_size": "5000",
+  "collateral_percent": 150,
+  "max_collateral_inputs": 3,
+  "coins_per_utxo_size": "34482",
+  "coins_per_utxo_word": "34482"
+}

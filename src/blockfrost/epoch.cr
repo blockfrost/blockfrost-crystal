@@ -101,6 +101,12 @@ struct Blockfrost::Epoch < Blockfrost::Resource
     )
   end
 
+  def self.parameters(
+    epoch_number : Int32
+  ) : Parameters
+    Parameters.from_json(client.get("epochs/#{epoch_number}/parameters"))
+  end
+
   struct Stake
     include JSON::Serializable
 
@@ -108,5 +114,41 @@ struct Blockfrost::Epoch < Blockfrost::Resource
     getter pool_id : String
     @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
     getter amount : Int64
+  end
+
+  struct Parameters
+    include JSON::Serializable
+
+    epoch : Int32
+    min_fee_a : Int32
+    min_fee_b : Int32
+    max_block_size : Int32
+    max_tx_size : Int32
+    max_block_header_size : Int32
+    key_deposit : Int64
+    pool_deposit : Int64
+    e_max : Int32
+    n_opt : Int32
+    a0 : Float64
+    rho : Float64
+    tau : Float64
+    decentralisation_param : Float64
+    extra_entropy : String?
+    protocol_major_ver : Int32
+    protocol_minor_ver : Int32
+    min_utxo : Int64
+    min_pool_cost : Int64
+    nonce : String
+    cost_models : Hash(String, Hash(String, Int32))?
+    price_mem : Float64?
+    price_step : Float64?
+    max_tx_ex_mem : Int64?
+    max_tx_ex_steps : Int64?
+    max_block_ex_mem : Int64?
+    max_block_ex_steps : Int64?
+    max_val_size : Int64?
+    collateral_percent : Int32?
+    max_collateral_inputs : Int32?
+    coins_per_utxo_size : Int64?
   end
 end
