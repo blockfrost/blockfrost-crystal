@@ -1,39 +1,45 @@
 struct Blockfrost::Client
+  alias RequestData = Hash(String, String)
+
+  enum Method
+    GET
+    POST
+  end
+
   def get(
     resource : String,
-    query : Hash? = nil
+    query : RequestData = RequestData.new
   ) : String
-    perform_http_call("GET", resource, query: query)
+    perform_http_call(Method::GET, resource, query: query)
   end
 
   def post(
     resource : String,
-    payload : Hash
+    body : RequestData
   ) : String
-    perform_http_call("POST", resource, body: payload)
+    perform_http_call(Method::POST, resource, body: body)
   end
 
   private def perform_http_call(
-    method : String,
+    method : Method,
     path : String,
-    body : Hash = {} of String => String,
-    query = {} of String => String
+    body : RequestData = RequestData.new,
+    query : RequestData = RequestData.new
   ) : String
-    uri = URI.parse(Blockfrost.config.host)
-    uri.path = File.join("/api", Blockfrost.config.api_version, path)
-    query_string(query).tap { |q| uri.query = q unless q.nil? }
-
     begin
-      if method == "GET"
-        response = HTTP::Client.get(uri, headers: headers)
+      case method
+      when Method::GET
+        render(HTTP::Client.get(build_uri(path, query), headers: headers))
       else
-        response = HTTP::Client.exec(
-          method, uri,
-          headers: headers,
-          body: body.compact.to_json
+        render(
+          HTTP::Client.exec(
+            method.to_s,
+            build_uri(path, query),
+            headers: headers,
+            body: body.compact.to_json
+          )
         )
       end
-      render(response)
     rescue e : IO::TimeoutError
       raise TimeoutException.new(e.message)
     rescue e : IO::EOFError
@@ -41,29 +47,51 @@ struct Blockfrost::Client
     end
   end
 
+  private def build_uri(
+    path : String,
+    query : RequestData
+  ) : String
+    uri = URI.parse(Blockfrost.host)
+    uri.path = File.join("/api", Blockfrost.settings.api_version, path)
+    query_string(query).tap { |q| uri.query = q unless q.blank? }
+    uri.to_s
+  end
+
+  private def query_string(
+    query : RequestData
+  ) : String
+    return "" if query.compact.empty?
+
+    URI::Params.encode(query.compact.transform_values(&.to_s))
+  end
+
   private def headers : HTTP::Headers
     HTTP::Headers{
       "Accept"       => "application/json",
       "Content-Type" => "application/json",
-      "project_id"   => Blockfrost.config.api_key,
+      "project_id"   => Blockfrost.settings.api_key,
     }
   end
 
-  private def query_string(query : Hash?) : String?
-    query = query.try(&.compact.transform_values(&.to_s))
-    URI::Params.encode(query) unless query.nil?
-  end
-
-  private def render(response : HTTP::Client::Response) : String
-    case response.status_code
-    when 200, 201
-      response.body
-    when 204
-      ""
-    when 404
-      raise NotFoundException.from_json(response.body)
-    else
-      raise response.body
-    end
+  private def render(
+    response : HTTP::Client::Response
+  ) : String
+    {% begin %}
+      case response.status_code
+      when 200, 201
+        response.body
+      when 204
+        ""
+      {% for name, status in Blockfrost::Exception
+                               .annotation(Blockfrost::RequestExceptions)
+                               .args
+                               .first %}
+        when {{status}}
+          raise {{name.id}}Exception.from_json(response.body)
+      {% end %}
+      else
+        raise response.body
+      end
+    {% end %}
   end
 end
