@@ -96,7 +96,18 @@ struct Blockfrost::Block < Blockfrost::Resource
     end
   {% end %}
 
-  def self.in_slot(slot_number : Int32) : Block
+  def self.in_slot(
+    slot_number : Int32
+  ) : Block
     Block.from_json(client.get("blocks/slot/#{slot_number}"))
+  end
+
+  def self.in_epoch_in_slot(
+    epoch_number : Int32,
+    slot_number : Int32
+  ) : Block
+    Block.from_json(
+      client.get("blocks/epoch/#{epoch_number}/slot/#{slot_number}")
+    )
   end
 end
