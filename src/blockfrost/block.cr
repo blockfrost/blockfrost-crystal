@@ -16,6 +16,9 @@ struct Blockfrost::Block < Blockfrost::Resource
   @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
   getter fees : Int64?
   getter block_vrf : String?
+  getter op_cert : String?
+  @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+  getter op_cert_counter : Int64?
   getter previous_block : String?
   getter next_block : String?
   getter confirmations : Int32
