@@ -18,10 +18,32 @@ struct Blockfrost::Epoch < Blockfrost::Resource
   getter active_stake : Int64
 
   def self.get(number : Int32) : Epoch
-    Epoch.from_json(client.get("epoch/#{number}"))
+    Epoch.from_json(client.get("epochs/#{number}"))
   end
 
   def self.latest : Epoch
-    Epoch.from_json(client.get("epoch/latest"))
+    Epoch.from_json(client.get("epochs/latest"))
   end
+
+  {% for key in %w[next previous] %}
+    def self.{{key.id}}(
+      number : Int32,
+      count : QueryCount? = nil,
+      page : QueryPage? = nil
+    ) : Array(Epoch)
+      Array(Epoch).from_json(
+        client.get("epochs/#{number}/{{key.id}}", {
+          "count" => count,
+          "page" => page
+        })
+      )
+    end
+
+    def {{key.id}}(
+      count : QueryCount? = nil,
+      page : QueryPage? = nil
+    ) : Array(Epoch)
+      Epoch.{{key.id}}(epoch, count: count, page: page)
+    end
+  {% end %}
 end
