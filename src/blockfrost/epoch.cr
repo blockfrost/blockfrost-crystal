@@ -74,6 +74,33 @@ struct Blockfrost::Epoch < Blockfrost::Resource
     )
   end
 
+  def self.block_ids(
+    epoch_number : Int32,
+    count : QueryCount? = nil,
+    page : QueryPage? = nil
+  ) : Array(String)
+    Array(String).from_json(
+      client.get("epochs/#{epoch_number}/blocks", {
+        "count" => count,
+        "page"  => page,
+      })
+    )
+  end
+
+  def self.block_ids_by_pool(
+    epoch_number : Int32,
+    pool_id : String,
+    count : QueryCount? = nil,
+    page : QueryPage? = nil
+  ) : Array(String)
+    Array(String).from_json(
+      client.get("epochs/#{epoch_number}/blocks/#{pool_id}", {
+        "count" => count,
+        "page"  => page,
+      })
+    )
+  end
+
   struct Stake
     include JSON::Serializable
 
