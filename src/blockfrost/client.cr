@@ -1,6 +1,4 @@
 struct Blockfrost::Client
-  alias RequestData = Hash(String, String)
-
   enum Method
     GET
     POST
@@ -53,16 +51,8 @@ struct Blockfrost::Client
   ) : String
     uri = URI.parse(Blockfrost.host)
     uri.path = File.join("/api", Blockfrost.settings.api_version, path)
-    query_string(query).tap { |q| uri.query = q unless q.blank? }
+    uri.query = QueryString.new(query).build
     uri.to_s
-  end
-
-  private def query_string(
-    query : RequestData
-  ) : String
-    return "" if query.compact.empty?
-
-    URI::Params.encode(query.compact.transform_values(&.to_s))
   end
 
   private def headers : HTTP::Headers
