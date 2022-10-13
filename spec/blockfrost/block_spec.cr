@@ -6,7 +6,7 @@ describe Blockfrost::Block do
   end
 
   describe ".get" do
-    it "loads the block for a given hash" do
+    it "fetches the block for a given hash" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/5ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a")
         .to_return(body: read_fixture("block/block.200.json"))
@@ -15,7 +15,7 @@ describe Blockfrost::Block do
         .should be_a(Blockfrost::Block)
     end
 
-    it "loads the block for a given height" do
+    it "fetches the block for a given height" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/15243593")
         .to_return(body: read_fixture("block/block.200.json"))
@@ -25,7 +25,7 @@ describe Blockfrost::Block do
   end
 
   describe ".latest" do
-    it "loads the latest block" do
+    it "fetches the latest block" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/latest"
       ).to_return(body: read_fixture("block/latest.200.json"))
