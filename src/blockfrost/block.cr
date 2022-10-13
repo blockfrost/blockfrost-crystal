@@ -29,20 +29,45 @@ struct Blockfrost::Block < Blockfrost::Resource
     Block.from_json(client.get("blocks/latest"))
   end
 
+  def self.latest_tx_ids(
+    count : QueryCount? = nil,
+    page : QueryPage? = nil,
+    order : QueryOrder? = nil
+  ) : Array(String)
+    Array(String).from_json(
+      client.get("blocks/latest/txs", {
+        "count" => count,
+        "page"  => page,
+        "order" => order.try(&.to_s),
+      })
+    )
+  end
+
+  def self.latest_tx_ids(
+    count : QueryCount? = nil,
+    page : QueryPage? = nil,
+    order : String? = nil
+  ) : Array(String)
+    latest_tx_ids(count, page, order ? QueryOrder.from_string(order) : nil)
+  end
+
   {% for key in %w[next previous] %}
     def self.{{key.id}}(
       hash_or_number : Int32 | String,
-      count : Int32? = nil,
-      page : Int32? = nil
+      count : QueryCount? = nil,
+      page : QueryPage? = nil
     ) : Array(Block)
-      query = Utils.sanitize_query({"count" => count, "page" => page})
-      response = client.get("blocks/#{hash_or_number}/{{key.id}}", query)
-      Array(Block).from_json(response)
+      Array(Block).from_json(
+        client.get("blocks/#{hash_or_number}/{{key.id}}", {
+          "count" => count,
+          "page" => page
+        })
+      )
     end
 
     def {{key.id}}(
-      count : Int32? = nil,
-      page : Int32? = nil
+      count : QueryCount? = nil,
+      page : QueryPage? = nil
     ) : Array(Block)
       Block.{{key.id}}(hash, count: count, page: page)
     end

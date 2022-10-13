@@ -64,6 +64,49 @@ describe Blockfrost::Block do
     end
   end
 
+  describe ".latest_tx_ids" do
+    it "fetches transaction ids for the latest transaction" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/latest/txs")
+        .to_return(body: read_fixture("block/latest_tx_ids.200.json"))
+
+      Blockfrost::Block.latest_tx_ids.should eq([
+        "8788591983aa73981fc92d6cddbbe643959f5a784e84b8bee0db15823f575a5b",
+        "4eef6bb7755d8afbeac526b799f3e32a624691d166657e9d862aaeb66682c036",
+        "52e748c4dec58b687b90b0b40d383b9fe1f24c1a833b7395cdf07dd67859f46f",
+        "e8073fd5318ff43eca18a852527166aa8008bee9ee9e891f585612b7e4ba700b",
+      ])
+    end
+
+    it "accepts query parameters for pagination and ordering" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/latest/txs?count=4&page=1&order=asc")
+        .to_return(body: read_fixture("block/latest_tx_ids.200.json"))
+
+      Blockfrost::Block.latest_tx_ids(
+        count: 4,
+        page: 1,
+        order: Blockfrost::QueryOrder::ASC
+      )
+    end
+
+    it "accepts a string as query parameter for ordering" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/latest/txs?order=desc")
+        .to_return(body: read_fixture("block/latest_tx_ids.200.json"))
+
+      Blockfrost::Block.latest_tx_ids(order: "desc")
+    end
+
+    it "uses default ordering if the order query parameter is invalid" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/latest/txs?order=asc")
+        .to_return(body: read_fixture("block/latest_tx_ids.200.json"))
+
+      Blockfrost::Block.latest_tx_ids(order: "forward")
+    end
+  end
+
   describe ".next" do
     it "fetches the next block for a given hash" do
       WebMock.stub(:get,
