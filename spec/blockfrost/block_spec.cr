@@ -33,10 +33,9 @@ describe Blockfrost::Block do
     end
 
     {% begin %}
-      {% for name, status in Blockfrost::Exception
+      {% for name, status in Blockfrost
                                .annotation(Blockfrost::RequestExceptions)
-                               .args
-                               .first %}
+                               .args.first %}
         it "handels {{status}} exceptions" do
           WebMock.stub(
             :get, "https://cardano-testnet.blockfrost.io/api/v9/blocks/latest"

@@ -82,10 +82,9 @@ struct Blockfrost::Client
         response.body
       when 204
         ""
-      {% for name, status in Blockfrost::Exception
+      {% for name, status in Blockfrost
                                .annotation(Blockfrost::RequestExceptions)
-                               .args
-                               .first %}
+                               .args.first %}
         when {{status}}
           raise {{name.id}}Exception.from_json(response.body)
       {% end %}

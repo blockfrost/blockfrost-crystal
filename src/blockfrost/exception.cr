@@ -1,15 +1,4 @@
 module Blockfrost
-  annotation RequestExceptions
-  end
-
-  @[Blockfrost::RequestExceptions({
-    BadRequest:  400,
-    Forbidden:   403,
-    NotFound:    404,
-    IpBanned:    418,
-    OverLimit:   429,
-    ServerError: 500,
-  })]
   class Exception < Exception; end
 
   class RequestException < Blockfrost::Exception
@@ -37,10 +26,9 @@ module Blockfrost
 
   struct Client
     {% begin %}
-      {% for name in Blockfrost::Exception
+      {% for name in Blockfrost
                        .annotation(Blockfrost::RequestExceptions)
-                       .args
-                       .first %}
+                       .args.first %}
         class {{name.id}}Exception < Blockfrost::RequestException; end
       {% end %}
     {% end %}
