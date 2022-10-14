@@ -4,18 +4,18 @@ describe Blockfrost do
   describe ".settings" do
     it "accepts a valid api key and api version" do
       Blockfrost.configure do |settings|
-        settings.api_key = fake_api_key
+        settings.cardano_api_key = fake_cardano_api_key
         settings.api_version = "v9"
       end
 
-      Blockfrost.settings.api_key.should eq(fake_api_key)
+      Blockfrost.settings.cardano_api_key.should eq(fake_cardano_api_key)
       Blockfrost.settings.api_version.should eq("v9")
     end
 
     it "raises with an invalid api key" do
       expect_raises(Habitat::InvalidSettingFormatError) do
         Blockfrost.configure do |settings|
-          settings.api_key = "sumtingwong"
+          settings.cardano_api_key = "sumtingwong"
         end
       end
     end
@@ -29,86 +29,105 @@ describe Blockfrost do
     end
   end
 
-  describe ".network" do
+  describe ".cardano_network" do
     it "returns the current network" do
       Blockfrost.configure do |settings|
-        settings.api_key = "mainnetVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE"
+        settings.cardano_api_key = "mainnetVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE"
       end
 
-      Blockfrost.network.should eq("mainnet")
+      Blockfrost.cardano_network.should eq("mainnet")
 
-      Blockfrost.temp_config(api_key: "testnetVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE") do
-        Blockfrost.network.should eq("testnet")
+      Blockfrost.temp_config(
+        cardano_api_key: "testnetVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE") do
+        Blockfrost.cardano_network.should eq("testnet")
       end
     end
   end
 
-  describe ".testnet?" do
+  describe ".cardano_testnet?" do
     it "tests if the current network is testnet or not" do
-      Blockfrost.temp_config(api_key: "testnetVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE") do
-        Blockfrost.testnet?.should be_truthy
+      Blockfrost.temp_config(
+        cardano_api_key: "testnetVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE") do
+        Blockfrost.cardano_testnet?.should be_truthy
       end
 
-      Blockfrost.temp_config(api_key: "mainnetVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE") do
-        Blockfrost.testnet?.should be_falsey
+      Blockfrost.temp_config(
+        cardano_api_key: "mainnetVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE") do
+        Blockfrost.cardano_testnet?.should be_falsey
       end
     end
   end
 
-  {% for network in Blockfrost.annotation(Blockfrost::Networks)
+  {% for network in Blockfrost.annotation(Blockfrost::CardanoNetworks)
                       .args.first.reject { |n| n == :testnet }.map(&.id) %}
-    describe ".{{network.id}}?" do
+    describe ".cardano_{{network.id}}?" do
       it "tests if the current network is {{network.id}} or not" do
-        Blockfrost.temp_config(api_key: "{{network.id}}Vas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE") do
-          Blockfrost.{{network.id}}?.should be_truthy
+        Blockfrost.temp_config(
+          cardano_api_key: "{{network.id}}Vas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE") do
+          Blockfrost.cardano_{{network.id}}?.should be_truthy
         end
 
-        Blockfrost.temp_config(api_key: "testnetVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE") do
-          Blockfrost.{{network.id}}?.should be_falsey
+        Blockfrost.temp_config(
+          cardano_api_key: "testnetVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE") do
+          Blockfrost.cardano_{{network.id}}?.should be_falsey
         end
       end
     end
   {% end %}
 
-  describe ".mainnet?" do
-    it "tests if the current network is mainnet or not" do
-      Blockfrost.temp_config(api_key: "mainnetVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE") do
-        Blockfrost.mainnet?.should be_truthy
-      end
-
-      Blockfrost.temp_config(api_key: "testnetVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE") do
-        Blockfrost.mainnet?.should be_falsey
-      end
-    end
-  end
-
-  describe ".host" do
+  describe ".host_for_path" do
     it "builds a cardano host name" do
       {% for network in %w[mainnet preprod preview testnet] %}
         Blockfrost.configure do |settings|
-          settings.api_key = "{{network.id}}Vas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE"
+          settings
+            .cardano_api_key = "{{network.id}}Vas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE"
         end
 
-        Blockfrost.host.should eq("https://cardano-{{network.id}}.blockfrost.io")
-      {% end %}
-    end
-
-    it "builds a milkomeda host name" do
-      {% for network in %w[mainnet testnet] %}
-        Blockfrost.configure do |settings|
-          settings.api_key = "milk{{network.id}}Vas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE"
-        end
-
-        Blockfrost.host.should eq("https://milkomeda-{{network.id}}.blockfrost.io")
+        Blockfrost.host_for_path("blocks/latest")
+          .should eq("https://cardano-{{network.id}}.blockfrost.io")
       {% end %}
     end
 
     it "builds an ipfs hostname" do
       Blockfrost.configure do |settings|
-        settings.api_key = "ipfsVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE"
+        settings.ipfs_api_key = "ipfsVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE"
       end
 
-      Blockfrost.host.should eq("https://ipfs.blockfrost.io")
+      Blockfrost.host_for_path("ipfs/gateway/QmZbHqiC")
+        .should eq("https://ipfs.blockfrost.io")
+    end
+  end
+
+  describe ".api_key_for_path" do
+    it "returns the appropriate api key for a given path" do
+      Blockfrost.api_key_for_path("blocks/latest")
+        .should eq("testnetVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE")
+      Blockfrost.api_key_for_path("ipfs/gateway/QmZbHqiC")
+        .should eq("ipfsVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE")
+    end
+
+    it "raises if no cardano api key is configured" do
+      Blockfrost.configure do |settings|
+        settings.cardano_api_key = nil
+      end
+
+      expect_raises(
+        Habitat::InvalidSettingFormatError, "Missing Cardano API key"
+      ) do
+        Blockfrost.api_key_for_path("blocks/latest")
+      end
+    end
+
+    it "raises if no ipfs api key is configured" do
+      Blockfrost.configure do |settings|
+        settings.ipfs_api_key = nil
+      end
+
+      expect_raises(
+        Habitat::InvalidSettingFormatError, "Missing IPFS API key"
+      ) do
+        Blockfrost.api_key_for_path("ipfs/gateway/QmZbHqiC")
+      end
     end
   end
 end

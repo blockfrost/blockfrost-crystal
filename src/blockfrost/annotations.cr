@@ -1,15 +1,12 @@
 module Blockfrost
-  annotation Networks
+  annotation CardanoNetworks
   end
   annotation RequestExceptions
   end
 end
 
-@[Blockfrost::Networks({
-  :ipfs,
+@[Blockfrost::CardanoNetworks({
   :mainnet,
-  :milkmainnet,
-  :milktestnet,
   :preprod,
   :preview,
   :testnet,

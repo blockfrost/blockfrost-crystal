@@ -27,13 +27,13 @@ struct Blockfrost::Client
     begin
       case method
       when Method::GET
-        render(HTTP::Client.get(build_uri(path, query), headers: headers))
+        render(HTTP::Client.get(build_uri(path, query), headers: headers(path)))
       else
         render(
           HTTP::Client.exec(
             method.to_s,
             build_uri(path, query),
-            headers: headers,
+            headers: headers(path),
             body: body.compact.to_json
           )
         )
@@ -49,17 +49,19 @@ struct Blockfrost::Client
     path : String,
     query : RequestData
   ) : String
-    uri = URI.parse(Blockfrost.host)
+    uri = URI.parse(Blockfrost.host_for_path(path))
     uri.path = File.join("/api", Blockfrost.settings.api_version, path)
     uri.query = QueryString.new(query).build
     uri.to_s
   end
 
-  private def headers : HTTP::Headers
+  private def headers(
+    path : String
+  ) : HTTP::Headers
     HTTP::Headers{
       "Accept"       => "application/json",
       "Content-Type" => "application/json",
-      "project_id"   => Blockfrost.settings.api_key,
+      "project_id"   => Blockfrost.api_key_for_path(path),
     }
   end
 
