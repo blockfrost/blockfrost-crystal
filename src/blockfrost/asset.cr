@@ -35,28 +35,33 @@ struct Blockfrost::Asset < Blockfrost::Resource
     Asset.from_json(client.get("assets/#{asset}"))
   end
 
-  def self.history(
-    asset : String,
-    order : QueryOrder? = nil,
-    count : QueryCount? = nil,
-    page : QueryPage? = nil
-  ) : Array(Event)
-    Array(Event).from_json(
-      client.get("assets/#{asset}/history", {
-        "order" => order.try(&.to_s),
-        "count" => count,
-        "page"  => page,
-      })
-    )
-  end
+  {% for path, model in {
+                          history:      "Event",
+                          transactions: "Transaction",
+                        } %}
+    def self.{{path.id}}(
+      asset : String,
+      order : QueryOrder? = nil,
+      count : QueryCount? = nil,
+      page : QueryPage? = nil
+    ) : Array({{model.id}})
+      Array({{model.id}}).from_json(
+        client.get("assets/#{asset}/{{path.id}}", {
+          "order" => order.try(&.to_s),
+          "count" => count,
+          "page"  => page,
+        })
+      )
+    end
 
-  def self.history(
-    asset : String,
-    order : String? = nil,
-    **args
-  ) : Array(Event)
-    history(asset, order_from_string(order), **args)
-  end
+    def self.{{path.id}}(
+      asset : String,
+      order : String? = nil,
+      **args
+    ) : Array({{model.id}})
+      {{path.id}}(asset, order_from_string(order), **args)
+    end
+  {% end %}
 
   struct Abbreviated
     include JSON::Serializable
@@ -91,5 +96,15 @@ struct Blockfrost::Asset < Blockfrost::Resource
     @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
     getter amount : Int64
     getter action : String
+  end
+
+  struct Transaction
+    include JSON::Serializable
+
+    getter tx_hash : String
+    getter tx_index : Int32
+    getter block_height : Int32
+    @[JSON::Field(converter: Blockfrost::Json::TimeFromInt)]
+    getter block_time : Time
   end
 end

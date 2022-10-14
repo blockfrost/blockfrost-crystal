@@ -87,4 +87,28 @@ describe Blockfrost::Asset do
         .should be_a(Array(Blockfrost::Asset::Event))
     end
   end
+
+  describe ".transactions" do
+    it "fetches all transactions for a given asset" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/assets/b0d07d45.../transactions")
+        .to_return(body: read_fixture("asset/transactions.200.json"))
+
+      Blockfrost::Asset.transactions("b0d07d45...").tap do |transactions|
+        transactions.first.tx_hash.should start_with("8788591983")
+        transactions.first.tx_index.should eq(6)
+        transactions.first.block_height.should eq(69)
+        transactions.first.block_time.should eq(Time.unix(1635505891))
+      end
+    end
+
+    it "accepts ordering and pagination parameters" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/assets/b0d07d45.../transactions?order=desc&count=3&page=5")
+        .to_return(body: read_fixture("asset/transactions.200.json"))
+
+      Blockfrost::Asset.transactions("b0d07d45...", order: "desc", count: 3, page: 5)
+        .should be_a(Array(Blockfrost::Asset::Transaction))
+    end
+  end
 end
