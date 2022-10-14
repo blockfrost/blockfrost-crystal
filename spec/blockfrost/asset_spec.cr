@@ -63,4 +63,28 @@ describe Blockfrost::Asset do
       end
     end
   end
+
+  describe ".history" do
+    it "fetches all events for a given asset" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/assets/b0d07d45.../history")
+        .to_return(body: read_fixture("asset/history.200.json"))
+
+      Blockfrost::Asset.history("b0d07d45...").tap do |events|
+        events.first.tx_hash.should start_with("2dd15e0ef6")
+        events.first.amount.should eq(10)
+        events.first.action.should start_with("minted")
+        events.last.action.should start_with("burned")
+      end
+    end
+
+    it "accepts ordering and pagination parameters" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/assets/b0d07d45.../history?order=desc&count=3&page=5")
+        .to_return(body: read_fixture("asset/history.200.json"))
+
+      Blockfrost::Asset.history("b0d07d45...", order: "desc", count: 3, page: 5)
+        .should be_a(Array(Blockfrost::Asset::Event))
+    end
+  end
 end

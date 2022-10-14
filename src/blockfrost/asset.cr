@@ -35,6 +35,29 @@ struct Blockfrost::Asset < Blockfrost::Resource
     Asset.from_json(client.get("assets/#{asset}"))
   end
 
+  def self.history(
+    asset : String,
+    order : QueryOrder? = nil,
+    count : QueryCount? = nil,
+    page : QueryPage? = nil
+  ) : Array(Event)
+    Array(Event).from_json(
+      client.get("assets/#{asset}/history", {
+        "order" => order.try(&.to_s),
+        "count" => count,
+        "page"  => page,
+      })
+    )
+  end
+
+  def self.history(
+    asset : String,
+    order : String? = nil,
+    **args
+  ) : Array(Event)
+    history(asset, order_from_string(order), **args)
+  end
+
   struct Abbreviated
     include JSON::Serializable
 
@@ -59,5 +82,14 @@ struct Blockfrost::Asset < Blockfrost::Resource
     getter url : String
     getter logo : String
     getter decimals : Int32
+  end
+
+  struct Event
+    include JSON::Serializable
+
+    getter tx_hash : String
+    @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+    getter amount : Int64
+    getter action : String
   end
 end
