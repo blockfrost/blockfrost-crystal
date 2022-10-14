@@ -133,4 +133,27 @@ describe Blockfrost::Asset do
         .should be_a(Array(Blockfrost::Asset::Address))
     end
   end
+
+  describe ".all_of_policy" do
+    it "fetches all assets for a given policy id" do
+      WebMock.stub(:get, "https://cardano-testnet.blockfrost.io/api/v0/assets/policy/476039a0...")
+        .to_return(body: read_fixture("asset/policy.200.json"))
+
+      Blockfrost::Asset.all_of_policy("476039a0...")
+        .should be_a(Array(Blockfrost::Asset::Abbreviated))
+    end
+
+    it "accepts ordering and pagination parameters" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/assets/policy/476039a0...?order=desc&count=10&page=2"
+      ).to_return(body: read_fixture("asset/policy.200.json"))
+
+      Blockfrost::Asset.all_of_policy(
+        policy_id: "476039a0...",
+        order: "desc",
+        count: 10,
+        page: 2
+      ).should be_a(Array(Blockfrost::Asset::Abbreviated))
+    end
+  end
 end

@@ -25,7 +25,7 @@ struct Blockfrost::Asset < Blockfrost::Resource
   end
 
   def self.all(
-    order : String? = nil,
+    order : String,
     **args
   ) : Array(Abbreviated)
     all(order_from_string(order), **args)
@@ -35,19 +35,19 @@ struct Blockfrost::Asset < Blockfrost::Resource
     Asset.from_json(client.get("assets/#{asset}"))
   end
 
-  {% for path, model in {
-                          addresses:    "Address",
-                          history:      "Event",
-                          transactions: "Transaction",
-                        } %}
-    def self.{{path.id}}(
+  {% for resource, model in {
+                              addresses:    "Address",
+                              history:      "Event",
+                              transactions: "Transaction",
+                            } %}
+    def self.{{resource.id}}(
       asset : String,
       order : QueryOrder? = nil,
       count : QueryCount? = nil,
       page : QueryPage? = nil
     ) : Array({{model.id}})
       Array({{model.id}}).from_json(
-        client.get("assets/#{asset}/{{path.id}}", {
+        client.get("assets/#{asset}/{{resource.id}}", {
           "order" => order.try(&.to_s),
           "count" => count,
           "page"  => page,
@@ -55,14 +55,41 @@ struct Blockfrost::Asset < Blockfrost::Resource
       )
     end
 
-    def self.{{path.id}}(
+    def self.{{resource.id}}(
       asset : String,
-      order : String? = nil,
+      order : String,
       **args
     ) : Array({{model.id}})
-      {{path.id}}(asset, order_from_string(order), **args)
+      {{resource.id}}(asset, order_from_string(order), **args)
+    end
+
+    def {{resource.id}}(**args) : Array({{model.id}})
+      Asset.{{resource.id}}(**args)
     end
   {% end %}
+
+  def self.all_of_policy(
+    policy_id : String,
+    order : QueryOrder? = nil,
+    count : QueryCount? = nil,
+    page : QueryPage? = nil
+  ) : Array(Abbreviated)
+    Array(Abbreviated).from_json(
+      client.get("assets/policy/#{policy_id}", {
+        "order" => order.try(&.to_s),
+        "count" => count,
+        "page"  => page,
+      })
+    )
+  end
+
+  def self.all_of_policy(
+    policy_id : String,
+    order : String,
+    **args
+  ) : Array(Abbreviated)
+    all_of_policy(policy_id, order_from_string(order), **args)
+  end
 
   struct Abbreviated
     include JSON::Serializable
