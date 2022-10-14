@@ -99,13 +99,13 @@ describe Blockfrost::Block do
 
     it "accepts query parameters for pagination and ordering" do
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/blocks/latest/txs?count=4&page=1&order=asc")
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/latest/txs?order=asc&count=4&page=1")
         .to_return(body: read_fixture("block/tx_ids.200.json"))
 
       Blockfrost::Block.latest_tx_ids(
+        order: Blockfrost::QueryOrder::ASC,
         count: 4,
-        page: 1,
-        order: Blockfrost::QueryOrder::ASC
+        page: 1
       )
     end
 

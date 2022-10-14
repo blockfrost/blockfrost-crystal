@@ -31,38 +31,33 @@ struct Blockfrost::Block < Blockfrost::Resource
 
   def self.tx_ids(
     hash_or_number : Int32 | String,
+    order : QueryOrder? = nil,
     count : QueryCount? = nil,
-    page : QueryPage? = nil,
-    order : QueryOrder? = nil
+    page : QueryPage? = nil
   ) : Array(String)
     Array(String).from_json(
       client.get("blocks/#{hash_or_number}/txs", {
+        "order" => order.try(&.to_s),
         "count" => count,
         "page"  => page,
-        "order" => order.try(&.to_s),
       })
     )
   end
 
   def self.tx_ids(
     hash_or_number : Int32 | String,
-    count : QueryCount? = nil,
-    page : QueryPage? = nil,
-    order : String? = nil
+    order : String? = nil,
+    **args
   ) : Array(String)
-    tx_ids(hash_or_number, count, page, order_from_string(order))
+    tx_ids(hash_or_number, order_from_string(order), **args)
   end
 
   def tx_ids(**args) : Array(String)
     Block.tx_ids(hash, **args)
   end
 
-  def self.latest_tx_ids(
-    count : QueryCount? = nil,
-    page : QueryPage? = nil,
-    order : String | QueryOrder? = nil
-  ) : Array(String)
-    tx_ids("latest", count, page, order)
+  def self.latest_tx_ids(**args) : Array(String)
+    tx_ids("latest", **args)
   end
 
   {% for key in %w[next previous] %}
