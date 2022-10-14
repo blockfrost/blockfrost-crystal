@@ -1,4 +1,4 @@
-# blockfrost.cr
+# blockfrost-crystal
 A Crystal SDK for the Blockfrost.io API.
 
 ## Installation
@@ -8,7 +8,7 @@ A Crystal SDK for the Blockfrost.io API.
   ```yaml
   dependencies:
     blockfrost:
-      github: wout/blockfrost.cr
+      github: wout/blockfrost-crystal
   ```
 
 2. Run `shards install`
@@ -23,7 +23,8 @@ Create an initializer to configure the API key:
 
 ```crystal
 Blockfrost.configure do |config|
-  config.api_key = ENV.fetch("BLOCKFROST_API_KEY")
+  config.cardano_api_key = ENV.fetch("BLOCKFROST_CARDANO_API_KEY")
+  config.ipfs_api_key = ENV.fetch("BLOCKFROST_IPFS_API_KEY")
 end
 ```
 
@@ -37,7 +38,7 @@ TODO: Write development instructions here
 
 ## Contributing
 
-1. Fork it (<https://github.com/wout/blockfrost.cr/fork>)
+1. Fork it (<https://github.com/wout/blockfrost-crystal/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
