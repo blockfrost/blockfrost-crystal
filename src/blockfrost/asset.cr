@@ -64,7 +64,7 @@ struct Blockfrost::Asset < Blockfrost::Resource
     end
 
     def {{resource.id}}(**args) : Array({{model.id}})
-      Asset.{{resource.id}}(**args)
+      Asset.{{resource.id}}(asset, **args)
     end
   {% end %}
 
