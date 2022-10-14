@@ -46,7 +46,7 @@ struct Blockfrost::Block < Blockfrost::Resource
 
   def self.tx_ids(
     hash_or_number : Int32 | String,
-    order : String? = nil,
+    order : String,
     **args
   ) : Array(String)
     tx_ids(hash_or_number, order_from_string(order), **args)
