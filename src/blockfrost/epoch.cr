@@ -116,36 +116,46 @@ struct Blockfrost::Epoch < Blockfrost::Resource
   struct Parameters
     include JSON::Serializable
 
-    epoch : Int32
-    min_fee_a : Int32
-    min_fee_b : Int32
-    max_block_size : Int32
-    max_tx_size : Int32
-    max_block_header_size : Int32
-    key_deposit : Int64
-    pool_deposit : Int64
-    e_max : Int32
-    n_opt : Int32
-    a0 : Float64
-    rho : Float64
-    tau : Float64
-    decentralisation_param : Float64
-    extra_entropy : String?
-    protocol_major_ver : Int32
-    protocol_minor_ver : Int32
-    min_utxo : Int64
-    min_pool_cost : Int64
-    nonce : String
-    cost_models : Hash(String, Hash(String, Int32))?
-    price_mem : Float64?
-    price_step : Float64?
-    max_tx_ex_mem : Int64?
-    max_tx_ex_steps : Int64?
-    max_block_ex_mem : Int64?
-    max_block_ex_steps : Int64?
-    max_val_size : Int64?
-    collateral_percent : Int32?
-    max_collateral_inputs : Int32?
-    coins_per_utxo_size : Int64?
+    getter epoch : Int32
+    getter min_fee_a : Int32
+    getter min_fee_b : Int32
+    getter max_block_size : Int32
+    getter max_tx_size : Int32
+    getter max_block_header_size : Int32
+    @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+    getter key_deposit : Int64
+    @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+    getter pool_deposit : Int64
+    getter e_max : Int32
+    getter n_opt : Int32
+    getter a0 : Float64
+    getter rho : Float64
+    getter tau : Float64
+    getter decentralisation_param : Float64
+    getter extra_entropy : String?
+    getter protocol_major_ver : Int32
+    getter protocol_minor_ver : Int32
+    @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+    getter min_utxo : Int64
+    @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+    getter min_pool_cost : Int64
+    getter nonce : String
+    getter cost_models : Hash(String, Hash(String, Int32))?
+    getter price_mem : Float64?
+    getter price_step : Float64?
+    @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+    getter max_tx_ex_mem : Int64?
+    @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+    getter max_tx_ex_steps : Int64?
+    @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+    getter max_block_ex_mem : Int64?
+    @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+    getter max_block_ex_steps : Int64?
+    @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+    getter max_val_size : Int64?
+    getter collateral_percent : Int32?
+    getter max_collateral_inputs : Int32?
+    @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+    getter coins_per_utxo_size : Int64?
   end
 end

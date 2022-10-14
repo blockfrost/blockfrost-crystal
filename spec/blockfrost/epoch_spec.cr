@@ -173,8 +173,17 @@ describe Blockfrost::Epoch do
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/parameters")
         .to_return(body: read_fixture("epoch/parameters.200.json"))
 
-      Blockfrost::Epoch.parameters(225)
-        .should be_a(Blockfrost::Epoch::Parameters)
+      Blockfrost::Epoch.parameters(225).tap do |parameters|
+        parameters.should be_a(Blockfrost::Epoch::Parameters)
+        parameters.epoch.should eq(225)
+        parameters.pool_deposit.should eq(500000000)
+        parameters.decentralisation_param.should eq(0.5)
+        parameters.cost_models
+          .as(Hash)
+          .dig("PlutusV2", "addInteger-cpu-arguments-intercept")
+          .should eq(197209)
+        parameters.coins_per_utxo_size.should eq(34482)
+      end
     end
   end
 end
