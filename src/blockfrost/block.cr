@@ -50,20 +50,11 @@ struct Blockfrost::Block < Blockfrost::Resource
     page : QueryPage? = nil,
     order : String? = nil
   ) : Array(String)
-    tx_ids(
-      hash_or_number,
-      count,
-      page,
-      order ? QueryOrder.from_string(order) : nil
-    )
+    tx_ids(hash_or_number, count, page, order_from_string(order))
   end
 
-  def tx_ids(
-    count : QueryCount? = nil,
-    page : QueryPage? = nil,
-    order : QueryOrder | String? = nil
-  ) : Array(String)
-    Block.tx_ids(hash, count, page, order)
+  def tx_ids(**args) : Array(String)
+    Block.tx_ids(hash, **args)
   end
 
   def self.latest_tx_ids(
@@ -88,11 +79,8 @@ struct Blockfrost::Block < Blockfrost::Resource
       )
     end
 
-    def {{key.id}}(
-      count : QueryCount? = nil,
-      page : QueryPage? = nil
-    ) : Array(Block)
-      Block.{{key.id}}(hash, count: count, page: page)
+    def {{key.id}}(**args) : Array(Block)
+      Block.{{key.id}}(hash, **args)
     end
   {% end %}
 
@@ -124,11 +112,8 @@ struct Blockfrost::Block < Blockfrost::Resource
     )
   end
 
-  def addresses(
-    count : QueryCount? = nil,
-    page : QueryPage? = nil
-  ) : Array(Address)
-    Block.addresses(hash, count, page)
+  def addresses(**args) : Array(Address)
+    Block.addresses(hash, **args)
   end
 
   struct Address

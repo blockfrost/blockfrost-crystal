@@ -39,11 +39,8 @@ struct Blockfrost::Epoch < Blockfrost::Resource
       )
     end
 
-    def {{key.id}}(
-      count : QueryCount? = nil,
-      page : QueryPage? = nil
-    ) : Array(Epoch)
-      Epoch.{{key.id}}(epoch, count: count, page: page)
+    def {{key.id}}(**args) : Array(Epoch)
+      Epoch.{{key.id}}(epoch, **args)
     end
   {% end %}
 
