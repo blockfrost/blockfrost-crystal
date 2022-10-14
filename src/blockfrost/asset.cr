@@ -36,6 +36,7 @@ struct Blockfrost::Asset < Blockfrost::Resource
   end
 
   {% for path, model in {
+                          addresses:    "Address",
                           history:      "Event",
                           transactions: "Transaction",
                         } %}
@@ -87,6 +88,14 @@ struct Blockfrost::Asset < Blockfrost::Resource
     getter url : String
     getter logo : String
     getter decimals : Int32
+  end
+
+  struct Address
+    include JSON::Serializable
+
+    getter address : String
+    @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+    getter quantity : Int64
   end
 
   struct Event

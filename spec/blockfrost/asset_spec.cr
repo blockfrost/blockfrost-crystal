@@ -111,4 +111,26 @@ describe Blockfrost::Asset do
         .should be_a(Array(Blockfrost::Asset::Transaction))
     end
   end
+
+  describe ".addresses" do
+    it "fetches all addresses for a given asset" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/assets/b0d07d45.../addresses")
+        .to_return(body: read_fixture("asset/addresses.200.json"))
+
+      Blockfrost::Asset.addresses("b0d07d45...").tap do |addresses|
+        addresses.first.address.should start_with("addr1qxqs59lp")
+        addresses.first.quantity.should eq(1)
+      end
+    end
+
+    it "accepts ordering and pagination parameters" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/assets/b0d07d45.../addresses?order=desc&count=3&page=5")
+        .to_return(body: read_fixture("asset/addresses.200.json"))
+
+      Blockfrost::Asset.addresses("b0d07d45...", order: "desc", count: 3, page: 5)
+        .should be_a(Array(Blockfrost::Asset::Address))
+    end
+  end
 end
