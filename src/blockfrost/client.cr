@@ -50,7 +50,7 @@ struct Blockfrost::Client
     query : RequestData
   ) : String
     uri = URI.parse(Blockfrost.host_for_path(path))
-    uri.path = File.join("/api", Blockfrost.settings.api_version, path)
+    uri.path = File.join("/api", Blockfrost.api_version_for_path(path), path)
     uri.query = QueryString.new(query).build
     uri.to_s
   end

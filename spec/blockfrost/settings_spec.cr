@@ -5,14 +5,18 @@ describe Blockfrost do
     it "accepts a valid api key and api version" do
       Blockfrost.configure do |settings|
         settings.cardano_api_key = fake_cardano_api_key
-        settings.api_version = "v9"
+        settings.cardano_api_version = "v0"
+        settings.ipfs_api_key = fake_ipfs_api_key
+        settings.ipfs_api_version = "v1"
       end
 
       Blockfrost.settings.cardano_api_key.should eq(fake_cardano_api_key)
-      Blockfrost.settings.api_version.should eq("v9")
+      Blockfrost.settings.cardano_api_version.should eq("v0")
+      Blockfrost.settings.ipfs_api_key.should eq(fake_ipfs_api_key)
+      Blockfrost.settings.ipfs_api_version.should eq("v1")
     end
 
-    it "raises with an invalid api key" do
+    it "raises with an invalid cardano api key" do
       expect_raises(Habitat::InvalidSettingFormatError) do
         Blockfrost.configure do |settings|
           settings.cardano_api_key = "sumtingwong"
@@ -20,10 +24,26 @@ describe Blockfrost do
       end
     end
 
-    it "raises with an invalid api version" do
+    it "raises with an invalid ipfs api key" do
       expect_raises(Habitat::InvalidSettingFormatError) do
         Blockfrost.configure do |settings|
-          settings.api_version = "1"
+          settings.ipfs_api_key = "sumtingwong"
+        end
+      end
+    end
+
+    it "raises with an invalid cardano api version" do
+      expect_raises(Habitat::InvalidSettingFormatError) do
+        Blockfrost.configure do |settings|
+          settings.cardano_api_version = "1"
+        end
+      end
+    end
+
+    it "raises with an invalid ipfs api version" do
+      expect_raises(Habitat::InvalidSettingFormatError) do
+        Blockfrost.configure do |settings|
+          settings.ipfs_api_version = "v"
         end
       end
     end
@@ -128,6 +148,20 @@ describe Blockfrost do
       ) do
         Blockfrost.api_key_for_path("ipfs/gateway/QmZbHqiC")
       end
+    end
+  end
+
+  describe ".api_version_for_path" do
+    it "returns the appropriate api key for a given path" do
+      Blockfrost.configure do |settings|
+        settings.cardano_api_key = fake_cardano_api_key
+        settings.cardano_api_version = "v0"
+        settings.ipfs_api_key = fake_ipfs_api_key
+        settings.ipfs_api_version = "v1"
+      end
+
+      Blockfrost.api_version_for_path("blocks/latest").should eq("v0")
+      Blockfrost.api_version_for_path("ipfs/gateway/QmZbHqiC").should eq("v1")
     end
   end
 end

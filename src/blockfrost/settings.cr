@@ -6,9 +6,14 @@ module Blockfrost
          .args.first.map(&.id) %}
 
     Habitat.create do
-      setting cardano_api_key : String?, validation: :validate_cardano_api_key
-      setting ipfs_api_key : String?, validation: :validate_ipfs_api_key
-      setting api_version : String = "v0", validation: :validate_api_version
+      setting cardano_api_key : String?,
+        validation: :validate_cardano_api_key
+      setting cardano_api_version : String = "v0",
+        validation: :validate_api_version
+      setting ipfs_api_key : String?,
+        validation: :validate_ipfs_api_key
+      setting ipfs_api_version : String = "v0",
+        validation: :validate_api_version
     end
 
     def host_for_path(
@@ -30,6 +35,15 @@ module Blockfrost
       else
         settings.cardano_api_key ||
           Habitat.raise_validation_error("Missing Cardano API key")
+      end
+    end
+
+    def api_version_for_path(
+      path : String
+    ) : String
+      case path
+      when /^ipfs/ then settings.ipfs_api_version
+      else settings.cardano_api_version
       end
     end
 

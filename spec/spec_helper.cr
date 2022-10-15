@@ -16,8 +16,9 @@ def configure_api_keys(
 ) : Void
   Blockfrost.configure do |settings|
     settings.cardano_api_key = cardano_api_key
+    settings.cardano_api_version = "v0"
     settings.ipfs_api_key = ipfs_api_key
-    settings.api_version = "v0"
+    settings.ipfs_api_version = "v0"
   end
 end
 
