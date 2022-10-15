@@ -10,7 +10,7 @@ def fake_ipfs_api_key
   "ipfsVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE"
 end
 
-def configure_api_key(
+def configure_api_keys(
   cardano_api_key : String = fake_cardano_api_key,
   ipfs_api_key : String = fake_ipfs_api_key
 ) : Void

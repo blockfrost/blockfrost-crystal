@@ -2,7 +2,7 @@ require "../spec_helper"
 
 describe Blockfrost::Metric do
   before_each do
-    configure_api_key
+    configure_api_keys
   end
 
   describe ".all" do

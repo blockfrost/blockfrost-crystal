@@ -2,7 +2,7 @@ require "../spec_helper"
 
 describe Blockfrost::Health do
   before_each do
-    configure_api_key
+    configure_api_keys
   end
 
   describe ".get" do
