@@ -121,6 +121,114 @@ describe Blockfrost::Account do
         .should be_a(Array(Blockfrost::Account::Registration))
     end
   end
+
+  describe ".withdrawals" do
+    it "fetches the withdrawals for a given account" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/accounts/#{stake_address}/withdrawals")
+        .to_return(body: read_fixture("account/withdrawals.200.json"))
+
+      Blockfrost::Account.withdrawals(stake_address).tap do |withdrawals|
+        withdrawals.first.tx_hash
+          .should eq("48a9625c841eea0dd2bb6cf551eabe6523b7290c9ce34be74eedef2dd8f7ecc5")
+        withdrawals.first.amount
+          .should eq(454541212442)
+      end
+    end
+
+    it "accepts parameters for ordering and pagination" do
+      WebMock.stub(:get, "https://cardano-testnet.blockfrost.io/api/v0/accounts/#{stake_address}/withdrawals?order=desc&count=2&page=3")
+        .to_return(body: read_fixture("account/withdrawals.200.json"))
+
+      Blockfrost::Account.withdrawals(stake_address, "desc", 2, 3)
+        .should be_a(Array(Blockfrost::Account::Withdrawal))
+    end
+  end
+
+  describe ".mirs" do
+    it "fetches the mirs for a given account" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/accounts/#{stake_address}/mirs")
+        .to_return(body: read_fixture("account/mirs.200.json"))
+
+      Blockfrost::Account.mirs(stake_address).tap do |mirs|
+        mirs.first.tx_hash
+          .should eq("69705bba1d687a816ff5a04ec0c358a1f1ef075ab7f9c6cc2763e792581cec6d")
+        mirs.first.amount
+          .should eq(2193707473)
+      end
+    end
+
+    it "accepts parameters for ordering and pagination" do
+      WebMock.stub(:get, "https://cardano-testnet.blockfrost.io/api/v0/accounts/#{stake_address}/mirs?order=desc&count=2&page=3")
+        .to_return(body: read_fixture("account/mirs.200.json"))
+
+      Blockfrost::Account.mirs(stake_address, "desc", 2, 3)
+        .should be_a(Array(Blockfrost::Account::Mir))
+    end
+  end
+
+  describe ".addresses" do
+    it "fetches the addresses for a given account" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/accounts/#{stake_address}/addresses")
+        .to_return(body: read_fixture("account/addresses.200.json"))
+
+      Blockfrost::Account.addresses(stake_address).tap do |addresses|
+        addresses.first.address
+          .should eq("addr1qx2kd28nq8ac5prwg32hhvudlwggpgfp8utlyqxu6wqgz62f79qsdmm5dsknt9ecr5w468r9ey0fxwkdrwh08ly3tu9sy0f4qd")
+      end
+    end
+
+    it "accepts parameters for ordering and pagination" do
+      WebMock.stub(:get, "https://cardano-testnet.blockfrost.io/api/v0/accounts/#{stake_address}/addresses?order=desc&count=2&page=3")
+        .to_return(body: read_fixture("account/addresses.200.json"))
+
+      Blockfrost::Account.addresses(stake_address, "desc", 2, 3)
+        .should be_a(Array(Blockfrost::Account::Address))
+    end
+  end
+
+  describe ".assets_from_addresses" do
+    it "fetches the assets from the addresses for a given account" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/accounts/#{stake_address}/addresses/assets")
+        .to_return(body: read_fixture("account/assets.200.json"))
+
+      Blockfrost::Account.assets_from_addresses(stake_address).tap do |assets|
+        assets.first.unit
+          .should eq("d5e6bf0500378d4f0da4e8dde6becec7621cd8cbf5cbb9b87013d4cc537061636542756433343132")
+        assets.first.quantity.should eq(1i64)
+      end
+    end
+
+    it "accepts parameters for ordering and pagination" do
+      WebMock.stub(:get, "https://cardano-testnet.blockfrost.io/api/v0/accounts/#{stake_address}/addresses/assets?order=desc&count=2&page=3")
+        .to_return(body: read_fixture("account/assets.200.json"))
+
+      Blockfrost::Account.assets_from_addresses(stake_address, "desc", 2, 3)
+        .should be_a(Array(Blockfrost::Account::Asset))
+    end
+  end
+
+  describe ".total_from_addresses" do
+    it "fetches the totals of all addresses combined" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/accounts/#{stake_address}/addresses/total")
+        .to_return(body: read_fixture("account/total.200.json"))
+
+      Blockfrost::Account.total_from_addresses(stake_address).tap do |total|
+        total.stake_address
+          .should eq("stake1u9l5q5jwgelgagzyt6nuaasefgmn8pd25c8e9qpeprq0tdcp0e3uk")
+        total.received_sum.first.unit.should eq("lovelace")
+        total.received_sum.first.quantity.should eq(42000000)
+        total.sent_sum.last.unit
+          .should eq("b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb38a76e7574636f696e")
+        total.sent_sum.last.quantity.should eq(12)
+        total.tx_count.should eq(12)
+      end
+    end
+  end
 end
 
 private def stake_address

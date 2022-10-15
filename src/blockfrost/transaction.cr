@@ -6,7 +6,7 @@ struct Blockfrost::Transaction < Blockfrost::Resource
   getter block_time : Time
   getter slot : Int32
   getter index : Int32
-  getter output_amount : Array(Unit::Lovelace)
+  getter output_amount : Array(Lovelace)
   @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
   getter fees : Int64
   @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
