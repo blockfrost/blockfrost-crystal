@@ -19,12 +19,21 @@ A Crystal SDK for the Blockfrost.io API.
 require "blockfrost"
 ```
 
-Create an initializer to configure the API key:
+Create an initializer to configure the global API key(s):
 
 ```crystal
+# e.g. config/blockfrost.cr
 Blockfrost.configure do |config|
   config.cardano_api_key = ENV.fetch("BLOCKFROST_CARDANO_API_KEY")
   config.ipfs_api_key = ENV.fetch("BLOCKFROST_IPFS_API_KEY")
+end
+```
+
+Or wrap your code in a block where different credentials are required:
+
+```crystal
+Blockfrost.temp_config(cardano_api_key: "testnetAbC...xYz") do
+  # your code here
 end
 ```
 
