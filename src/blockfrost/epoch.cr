@@ -17,31 +17,21 @@ struct Blockfrost::Epoch < Blockfrost::BaseResource
   @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
   getter active_stake : Int64
 
-  def self.get(epoch_number : Int32) : Epoch
-    Epoch.from_json(client.get("epochs/#{epoch_number}"))
+  def self.get(epoch : Int32) : Epoch
+    Epoch.from_json(client.get("epochs/#{epoch}"))
   end
 
   def self.latest : Epoch
     Epoch.from_json(client.get("epochs/latest"))
   end
 
-  {% for key in %w[next previous] %}
-    def self.{{key.id}}(
-      epoch_number : Int32,
-      count : QueryCount? = nil,
-      page : QueryPage? = nil
-    ) : Array(Epoch)
-      Array(Epoch).from_json(
-        client.get("epochs/#{epoch_number}/{{key.id}}", {
-          "count" => count,
-          "page" => page
-        })
-      )
-    end
-
-    def {{key.id}}(**args) : Array(Epoch)
-      Epoch.{{key.id}}(epoch, **args)
-    end
+  {% for method in %w[next previous] %}
+    get_all_with_pagination(
+      :{{method.id}},
+      Array(Epoch),
+      "epochs/#{epoch}/{{method.id}}",
+      epoch : Int32
+    )
   {% end %}
 
   def self.stakes(

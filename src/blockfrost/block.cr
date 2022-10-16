@@ -40,23 +40,13 @@ struct Blockfrost::Block < Blockfrost::BaseResource
     tx_ids("latest", **args)
   end
 
-  {% for key in %w[next previous] %}
-    def self.{{key.id}}(
-      hash_or_number : Int32 | String,
-      count : QueryCount? = nil,
-      page : QueryPage? = nil
-    ) : Array(Block)
-      Array(Block).from_json(
-        client.get("blocks/#{hash_or_number}/{{key.id}}", {
-          "count" => count,
-          "page" => page
-        })
-      )
-    end
-
-    def {{key.id}}(**args) : Array(Block)
-      Block.{{key.id}}(hash, **args)
-    end
+  {% for method in %w[next previous] %}
+    get_all_with_pagination(
+      :{{method.id}},
+      Array(Block),
+      "blocks/#{hash_or_number}/{{method.id}}",
+      hash_or_number : Int32 | String
+    )
   {% end %}
 
   def self.in_slot(
@@ -74,22 +64,12 @@ struct Blockfrost::Block < Blockfrost::BaseResource
     )
   end
 
-  def self.addresses(
-    hash_or_number : Int32 | String,
-    count : QueryCount? = nil,
-    page : QueryPage? = nil
-  ) : Array(Address)
-    Array(Address).from_json(
-      client.get("blocks/#{hash_or_number}/addresses", {
-        "count" => count,
-        "page"  => page,
-      })
-    )
-  end
-
-  def addresses(**args) : Array(Address)
-    Block.addresses(hash, **args)
-  end
+  get_all_with_pagination(
+    :addresses,
+    Array(Address),
+    "blocks/#{hash_or_number}/addresses",
+    hash_or_number : Int32 | String
+  )
 
   private def hash_or_number : String
     hash

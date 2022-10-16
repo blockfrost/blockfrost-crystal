@@ -15,6 +15,30 @@ abstract struct Blockfrost::BaseResource
     self.order_from_string(**args)
   end
 
+  macro get_all_with_pagination(
+    method_name,
+    return_type,
+    resource_path,
+    argument_type_declaration
+  )
+    def self.{{method_name.id}}(
+      {{argument_type_declaration}},
+      count : QueryCount? = nil,
+      page : QueryPage? = nil
+    ) : {{return_type}}
+      {{return_type}}.from_json(
+        client.get({{resource_path}}, {
+          "count" => count,
+          "page" => page
+        })
+      )
+    end
+
+    def {{method_name.id}}(**args) : {{return_type}}
+      self.class.{{method_name.id}}({{argument_type_declaration.var}}, **args)
+    end
+  end
+
   macro get_all_with_order_and_pagination(
     method_name,
     return_type,
