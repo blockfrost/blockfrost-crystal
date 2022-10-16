@@ -60,6 +60,28 @@ describe Blockfrost::Address do
       end
     end
   end
+
+  describe ".utxos" do
+    it "fetches the address' current utxos" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/addresses/#{fake_address}/utxos")
+        .to_return(body: read_fixture("address/utxos.200.json"))
+
+      Blockfrost::Address.utxos(fake_address).tap do |utxos|
+        utxos.first.tx_hash
+          .should eq("39a7a284c2a0948189dc45dec670211cd4d72f7b66c5726c08d9b3df11e44d58")
+        utxos.first.output_index.should eq(0)
+        utxos.first.amount.first.unit.should eq("lovelace")
+        utxos.first.amount.first.quantity.should eq(42_000_000)
+        utxos.first.block
+          .should eq("7eb8e27d18686c7db9a18f8bbcfe34e3fed6e047afaa2d969904d15e934847e6")
+        utxos.first.data_hash
+          .should eq("9e478573ab81ea7a8e31891ce0648b81229f408d596a3483e6f4f9b92d3cf710")
+        utxos.first.inline_datum.should be_nil,
+          utxos.first.reference_script_hash.should be_nil
+      end
+    end
+  end
 end
 
 private def fake_address

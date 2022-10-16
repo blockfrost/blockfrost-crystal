@@ -1,4 +1,4 @@
-abstract struct Blockfrost::BaseAddress < Blockfrost::Base::Resource
+abstract struct Blockfrost::BaseAddress < Blockfrost::BaseResource
   getter address : String
   getter stake_address : String?
   getter type : String
@@ -20,6 +20,10 @@ struct Blockfrost::Address < Blockfrost::BaseAddress
     Total.from_json(client.get("addresses/#{address}/total"))
   end
 
+  def self.utxos(address : String) : Array(UTXO)
+    Array(UTXO).from_json(client.get("addresses/#{address}/utxos"))
+  end
+
   struct Extended < BaseAddress
     getter amount : Array(Token::Extended)
   end
@@ -33,6 +37,6 @@ struct Blockfrost::Address < Blockfrost::BaseAddress
     getter tx_count : Int32
   end
 
-  struct UTXO < Base::UTXO
+  struct UTXO < BaseUTXO
   end
 end
