@@ -41,19 +41,13 @@ struct Blockfrost::Epoch < Blockfrost::BaseResource
     epoch : Int32
   )
 
-  def self.stakes_by_pool(
+  gets_all_scoped_with_pagination(
+    :stakes_by_pool,
+    Array(Stake),
+    "epochs/#{epoch}/stakes/#{pool_id}",
     epoch : Int32,
-    pool_id : String,
-    count : QueryCount? = nil,
-    page : QueryPage? = nil
-  ) : Array(Stake)
-    Array(Stake).from_json(
-      client.get("epochs/#{epoch}/stakes/#{pool_id}", {
-        "count" => count,
-        "page"  => page,
-      })
-    )
-  end
+    pool_id : String
+  )
 
   gets_all_with_pagination(
     :block_ids,
@@ -62,19 +56,13 @@ struct Blockfrost::Epoch < Blockfrost::BaseResource
     epoch : Int32
   )
 
-  def self.block_ids_by_pool(
+  gets_all_scoped_with_pagination(
+    :block_ids_by_pool,
+    Array(String),
+    "epochs/#{epoch}/blocks/#{pool_id}",
     epoch : Int32,
-    pool_id : String,
-    count : QueryCount? = nil,
-    page : QueryPage? = nil
-  ) : Array(String)
-    Array(String).from_json(
-      client.get("epochs/#{epoch}/blocks/#{pool_id}", {
-        "count" => count,
-        "page"  => page,
-      })
-    )
-  end
+    pool_id : String
+  )
 
   def self.parameters(epoch : Int32) : Parameters
     Parameters.from_json(client.get("epochs/#{epoch}/parameters"))
