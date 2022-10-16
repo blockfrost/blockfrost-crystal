@@ -29,32 +29,12 @@ struct Blockfrost::Block < Blockfrost::BaseResource
     get("latest")
   end
 
-  def self.tx_ids(
-    hash_or_number : Int32 | String,
-    order : QueryOrder? = nil,
-    count : QueryCount? = nil,
-    page : QueryPage? = nil
-  ) : Array(String)
-    Array(String).from_json(
-      client.get("blocks/#{hash_or_number}/txs", {
-        "order" => order.try(&.to_s),
-        "count" => count,
-        "page"  => page,
-      })
-    )
-  end
-
-  def self.tx_ids(
-    hash_or_number : Int32 | String,
-    order : String,
-    **args
-  ) : Array(String)
-    tx_ids(hash_or_number, order_from_string(order), **args)
-  end
-
-  def tx_ids(**args) : Array(String)
-    Block.tx_ids(hash, **args)
-  end
+  get_all_with_order_and_pagination(
+    :tx_ids,
+    Array(String),
+    "blocks/#{hash_or_number}/txs",
+    hash_or_number : Int32 | String
+  )
 
   def self.latest_tx_ids(**args) : Array(String)
     tx_ids("latest", **args)
@@ -109,6 +89,10 @@ struct Blockfrost::Block < Blockfrost::BaseResource
 
   def addresses(**args) : Array(Address)
     Block.addresses(hash, **args)
+  end
+
+  private def hash_or_number : String
+    hash
   end
 
   struct Address

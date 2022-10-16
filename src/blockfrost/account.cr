@@ -29,54 +29,20 @@ struct Blockfrost::Account < Blockfrost::BaseResource
                             mirs:          "Mir",
                             addresses:     "Address",
                           } %}
-    def self.{{method.id}}(
-      stake_address : String,
-      order : QueryOrder? = nil,
-      count : QueryCount? = nil,
-      page : QueryPage? = nil
-    ) : Array({{model.id}})
-      Array({{model.id}}).from_json(
-        client.get("accounts/#{stake_address}/{{method.id}}", {
-          "order" => order.try(&.to_s),
-          "count" => count,
-          "page"  => page,
-        })
-      )
-    end
-
-    def self.{{method.id}}(
-      stake_address : String,
-      order : String,
-      count : QueryCount? = nil,
-      page : QueryPage? = nil
-    ) : Array({{model.id}})
-      {{method.id}}(stake_address, order_from_string(order), count, page)
-    end
+    get_all_with_order_and_pagination(
+      :{{method.id}},
+      Array({{model.id}}),
+      "accounts/#{stake_address}/{{method.id}}",
+      stake_address : String
+    )
   {% end %}
 
-  def self.assets_from_addresses(
-    stake_address : String,
-    order : QueryOrder? = nil,
-    count : QueryCount? = nil,
-    page : QueryPage? = nil
-  ) : Array(Token)
-    Array(Token).from_json(
-      client.get("accounts/#{stake_address}/addresses/assets", {
-        "order" => order.try(&.to_s),
-        "count" => count,
-        "page"  => page,
-      })
-    )
-  end
-
-  def self.assets_from_addresses(
-    stake_address : String,
-    order : String,
-    count : QueryCount? = nil,
-    page : QueryPage? = nil
-  ) : Array(Token)
-    assets_from_addresses(stake_address, order_from_string(order), count, page)
-  end
+  get_all_with_order_and_pagination(
+    :assets_from_addresses,
+    Array(Token),
+    "accounts/#{stake_address}/addresses/assets",
+    stake_address : String
+  )
 
   def self.total_from_addresses(
     stake_address : String

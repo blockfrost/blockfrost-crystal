@@ -20,9 +20,12 @@ struct Blockfrost::Address < Blockfrost::BaseAddress
     Total.from_json(client.get("addresses/#{address}/total"))
   end
 
-  def self.utxos(address : String) : Array(UTXO)
-    Array(UTXO).from_json(client.get("addresses/#{address}/utxos"))
-  end
+  get_all_with_order_and_pagination(
+    :utxos,
+    Array(UTXO),
+    "addresses/#{address}/utxos",
+    address : String
+  )
 
   struct Extended < BaseAddress
     getter amount : Array(Token::Extended)

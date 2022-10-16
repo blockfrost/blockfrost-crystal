@@ -10,86 +10,32 @@ struct Blockfrost::Asset < Blockfrost::BaseResource
   getter onchain_metadata : OnchainMetadata?
   getter metadata : Metadata?
 
-  def self.all(
-    order : QueryOrder? = nil,
-    count : QueryCount? = nil,
-    page : QueryPage? = nil
-  ) : Array(Abbreviated)
-    Array(Abbreviated).from_json(
-      client.get("assets", {
-        "order" => order.try(&.to_s),
-        "count" => count,
-        "page"  => page,
-      })
-    )
-  end
-
-  def self.all(
-    order : String,
-    **args
-  ) : Array(Abbreviated)
-    all(order_from_string(order), **args)
-  end
+  get_all_with_order_and_pagination(:all, Array(Abbreviated), "assets")
 
   def self.get(asset : String) : Asset
     Asset.from_json(client.get("assets/#{asset}"))
   end
 
-  {% for resource, model in {
-                              addresses:    "Address",
-                              history:      "Event",
-                              transactions: "Transaction",
-                            } %}
-    def self.{{resource.id}}(
-      asset : String,
-      order : QueryOrder? = nil,
-      count : QueryCount? = nil,
-      page : QueryPage? = nil
-    ) : Array({{model.id}})
-      Array({{model.id}}).from_json(
-        client.get("assets/#{asset}/{{resource.id}}", {
-          "order" => order.try(&.to_s),
-          "count" => count,
-          "page"  => page,
-        })
-      )
-    end
+  {% for method, model in {
+                            addresses:    "Address",
+                            history:      "Event",
+                            transactions: "Transaction",
+                          } %}
 
-    def self.{{resource.id}}(
-      asset : String,
-      order : String,
-      **args
-    ) : Array({{model.id}})
-      {{resource.id}}(asset, order_from_string(order), **args)
-    end
-
-    def {{resource.id}}(**args) : Array({{model.id}})
-      Asset.{{resource.id}}(asset, **args)
-    end
+    get_all_with_order_and_pagination(
+      :{{method.id}},
+      Array({{model.id}}),
+      "assets/#{asset}/{{method.id}}",
+      asset : String
+    )
   {% end %}
 
-  def self.all_of_policy(
-    policy_id : String,
-    order : QueryOrder? = nil,
-    count : QueryCount? = nil,
-    page : QueryPage? = nil
-  ) : Array(Abbreviated)
-    Array(Abbreviated).from_json(
-      client.get("assets/policy/#{policy_id}", {
-        "order" => order.try(&.to_s),
-        "count" => count,
-        "page"  => page,
-      })
-    )
-  end
-
-  def self.all_of_policy(
-    policy_id : String,
-    order : String,
-    **args
-  ) : Array(Abbreviated)
-    all_of_policy(policy_id, order_from_string(order), **args)
-  end
+  get_all_with_order_and_pagination(
+    :all_of_policy,
+    Array(Abbreviated),
+    "assets/policy/#{policy_id}",
+    policy_id : String
+  )
 
   struct Abbreviated
     include JSON::Serializable

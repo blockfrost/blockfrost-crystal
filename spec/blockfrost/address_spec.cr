@@ -81,6 +81,15 @@ describe Blockfrost::Address do
           utxos.first.reference_script_hash.should be_nil
       end
     end
+
+    it "accepts ordering and pagination parameters" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/addresses/#{fake_address}/utxos?order=desc&count=10&page=1")
+        .to_return(body: read_fixture("address/utxos.200.json"))
+
+      Blockfrost::Address.utxos(fake_address, "desc", 10, 1)
+        .should be_a(Array(Blockfrost::Address::UTXO))
+    end
   end
 end
 
