@@ -32,7 +32,7 @@ describe Blockfrost::Address do
       Blockfrost::Address.extended(fake_address).tap do |address|
         address.address.should eq(fake_address)
         address.amount.first.unit.should eq("lovelace")
-        address.amount.first.quantity.should eq(42000000)
+        address.amount.first.quantity.should eq(42_000_000)
         address.amount.first.decimals.should eq(6)
         address.amount.first.has_nft_onchain_metadata.should be_falsey
         address.amount.last.decimals.should be_nil
@@ -40,6 +40,23 @@ describe Blockfrost::Address do
           .should eq("stake1ux3g2c9dx2nhhehyrezyxpkstartcqmu9hk63qgfkccw5rqttygt7")
         address.type.should eq("shelley")
         address.script.should be_falsey
+      end
+    end
+  end
+
+  describe ".total" do
+    it "fetches the address' totals" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/addresses/#{fake_address}/total")
+        .to_return(body: read_fixture("address/total.200.json"))
+
+      Blockfrost::Address.total(fake_address).tap do |total|
+        total.address.should eq(fake_address)
+        total.received_sum.first.unit.should eq("lovelace")
+        total.received_sum.first.quantity.should eq(42_000_000)
+        total.sent_sum.last.unit.should start_with("b0d07d45fe")
+        total.sent_sum.last.quantity.should eq(12)
+        total.tx_count.should eq(12)
       end
     end
   end
