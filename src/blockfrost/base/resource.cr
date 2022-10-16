@@ -11,10 +11,6 @@ abstract struct Blockfrost::BaseResource
     QueryOrder.from_string(order)
   end
 
-  def order_from_string(**args)
-    self.order_from_string(**args)
-  end
-
   macro gets_all_with_pagination(
     method_name,
     return_type,
