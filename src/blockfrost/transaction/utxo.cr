@@ -11,7 +11,7 @@ struct Blockfrost::Transaction::Utxo < Blockfrost::Resource
     include JSON::Serializable
 
     getter address : String
-    getter amount : Array(Unit)
+    getter amount : Array(Token)
     getter tx_hash : String
     getter output_index : Int32
     getter data_hash : String?
@@ -22,7 +22,7 @@ struct Blockfrost::Transaction::Utxo < Blockfrost::Resource
     include JSON::Serializable
 
     getter address : String
-    getter amount : Array(Unit)
+    getter amount : Array(Token)
     getter output_index : Int32
     getter data_hash : String?
   end

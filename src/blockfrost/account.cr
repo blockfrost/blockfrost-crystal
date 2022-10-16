@@ -154,8 +154,8 @@ struct Blockfrost::Account < Blockfrost::Resource
     include JSON::Serializable
 
     getter stake_address : String
-    getter received_sum : Array(Unit)
-    getter sent_sum : Array(Unit)
+    getter received_sum : Array(Token)
+    getter sent_sum : Array(Token)
     getter tx_count : Int32
   end
 end
