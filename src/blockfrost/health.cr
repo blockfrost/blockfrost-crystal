@@ -1,4 +1,4 @@
-struct Blockfrost::Health < Blockfrost::Resource
+struct Blockfrost::Health < Blockfrost::Base::Resource
   getter is_healthy : Bool
 
   def self.get : Health

@@ -1,4 +1,4 @@
-struct Blockfrost::Transaction < Blockfrost::Resource
+struct Blockfrost::Transaction < Blockfrost::Base::Resource
   getter hash : String
   getter block : String
   getter block_height : Int32

@@ -1,4 +1,4 @@
-struct Blockfrost::Root < Blockfrost::Resource
+struct Blockfrost::Root < Blockfrost::Base::Resource
   getter url : String
   getter version : String
 

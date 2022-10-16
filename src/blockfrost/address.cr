@@ -1,4 +1,4 @@
-abstract struct Blockfrost::BaseAddress < Blockfrost::Resource
+abstract struct Blockfrost::BaseAddress < Blockfrost::Base::Resource
   getter address : String
   getter stake_address : String?
   getter type : String
@@ -31,5 +31,8 @@ struct Blockfrost::Address < Blockfrost::BaseAddress
     getter received_sum : Array(Token)
     getter sent_sum : Array(Token)
     getter tx_count : Int32
+  end
+
+  struct UTXO < Base::UTXO
   end
 end

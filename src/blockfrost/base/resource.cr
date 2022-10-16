@@ -1,4 +1,4 @@
-abstract struct Blockfrost::Resource
+abstract struct Blockfrost::Base::Resource
   include JSON::Serializable
 
   def self.client : Client

@@ -1,13 +1,5 @@
-abstract struct Blockfrost::BaseToken
-  include JSON::Serializable
-
-  getter unit : String
-  @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
-  getter quantity : Int64
-end
-
-struct Blockfrost::Token < Blockfrost::BaseToken
-  struct Extended < Blockfrost::BaseToken
+struct Blockfrost::Token < Blockfrost::Base::Token
+  struct Extended < Blockfrost::Base::Token
     getter decimals : Int32?
     getter has_nft_onchain_metadata : Bool
 

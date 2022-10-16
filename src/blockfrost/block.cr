@@ -1,4 +1,4 @@
-struct Blockfrost::Block < Blockfrost::Resource
+struct Blockfrost::Block < Blockfrost::Base::Resource
   @[JSON::Field(converter: Blockfrost::Json::TimeFromInt)]
   getter time : Time
   getter height : Int32?

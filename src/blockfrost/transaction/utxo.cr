@@ -1,4 +1,4 @@
-struct Blockfrost::Transaction::Utxo < Blockfrost::Resource
+struct Blockfrost::Transaction::Utxo < Blockfrost::Base::Resource
   getter hash : String
   getter inputs : Array(Input)
   getter outputs : Array(Output)
