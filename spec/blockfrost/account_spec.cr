@@ -207,7 +207,7 @@ describe Blockfrost::Account do
         .to_return(body: read_fixture("account/assets.200.json"))
 
       Blockfrost::Account.assets_from_addresses(stake_address, "desc", 2, 3)
-        .should be_a(Array(Blockfrost::Account::Asset))
+        .should be_a(Array(Blockfrost::Token))
     end
   end
 

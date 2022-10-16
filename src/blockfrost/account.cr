@@ -1,4 +1,4 @@
-struct Blockfrost::Account < Blockfrost::Resource
+struct Blockfrost::Account < Blockfrost::Base::Resource
   getter stake_address : String
   getter active : Bool
   getter active_epoch : Int32?
@@ -59,8 +59,8 @@ struct Blockfrost::Account < Blockfrost::Resource
     order : QueryOrder? = nil,
     count : QueryCount? = nil,
     page : QueryPage? = nil
-  ) : Array(Asset)
-    Array(Asset).from_json(
+  ) : Array(Token)
+    Array(Token).from_json(
       client.get("accounts/#{stake_address}/addresses/assets", {
         "order" => order.try(&.to_s),
         "count" => count,
@@ -74,7 +74,7 @@ struct Blockfrost::Account < Blockfrost::Resource
     order : String,
     count : QueryCount? = nil,
     page : QueryPage? = nil
-  ) : Array(Asset)
+  ) : Array(Token)
     assets_from_addresses(stake_address, order_from_string(order), count, page)
   end
 
@@ -140,14 +140,6 @@ struct Blockfrost::Account < Blockfrost::Resource
     include JSON::Serializable
 
     getter address : String
-  end
-
-  struct Asset
-    include JSON::Serializable
-
-    getter unit : String
-    @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
-    getter quantity : Int64
   end
 
   struct Total
