@@ -1,4 +1,4 @@
-struct Blockfrost::Epoch < Blockfrost::Base::Resource
+struct Blockfrost::Epoch < Blockfrost::BaseResource
   getter epoch : Int32
   @[JSON::Field(converter: Blockfrost::Json::TimeFromInt)]
   getter start_time : Time

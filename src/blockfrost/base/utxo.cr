@@ -1,4 +1,4 @@
-abstract struct Blockfrost::Base::UTXO
+abstract struct Blockfrost::BaseUTXO
   include JSON::Serializable
 
   getter tx_hash : String

@@ -1,4 +1,4 @@
-abstract struct Blockfrost::Base::Token
+abstract struct Blockfrost::BaseToken
   include JSON::Serializable
 
   getter unit : String

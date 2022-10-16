@@ -1,5 +1,5 @@
-struct Blockfrost::Token < Blockfrost::Base::Token
-  struct Extended < Blockfrost::Base::Token
+struct Blockfrost::Token < Blockfrost::BaseToken
+  struct Extended < Blockfrost::BaseToken
     getter decimals : Int32?
     getter has_nft_onchain_metadata : Bool
 

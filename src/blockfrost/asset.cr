@@ -1,4 +1,4 @@
-struct Blockfrost::Asset < Blockfrost::Base::Resource
+struct Blockfrost::Asset < Blockfrost::BaseResource
   getter asset : String
   @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
   getter quantity : Int64

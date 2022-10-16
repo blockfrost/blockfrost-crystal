@@ -1,4 +1,4 @@
-struct Blockfrost::Account < Blockfrost::Base::Resource
+struct Blockfrost::Account < Blockfrost::BaseResource
   getter stake_address : String
   getter active : Bool
   getter active_epoch : Int32?
