@@ -34,64 +34,50 @@ struct Blockfrost::Epoch < Blockfrost::BaseResource
     )
   {% end %}
 
-  def self.stakes(
-    epoch_number : Int32,
-    count : QueryCount? = nil,
-    page : QueryPage? = nil
-  ) : Array(Stake)
-    Array(Stake).from_json(
-      client.get("epochs/#{epoch_number}/stakes", {
-        "count" => count,
-        "page"  => page,
-      })
-    )
-  end
+  get_all_with_pagination(
+    :stakes,
+    Array(Stake),
+    "epochs/#{epoch}/stakes",
+    epoch : Int32
+  )
 
   def self.stakes_by_pool(
-    epoch_number : Int32,
+    epoch : Int32,
     pool_id : String,
     count : QueryCount? = nil,
     page : QueryPage? = nil
   ) : Array(Stake)
     Array(Stake).from_json(
-      client.get("epochs/#{epoch_number}/stakes/#{pool_id}", {
+      client.get("epochs/#{epoch}/stakes/#{pool_id}", {
         "count" => count,
         "page"  => page,
       })
     )
   end
 
-  def self.block_ids(
-    epoch_number : Int32,
-    count : QueryCount? = nil,
-    page : QueryPage? = nil
-  ) : Array(String)
-    Array(String).from_json(
-      client.get("epochs/#{epoch_number}/blocks", {
-        "count" => count,
-        "page"  => page,
-      })
-    )
-  end
+  get_all_with_pagination(
+    :block_ids,
+    Array(String),
+    "epochs/#{epoch}/blocks",
+    epoch : Int32
+  )
 
   def self.block_ids_by_pool(
-    epoch_number : Int32,
+    epoch : Int32,
     pool_id : String,
     count : QueryCount? = nil,
     page : QueryPage? = nil
   ) : Array(String)
     Array(String).from_json(
-      client.get("epochs/#{epoch_number}/blocks/#{pool_id}", {
+      client.get("epochs/#{epoch}/blocks/#{pool_id}", {
         "count" => count,
         "page"  => page,
       })
     )
   end
 
-  def self.parameters(
-    epoch_number : Int32
-  ) : Parameters
-    Parameters.from_json(client.get("epochs/#{epoch_number}/parameters"))
+  def self.parameters(epoch : Int32) : Parameters
+    Parameters.from_json(client.get("epochs/#{epoch}/parameters"))
   end
 
   struct Stake

@@ -55,9 +55,7 @@ struct Blockfrost::Client
     uri.to_s
   end
 
-  private def headers(
-    path : String
-  ) : HTTP::Headers
+  private def headers(path : String) : HTTP::Headers
     HTTP::Headers{
       "Accept"       => "application/json",
       "Content-Type" => "application/json",
@@ -65,9 +63,7 @@ struct Blockfrost::Client
     }
   end
 
-  private def render(
-    response : HTTP::Client::Response
-  ) : String
+  private def render(response : HTTP::Client::Response) : String
     {% begin %}
       case response.status_code
       when 200, 201
