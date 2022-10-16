@@ -20,6 +20,14 @@ struct Blockfrost::Address < Blockfrost::BaseAddress
     address : String
   )
 
+  gets_all_scoped_with_order_and_pagination(
+    :utxos_of_asset,
+    Array(UTXO),
+    "addresses/#{address}/utxos/#{asset}",
+    address : String,
+    asset : String
+  )
+
   struct Extended < BaseAddress
     getter amount : Array(Token::Extended)
   end

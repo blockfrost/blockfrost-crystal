@@ -10,7 +10,11 @@ struct Blockfrost::Asset < Blockfrost::BaseResource
   getter onchain_metadata : OnchainMetadata?
   getter metadata : Metadata?
 
-  gets_all_with_order_and_pagination(:all, Array(Abbreviated), "assets")
+  gets_all_with_order_and_pagination(
+    :all,
+    Array(Abbreviated),
+    "assets"
+  )
 
   def self.get(asset : String) : Asset
     Asset.from_json(client.get("assets/#{asset}"))
