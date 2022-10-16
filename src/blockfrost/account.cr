@@ -44,9 +44,7 @@ struct Blockfrost::Account < Blockfrost::BaseResource
     stake_address : String
   )
 
-  def self.total_from_addresses(
-    stake_address : String
-  ) : Total
+  def self.total_from_addresses(stake_address : String) : Total
     Total.from_json(client.get("accounts/#{stake_address}/addresses/total"))
   end
 
