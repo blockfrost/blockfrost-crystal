@@ -15,7 +15,7 @@ abstract struct Blockfrost::BaseResource
     self.order_from_string(**args)
   end
 
-  macro get_all_with_pagination(
+  macro gets_all_with_pagination(
     method_name,
     return_type,
     resource_path,
@@ -39,7 +39,7 @@ abstract struct Blockfrost::BaseResource
     end
   end
 
-  macro get_all_with_order_and_pagination(
+  macro gets_all_with_order_and_pagination(
     method_name,
     return_type,
     resource_path,

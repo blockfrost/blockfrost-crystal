@@ -26,7 +26,7 @@ struct Blockfrost::Epoch < Blockfrost::BaseResource
   end
 
   {% for method in %w[next previous] %}
-    get_all_with_pagination(
+    gets_all_with_pagination(
       :{{method.id}},
       Array(Epoch),
       "epochs/#{epoch}/{{method.id}}",
@@ -34,7 +34,7 @@ struct Blockfrost::Epoch < Blockfrost::BaseResource
     )
   {% end %}
 
-  get_all_with_pagination(
+  gets_all_with_pagination(
     :stakes,
     Array(Stake),
     "epochs/#{epoch}/stakes",
@@ -55,7 +55,7 @@ struct Blockfrost::Epoch < Blockfrost::BaseResource
     )
   end
 
-  get_all_with_pagination(
+  gets_all_with_pagination(
     :block_ids,
     Array(String),
     "epochs/#{epoch}/blocks",

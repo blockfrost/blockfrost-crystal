@@ -20,7 +20,7 @@ struct Blockfrost::Address < Blockfrost::BaseAddress
     Total.from_json(client.get("addresses/#{address}/total"))
   end
 
-  get_all_with_order_and_pagination(
+  gets_all_with_order_and_pagination(
     :utxos,
     Array(UTXO),
     "addresses/#{address}/utxos",

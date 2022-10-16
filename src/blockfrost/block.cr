@@ -29,7 +29,7 @@ struct Blockfrost::Block < Blockfrost::BaseResource
     get("latest")
   end
 
-  get_all_with_order_and_pagination(
+  gets_all_with_order_and_pagination(
     :tx_ids,
     Array(String),
     "blocks/#{hash_or_number}/txs",
@@ -41,7 +41,7 @@ struct Blockfrost::Block < Blockfrost::BaseResource
   end
 
   {% for method in %w[next previous] %}
-    get_all_with_pagination(
+    gets_all_with_pagination(
       :{{method.id}},
       Array(Block),
       "blocks/#{hash_or_number}/{{method.id}}",
@@ -62,7 +62,7 @@ struct Blockfrost::Block < Blockfrost::BaseResource
     )
   end
 
-  get_all_with_pagination(
+  gets_all_with_pagination(
     :addresses,
     Array(Address),
     "blocks/#{hash_or_number}/addresses",

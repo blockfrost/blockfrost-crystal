@@ -29,7 +29,7 @@ struct Blockfrost::Account < Blockfrost::BaseResource
                             mirs:          "Mir",
                             addresses:     "Address",
                           } %}
-    get_all_with_order_and_pagination(
+    gets_all_with_order_and_pagination(
       :{{method.id}},
       Array({{model.id}}),
       "accounts/#{stake_address}/{{method.id}}",
@@ -37,7 +37,7 @@ struct Blockfrost::Account < Blockfrost::BaseResource
     )
   {% end %}
 
-  get_all_with_order_and_pagination(
+  gets_all_with_order_and_pagination(
     :assets_from_addresses,
     Array(Token),
     "accounts/#{stake_address}/addresses/assets",
