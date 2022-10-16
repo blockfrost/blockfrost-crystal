@@ -49,9 +49,7 @@ struct Blockfrost::Block < Blockfrost::BaseResource
     )
   {% end %}
 
-  def self.in_slot(
-    slot_number : Int32
-  ) : Block
+  def self.in_slot(slot_number : Int32) : Block
     Block.from_json(client.get("blocks/slot/#{slot_number}"))
   end
 
