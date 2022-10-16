@@ -28,6 +28,13 @@ struct Blockfrost::Address < Blockfrost::BaseAddress
     asset : String
   )
 
+  gets_all_with_order_and_pagination_and_from_to(
+    :transactions,
+    Array(Transaction),
+    "addresses/#{address}/transactions",
+    address : String
+  )
+
   struct Extended < BaseAddress
     getter amount : Array(Token::Extended)
   end
@@ -42,5 +49,8 @@ struct Blockfrost::Address < Blockfrost::BaseAddress
   end
 
   struct UTXO < BaseUTXO
+  end
+
+  struct Transaction < BaseTransaction
   end
 end

@@ -158,6 +158,52 @@ describe Blockfrost::Address do
         .should be_a(Array(Blockfrost::Address::UTXO))
     end
   end
+
+  describe ".transactions" do
+    it "fetches the address' transactions" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/addresses/#{fake_address}/transactions")
+        .to_return(body: read_fixture("address/transactions.200.json"))
+
+      Blockfrost::Address.transactions(fake_address).tap do |txs|
+        txs.first.tx_hash.should eq(
+          "8788591983aa73981fc92d6cddbbe643959f5a784e84b8bee0db15823f575a5b"
+        )
+        txs.first.tx_index.should eq(6)
+        txs.first.block_height.should eq(69)
+        txs.first.block_time.should eq(Time.unix(1635505891))
+      end
+    end
+
+    it "accepts ordering, pagination, from and to parameters" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/addresses/#{fake_address}/transactions?order=desc&count=10&page=1&from=8929261&to=9999269:10")
+        .to_return(body: read_fixture("address/transactions.200.json"))
+
+      Blockfrost::Address.transactions(
+        fake_address,
+        order: "desc",
+        count: 10,
+        page: 1,
+        from: "8929261",
+        to: "9999269:10"
+      ).should be_a(Array(Blockfrost::Address::Transaction))
+    end
+  end
+
+  describe "#transactions" do
+    it "fetches the current address' transactions" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/addresses/#{fake_address}")
+        .to_return(body: read_fixture("address/get.200.json"))
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/addresses/#{fake_address}/transactions?from=8929261")
+        .to_return(body: read_fixture("address/transactions.200.json"))
+
+      Blockfrost::Address.get(fake_address).transactions(from: "8929261")
+        .should be_a(Array(Blockfrost::Address::Transaction))
+    end
+  end
 end
 
 private def fake_address
