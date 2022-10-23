@@ -39,7 +39,11 @@ end
 
 ## Usage
 
-TODO: Coming soon!
+```crystal
+epochs = Blockfrost::Epoch.all
+```
+
+TODO: Write usage instructions here
 
 ## Development
 
