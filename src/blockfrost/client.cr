@@ -13,27 +13,39 @@ struct Blockfrost::Client
 
   def post(
     resource : String,
-    body : RequestData
+    body : RequestData,
+    content_type : ContentType = ContentType::Json
   ) : String
-    perform_http_call(Method::POST, resource, body: body)
+    perform_http_call(
+      Method::POST,
+      resource,
+      body: body,
+      content_type: content_type
+    )
   end
 
   private def perform_http_call(
     method : Method,
     path : String,
     body : RequestData = RequestData.new,
-    query : RequestData = RequestData.new
+    query : RequestData = RequestData.new,
+    content_type : ContentType = ContentType::Json
   ) : String
     begin
       case method
       when Method::GET
-        render(HTTP::Client.get(build_uri(path, query), headers: headers(path)))
+        render(
+          HTTP::Client.get(
+            build_uri(path, query),
+            headers: headers(path, content_type)
+          )
+        )
       else
         render(
           HTTP::Client.exec(
             method.to_s,
             build_uri(path, query),
-            headers: headers(path),
+            headers: headers(path, content_type),
             body: body.compact.to_json
           )
         )
@@ -55,10 +67,13 @@ struct Blockfrost::Client
     uri.to_s
   end
 
-  private def headers(path : String) : HTTP::Headers
+  private def headers(
+    path : String,
+    content_type : ContentType
+  ) : HTTP::Headers
     HTTP::Headers{
       "Accept"       => "application/json",
-      "Content-Type" => "application/json",
+      "Content-Type" => content_type.to_s,
       "project_id"   => Blockfrost.api_key_for_path(path),
     }
   end

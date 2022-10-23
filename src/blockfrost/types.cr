@@ -18,4 +18,13 @@ module Blockfrost
       )
     end
   end
+
+  enum ContentType
+    Json
+    Cbor
+
+    def to_s
+      "application/#{super.downcase}"
+    end
+  end
 end
