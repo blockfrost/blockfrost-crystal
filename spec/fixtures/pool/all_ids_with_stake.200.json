@@ -1,0 +1,20 @@
+[
+  {
+      "pool_id": "pool1z5uqdk7dzdxaae5633fqfcu2eqzy3a3rgtuvy087fdld7yws0xt",
+      "hex": "153806dbcd134ddee69a8c5204e38ac80448f62342f8c23cfe4b7edf",
+      "active_stake": "44709944758094",
+      "live_stake": "46600529805358"
+  },
+  {
+      "pool_id": "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy",
+      "hex": "0f292fcaa02b8b2f9b3c8f9fd8e0bb21abedb692a6d5058df3ef2735",
+      "active_stake": "5709619994841",
+      "live_stake": "5686295872662"
+  },
+  {
+      "pool_id": "pool1c8k78ny3xvsfgenhf4yzvpzwgzxmz0t0um0h2xnn2q83vjdr5dj",
+      "hex": "c1ede3cc9133209466774d4826044e408db13d6fe6df751a73500f16",
+      "active_stake": "545084632909",
+      "live_stake": "545084632909"
+  }
+]
