@@ -21,7 +21,7 @@ abstract struct Blockfrost::BaseResource
       {{argument_type_declaration}},
       count : QueryCount? = nil,
       page : QueryPage? = nil
-    ) : {{return_type}}
+    )
       {{return_type}}.from_json(
         client.get({{resource_path}}, {
           "count" => count,
@@ -30,7 +30,7 @@ abstract struct Blockfrost::BaseResource
       )
     end
 
-    def {{method_name.id}}(**args) : {{return_type}}
+    def {{method_name.id}}(**args)
       self.class.{{method_name.id}}({{argument_type_declaration.var}}, **args)
     end
   end
@@ -47,7 +47,7 @@ abstract struct Blockfrost::BaseResource
       {{scope_argument_type_declaration}},
       count : QueryCount? = nil,
       page : QueryPage? = nil
-    ) : {{return_type}}
+    )
       {{return_type}}.from_json(
         client.get({{resource_path}}, {
           "count" => count,
@@ -59,7 +59,7 @@ abstract struct Blockfrost::BaseResource
     def {{method_name.id}}(
       {{scope_argument_type_declaration}},
       **args
-    ) : {{return_type}}
+    )
       self.class.{{method_name.id}}(
         {{argument_type_declaration.var}},
         {{scope_argument_type_declaration.var}},
@@ -81,7 +81,7 @@ abstract struct Blockfrost::BaseResource
       order : QueryOrder? = nil,
       count : QueryCount? = nil,
       page : QueryPage? = nil
-    ) : {{return_type}}
+    )
       {{return_type}}.from_json(
         client.get({{resource_path}}, {
           "order" => order.try(&.to_s),
@@ -98,7 +98,7 @@ abstract struct Blockfrost::BaseResource
       order : String,
       count : QueryCount? = nil,
       page : QueryPage? = nil
-    ) : {{return_type}}
+    )
       {{method_name.id}}(
         {% unless argument_type_declaration.nil? %}
           {{argument_type_declaration.var}},
@@ -110,7 +110,7 @@ abstract struct Blockfrost::BaseResource
     end
 
     {% unless argument_type_declaration.nil? %}
-      def {{method_name.id}}(**args) : {{return_type}}
+      def {{method_name.id}}(**args)
         self.class.{{method_name.id}}({{argument_type_declaration.var}}, **args)
       end
     {% end %}
@@ -129,7 +129,7 @@ abstract struct Blockfrost::BaseResource
       order : QueryOrder? = nil,
       count : QueryCount? = nil,
       page : QueryPage? = nil
-    ) : {{return_type}}
+    )
       {{return_type}}.from_json(
         client.get({{resource_path}}, {
           "order" => order.try(&.to_s),
@@ -145,7 +145,7 @@ abstract struct Blockfrost::BaseResource
       order : String,
       count : QueryCount? = nil,
       page : QueryPage? = nil
-    ) : {{return_type}}
+    )
       {{method_name.id}}(
         {{argument_type_declaration.var}},
         {{scope_argument_type_declaration.var}},
@@ -159,7 +159,7 @@ abstract struct Blockfrost::BaseResource
       def {{method_name.id}}(
         {{scope_argument_type_declaration.var}},
         **args
-      ) : {{return_type}}
+      )
         self.class.{{method_name.id}}(
           {{argument_type_declaration.var}},
           {{scope_argument_type_declaration.var}},
@@ -184,7 +184,7 @@ abstract struct Blockfrost::BaseResource
       page : QueryPage? = nil,
       from : String? = nil,
       to : String? = nil
-    ) : {{return_type}}
+    )
       {{return_type}}.from_json(
         client.get({{resource_path}}, {
           "order" => order.try(&.to_s),
@@ -205,7 +205,7 @@ abstract struct Blockfrost::BaseResource
       page : QueryPage? = nil,
       from : String? = nil,
       to : String? = nil
-    ) : {{return_type}}
+    )
       {{method_name.id}}(
         {% unless argument_type_declaration.nil? %}
           {{argument_type_declaration.var}},
@@ -219,7 +219,7 @@ abstract struct Blockfrost::BaseResource
     end
 
     {% unless argument_type_declaration.nil? %}
-      def {{method_name.id}}(**args) : {{return_type}}
+      def {{method_name.id}}(**args)
         self.class.{{method_name.id}}({{argument_type_declaration.var}}, **args)
       end
     {% end %}
