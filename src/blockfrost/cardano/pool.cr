@@ -26,25 +26,25 @@ struct Blockfrost::Pool < Blockfrost::BaseResource
   getter registration : Array(String)
   getter retirement : Array(String)
 
-  gets_all_with_order_and_pagination(
+  Blockfrost.gets_all_with_order_and_pagination(
     :all_ids,
     Array(String),
     "pools"
   )
 
-  gets_all_with_order_and_pagination(
+  Blockfrost.gets_all_with_order_and_pagination(
     :all_ids_with_stake,
     Array(Abbreviated),
     "pools/extended"
   )
 
-  gets_all_with_order_and_pagination(
+  Blockfrost.gets_all_with_order_and_pagination(
     :retired_ids,
     Array(Retired),
     "pools/retired"
   )
 
-  gets_all_with_order_and_pagination(
+  Blockfrost.gets_all_with_order_and_pagination(
     :retiring_ids,
     Array(Retiring),
     "pools/retiring"
@@ -54,7 +54,7 @@ struct Blockfrost::Pool < Blockfrost::BaseResource
     Pool.from_json(client.get("pools/#{pool_id}"))
   end
 
-  gets_all_with_order_and_pagination(
+  Blockfrost.gets_all_with_order_and_pagination(
     :history,
     Array(Event),
     "pools/#{pool_id}/history",
@@ -77,21 +77,21 @@ struct Blockfrost::Pool < Blockfrost::BaseResource
     self.class.relays(pool_id)
   end
 
-  gets_all_with_order_and_pagination(
+  Blockfrost.gets_all_with_order_and_pagination(
     :delegators,
     Array(Delegator),
     "pools/#{pool_id}/delegators",
     pool_id : String
   )
 
-  gets_all_with_order_and_pagination(
+  Blockfrost.gets_all_with_order_and_pagination(
     :block_hashes,
     Array(String),
     "pools/#{pool_id}/blocks",
     pool_id : String
   )
 
-  gets_all_with_order_and_pagination(
+  Blockfrost.gets_all_with_order_and_pagination(
     :updates,
     Array(Update),
     "pools/#{pool_id}/updates",

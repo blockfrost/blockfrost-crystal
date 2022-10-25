@@ -13,14 +13,14 @@ struct Blockfrost::Address < Blockfrost::BaseAddress
     Total.from_json(client.get("addresses/#{address}/total"))
   end
 
-  gets_all_with_order_and_pagination(
+  Blockfrost.gets_all_with_order_and_pagination(
     :utxos,
     Array(UTXO),
     "addresses/#{address}/utxos",
     address : String
   )
 
-  gets_all_scoped_with_order_and_pagination(
+  Blockfrost.gets_all_scoped_with_order_and_pagination(
     :utxos_of_asset,
     Array(UTXO),
     "addresses/#{address}/utxos/#{asset}",
@@ -28,7 +28,7 @@ struct Blockfrost::Address < Blockfrost::BaseAddress
     asset : String
   )
 
-  gets_all_with_order_and_pagination_and_from_to(
+  Blockfrost.gets_all_with_order_and_pagination_and_from_to(
     :transactions,
     Array(Transaction),
     "addresses/#{address}/transactions",

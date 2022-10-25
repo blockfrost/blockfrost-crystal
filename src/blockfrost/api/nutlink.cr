@@ -8,14 +8,14 @@ struct Blockfrost::Nutlink < Blockfrost::BaseResource
     Nutlink.from_json(client.get("nutlink/#{address}"))
   end
 
-  gets_all_with_order_and_pagination(
+  Blockfrost.gets_all_with_order_and_pagination(
     :tickers,
     Array(Ticker),
     "nutlink/#{address}/tickers",
     address : String
   )
 
-  gets_all_scoped_with_order_and_pagination(
+  Blockfrost.gets_all_scoped_with_order_and_pagination(
     :ticker_records_for_address,
     Array(Ticker::Record),
     "nutlink/#{address}/tickers/#{ticker}",
@@ -23,7 +23,7 @@ struct Blockfrost::Nutlink < Blockfrost::BaseResource
     ticker : String
   )
 
-  gets_all_with_order_and_pagination(
+  Blockfrost.gets_all_with_order_and_pagination(
     :ticker_records,
     Array(Ticker::Record),
     "nutlink/tickers/#{ticker}",

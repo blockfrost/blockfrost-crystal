@@ -10,7 +10,7 @@ struct Blockfrost::Asset < Blockfrost::BaseResource
   getter onchain_metadata : OnchainMetadata?
   getter metadata : Metadata?
 
-  gets_all_with_order_and_pagination(
+  Blockfrost.gets_all_with_order_and_pagination(
     :all,
     Array(Abbreviated),
     "assets"
@@ -26,7 +26,7 @@ struct Blockfrost::Asset < Blockfrost::BaseResource
                             transactions: "Transaction",
                           } %}
 
-    gets_all_with_order_and_pagination(
+    Blockfrost.gets_all_with_order_and_pagination(
       :{{method.id}},
       Array({{model.id}}),
       "assets/#{asset}/{{method.id}}",
@@ -34,7 +34,7 @@ struct Blockfrost::Asset < Blockfrost::BaseResource
     )
   {% end %}
 
-  gets_all_with_order_and_pagination(
+  Blockfrost.gets_all_with_order_and_pagination(
     :all_of_policy,
     Array(Abbreviated),
     "assets/policy/#{policy_id}",

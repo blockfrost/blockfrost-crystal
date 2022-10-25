@@ -26,7 +26,7 @@ struct Blockfrost::Epoch < Blockfrost::BaseResource
   end
 
   {% for method in %w[next previous] %}
-    gets_all_with_pagination(
+    Blockfrost.gets_all_with_pagination(
       :{{method.id}},
       Array(Epoch),
       "epochs/#{epoch}/{{method.id}}",
@@ -34,14 +34,14 @@ struct Blockfrost::Epoch < Blockfrost::BaseResource
     )
   {% end %}
 
-  gets_all_with_pagination(
+  Blockfrost.gets_all_with_pagination(
     :stakes,
     Array(Stake),
     "epochs/#{epoch}/stakes",
     epoch : Int32
   )
 
-  gets_all_scoped_with_pagination(
+  Blockfrost.gets_all_scoped_with_pagination(
     :stakes_by_pool,
     Array(Stake),
     "epochs/#{epoch}/stakes/#{pool_id}",
@@ -49,14 +49,14 @@ struct Blockfrost::Epoch < Blockfrost::BaseResource
     pool_id : String
   )
 
-  gets_all_with_pagination(
+  Blockfrost.gets_all_with_pagination(
     :block_hashes,
     Array(String),
     "epochs/#{epoch}/blocks",
     epoch : Int32
   )
 
-  gets_all_scoped_with_pagination(
+  Blockfrost.gets_all_scoped_with_pagination(
     :block_hashes_by_pool,
     Array(String),
     "epochs/#{epoch}/blocks/#{pool_id}",

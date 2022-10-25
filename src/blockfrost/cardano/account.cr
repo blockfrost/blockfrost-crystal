@@ -29,7 +29,7 @@ struct Blockfrost::Account < Blockfrost::BaseResource
                             mirs:          "Mir",
                             addresses:     "Address",
                           } %}
-    gets_all_with_order_and_pagination(
+    Blockfrost.gets_all_with_order_and_pagination(
       :{{method.id}},
       Array({{model.id}}),
       "accounts/#{stake_address}/{{method.id}}",
@@ -37,7 +37,7 @@ struct Blockfrost::Account < Blockfrost::BaseResource
     )
   {% end %}
 
-  gets_all_with_order_and_pagination(
+  Blockfrost.gets_all_with_order_and_pagination(
     :assets_from_addresses,
     Array(Token),
     "accounts/#{stake_address}/addresses/assets",
@@ -51,11 +51,17 @@ struct Blockfrost::Account < Blockfrost::BaseResource
   struct Reward
     include JSON::Serializable
 
+    Blockfrost.castable_enum_from_string(Type, {
+      Leader,
+      Member,
+      PoolDepositRefund,
+    })
+
     getter epoch : Int32
     @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
     getter amount : Int64
     getter pool_id : String
-    getter type : String
+    getter type : Type
   end
 
   struct Event

@@ -1,18 +1,18 @@
 struct Blockfrost::Metadata < Blockfrost::BaseResource
-  gets_all_with_order_and_pagination(
+  Blockfrost.gets_all_with_order_and_pagination(
     :labels,
     Array(Label),
     "metadata/txs/labels"
   )
 
-  gets_all_with_order_and_pagination(
+  Blockfrost.gets_all_with_order_and_pagination(
     :label_json_content,
     Array(JsonContent),
     "metadata/txs/labels/#{label}",
     label : String
   )
 
-  gets_all_with_order_and_pagination(
+  Blockfrost.gets_all_with_order_and_pagination(
     :label_cbor_content,
     Array(CborContent),
     "metadata/txs/labels/#{label}/cbor",
