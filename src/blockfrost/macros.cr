@@ -1,12 +1,12 @@
 module Blockfrost
-  macro castable_enum_from_string(name, types)
-    enum {{name.id}}
+  macro castable_enum_from_string(name, types, stringify = underscore)
+    enum {{name}}
       {% for type in types %}
-        {{type.id}}
+        {{type}}
       {% end %}
 
       def to_s
-        super.underscore
+        super.{{stringify}}
       end
 
       def self.from_json(pull : JSON::PullParser)
@@ -14,7 +14,7 @@ module Blockfrost
       end
 
       def self.from_string(value : String)
-        {{name.id}}.from_value({{name.id}}.names.map(&.to_s).index(value) || 0)
+        from_value(names.map(&.{{stringify}}).index(value) || 0)
       end
     end
   end
