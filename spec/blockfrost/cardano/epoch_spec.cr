@@ -21,18 +21,17 @@ describe Blockfrost::Epoch do
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/latest")
         .to_return(body: read_fixture("epoch/latest.200.json"))
 
-      Blockfrost::Epoch.latest.tap do |epoch|
-        epoch.epoch.should eq(225)
-        epoch.start_time.should eq(Time.unix(1603403091))
-        epoch.end_time.should eq(Time.unix(1603835086))
-        epoch.first_block_time.should eq(Time.unix(1603403092))
-        epoch.last_block_time.should eq(Time.unix(1603835084))
-        epoch.block_count.should eq(21298)
-        epoch.tx_count.should eq(17856)
-        epoch.output.should eq(7849943934049314)
-        epoch.fees.should eq(4203312194)
-        epoch.active_stake.should eq(784953934049314)
-      end
+      epoch = Blockfrost::Epoch.latest
+      epoch.epoch.should eq(225)
+      epoch.start_time.should eq(Time.unix(1603403091))
+      epoch.end_time.should eq(Time.unix(1603835086))
+      epoch.first_block_time.should eq(Time.unix(1603403092))
+      epoch.last_block_time.should eq(Time.unix(1603835084))
+      epoch.block_count.should eq(21298)
+      epoch.tx_count.should eq(17856)
+      epoch.output.should eq(7849943934049314)
+      epoch.fees.should eq(4203312194)
+      epoch.active_stake.should eq(784953934049314)
     end
   end
 
@@ -108,13 +107,15 @@ describe Blockfrost::Epoch do
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/stakes")
         .to_return(body: read_fixture("epoch/stakes.200.json"))
 
-      Blockfrost::Epoch.stakes(225).tap do |stakes|
-        stakes.should be_a(Array(Blockfrost::Epoch::Stake))
-
-        stakes.first.stake_address.should eq("stake1u9l5q5jwgelgagzyt6nuaasefgmn8pd25c8e9qpeprq0tdcp0e3uk")
-        stakes.first.pool_id.should eq("pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy")
-        stakes.first.amount.should eq(4440295078)
-      end
+      stakes = Blockfrost::Epoch.stakes(225)
+      stakes.should be_a(Array(Blockfrost::Epoch::Stake))
+      stakes.first.stake_address.should eq(
+        "stake1u9l5q5jwgelgagzyt6nuaasefgmn8pd25c8e9qpeprq0tdcp0e3uk"
+      )
+      stakes.first.pool_id.should eq(
+        "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy"
+      )
+      stakes.first.amount.should eq(4440295078)
     end
 
     it "fetches the stakes with pagination parameters" do
@@ -200,13 +201,15 @@ describe Blockfrost::Epoch do
   describe ".block_hashes_by_pool" do
     it "fetches the block ids the given epoch for a given pool" do
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/blocks/pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy?count=3&page=2")
+        "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/blocks/#{fake_pool_id}?count=3&page=2")
         .to_return(body: read_fixture("epoch/blocks.200.json"))
 
-      pool_id = "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy"
-
-      Blockfrost::Epoch.block_hashes_by_pool(225, pool_id, count: 3, page: 2)
-        .should be_a(Array(String))
+      Blockfrost::Epoch.block_hashes_by_pool(
+        225,
+        fake_pool_id,
+        count: 3,
+        page: 2
+      ).should be_a(Array(String))
     end
   end
 
@@ -216,12 +219,10 @@ describe Blockfrost::Epoch do
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/latest")
         .to_return(body: read_fixture("epoch/latest.200.json"))
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/blocks/pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy")
+        "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/blocks/#{fake_pool_id}")
         .to_return(body: read_fixture("epoch/blocks.200.json"))
 
-      pool_id = "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy"
-
-      Blockfrost::Epoch.latest.block_hashes_by_pool(pool_id)
+      Blockfrost::Epoch.latest.block_hashes_by_pool(fake_pool_id)
         .should be_a(Array(String))
     end
   end
@@ -245,4 +246,8 @@ describe Blockfrost::Epoch do
       end
     end
   end
+end
+
+private def fake_pool_id
+  "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy"
 end

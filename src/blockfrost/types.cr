@@ -14,7 +14,7 @@ module Blockfrost
 
     def self.from_string(value : String) : QueryOrder
       QueryOrder.from_value(
-        QueryOrder.names.map(&.downcase).index(value) || 0
+        QueryOrder.names.map(&.underscore).index(value) || 0
       )
     end
   end

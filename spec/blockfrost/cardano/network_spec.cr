@@ -10,16 +10,15 @@ describe Blockfrost::Network do
       WebMock.stub(:get, "https://cardano-testnet.blockfrost.io/api/v0/network")
         .to_return(body: read_fixture("network/get.200.json"))
 
-      Blockfrost::Network.get.tap do |network|
-        network.supply.max.should eq(45000000000000000)
-        network.supply.total.should eq(32890715183299160)
-        network.supply.circulating.should eq(32412601976210393)
-        network.supply.locked.should eq(125006953355)
-        network.supply.treasury.should eq(98635632000000)
-        network.supply.reserves.should eq(46635632000000)
-        network.stake.live.should eq(23204950463991654)
-        network.stake.active.should eq(22210233523456321)
-      end
+      network = Blockfrost::Network.get
+      network.supply.max.should eq(45000000000000000)
+      network.supply.total.should eq(32890715183299160)
+      network.supply.circulating.should eq(32412601976210393)
+      network.supply.locked.should eq(125006953355)
+      network.supply.treasury.should eq(98635632000000)
+      network.supply.reserves.should eq(46635632000000)
+      network.stake.live.should eq(23204950463991654)
+      network.stake.active.should eq(22210233523456321)
     end
   end
 end

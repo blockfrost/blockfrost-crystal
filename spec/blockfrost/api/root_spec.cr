@@ -10,10 +10,9 @@ describe Blockfrost::Root do
       WebMock.stub(:get, "https://cardano-testnet.blockfrost.io/api/v0/")
         .to_return(body: read_fixture("root/get.200.json"))
 
-      Blockfrost::Root.get.tap do |root|
-        root.url.should eq("https://blockfrost.io/")
-        root.version.should eq("0.1.0")
-      end
+      root = Blockfrost::Root.get
+      root.url.should eq("https://blockfrost.io/")
+      root.version.should eq("0.1.0")
     end
   end
 end

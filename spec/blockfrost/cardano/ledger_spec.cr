@@ -10,18 +10,17 @@ describe Blockfrost::Ledger do
       WebMock.stub(:get, "https://cardano-testnet.blockfrost.io/api/v0/genesis")
         .to_return(body: read_fixture("ledger/genesis.200.json"))
 
-      Blockfrost::Ledger.genesis.tap do |genesis|
-        genesis.active_slots_coefficient.should eq(0.05)
-        genesis.update_quorum.should eq(5)
-        genesis.max_lovelace_supply.should eq(45000000000000000)
-        genesis.network_magic.should eq(764824073)
-        genesis.epoch_length.should eq(432000)
-        genesis.system_start.should eq(1506203091)
-        genesis.slots_per_kes_period.should eq(129600)
-        genesis.slot_length.should eq(1)
-        genesis.max_kes_evolutions.should eq(62)
-        genesis.security_param.should eq(2160)
-      end
+      genesis = Blockfrost::Ledger.genesis
+      genesis.active_slots_coefficient.should eq(0.05)
+      genesis.update_quorum.should eq(5)
+      genesis.max_lovelace_supply.should eq(45000000000000000)
+      genesis.network_magic.should eq(764824073)
+      genesis.epoch_length.should eq(432000)
+      genesis.system_start.should eq(1506203091)
+      genesis.slots_per_kes_period.should eq(129600)
+      genesis.slot_length.should eq(1)
+      genesis.max_kes_evolutions.should eq(62)
+      genesis.security_param.should eq(2160)
     end
   end
 end

@@ -10,10 +10,9 @@ describe Blockfrost::Metric do
       WebMock.stub(:get, "https://cardano-testnet.blockfrost.io/api/v0/metrics")
         .to_return(body: read_fixture("metric/all.200.json"))
 
-      Blockfrost::Metric.all.tap do |metrics|
-        metrics.first.time.should eq(Time.unix(1612543884))
-        metrics.first.calls.should eq(42)
-      end
+      metric = Blockfrost::Metric.all.first
+      metric.time.should eq(Time.unix(1612543884))
+      metric.calls.should eq(42)
     end
   end
 
@@ -23,11 +22,10 @@ describe Blockfrost::Metric do
         "https://cardano-testnet.blockfrost.io/api/v0/metrics/endpoints")
         .to_return(body: read_fixture("metric/endpoints.200.json"))
 
-      Blockfrost::Metric.endpoints.tap do |metrics|
-        metrics.first.time.should eq(Time.unix(1612543814))
-        metrics.first.calls.should eq(182)
-        metrics.first.endpoint.should eq("block")
-      end
+      metric = Blockfrost::Metric.endpoints.first
+      metric.time.should eq(Time.unix(1612543814))
+      metric.calls.should eq(182)
+      metric.endpoint.should eq("block")
     end
   end
 end

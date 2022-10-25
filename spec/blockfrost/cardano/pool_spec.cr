@@ -21,6 +21,7 @@ describe Blockfrost::Pool do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/pools?order=desc&count=10&page=10")
         .to_return(body: read_fixture("pool/all_ids.200.json"))
+
       Blockfrost::Pool.all_ids("desc", 10, 10).should be_a(Array(String))
     end
   end
@@ -31,14 +32,15 @@ describe Blockfrost::Pool do
         "https://cardano-testnet.blockfrost.io/api/v0/pools/extended")
         .to_return(body: read_fixture("pool/all_ids_with_stake.200.json"))
 
-      Blockfrost::Pool.all_ids_with_stake.tap do |pools|
-        pools.first.pool_id
-          .should eq("pool1z5uqdk7dzdxaae5633fqfcu2eqzy3a3rgtuvy087fdld7yws0xt")
-        pools.first.hex
-          .should eq("153806dbcd134ddee69a8c5204e38ac80448f62342f8c23cfe4b7edf")
-        pools.first.active_stake.should eq(44709944758094)
-        pools.first.live_stake.should eq(46600529805358)
-      end
+      pool = Blockfrost::Pool.all_ids_with_stake.first
+      pool.pool_id.should eq(
+        "pool1z5uqdk7dzdxaae5633fqfcu2eqzy3a3rgtuvy087fdld7yws0xt"
+      )
+      pool.hex.should eq(
+        "153806dbcd134ddee69a8c5204e38ac80448f62342f8c23cfe4b7edf"
+      )
+      pool.active_stake.should eq(44709944758094)
+      pool.live_stake.should eq(46600529805358)
     end
 
     it "accepts ordering and pagination parameters" do
@@ -57,11 +59,11 @@ describe Blockfrost::Pool do
         "https://cardano-testnet.blockfrost.io/api/v0/pools/retired")
         .to_return(body: read_fixture("pool/retired_ids.200.json"))
 
-      Blockfrost::Pool.retired_ids.tap do |pools|
-        pools.first.pool_id
-          .should eq("pool19u64770wqp6s95gkajc8udheske5e6ljmpq33awxk326zjaza0q")
-        pools.first.epoch.should eq(225)
-      end
+      pool = Blockfrost::Pool.retired_ids.first
+      pool.pool_id.should eq(
+        "pool19u64770wqp6s95gkajc8udheske5e6ljmpq33awxk326zjaza0q"
+      )
+      pool.epoch.should eq(225)
     end
 
     it "accepts ordering and pagination parameters" do
@@ -81,8 +83,9 @@ describe Blockfrost::Pool do
         .to_return(body: read_fixture("pool/retiring_ids.200.json"))
 
       pools = Blockfrost::Pool.retiring_ids
-      pools.first.pool_id
-        .should eq("pool19u64770wqp6s95gkajc8udheske5e6ljmpq33awxk326zjaza0q")
+      pools.first.pool_id.should eq(
+        "pool19u64770wqp6s95gkajc8udheske5e6ljmpq33awxk326zjaza0q"
+      )
       pools.first.epoch.should eq(225)
     end
 
