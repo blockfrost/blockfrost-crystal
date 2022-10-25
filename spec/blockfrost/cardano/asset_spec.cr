@@ -76,8 +76,8 @@ describe Blockfrost::Asset do
       events = Blockfrost::Asset.history("b0d07d45...")
       events.first.tx_hash.should start_with("2dd15e0ef6")
       events.first.amount.should eq(10)
-      events.first.action.should start_with("minted")
-      events.last.action.should start_with("burned")
+      events.first.action.should eq(Blockfrost::Asset::Event::Action::Minted)
+      events.last.action.should eq(Blockfrost::Asset::Event::Action::Burned)
     end
 
     it "accepts ordering and pagination parameters" do

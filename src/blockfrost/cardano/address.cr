@@ -1,5 +1,11 @@
 struct Blockfrost::Address < Blockfrost::BaseAddress
+  Blockfrost.enum_castable_from_string(Type, {
+    Byron,
+    Shelley,
+  })
+
   getter amount : Array(Token)
+  getter type : Type
 
   def self.get(address : String)
     Address.from_json(client.get("addresses/#{address}"))
@@ -37,6 +43,7 @@ struct Blockfrost::Address < Blockfrost::BaseAddress
 
   struct Extended < BaseAddress
     getter amount : Array(Token::Extended)
+    getter type : Type
   end
 
   struct Total

@@ -319,7 +319,7 @@ describe Blockfrost::Pool do
         "6804edf9712d2b619edb6ac86861fe93a730693183a262b165fcc1ba1bc99cad"
       )
       update.cert_index.should eq(0)
-      update.action.should eq("registered")
+      update.action.should eq(Blockfrost::Pool::Update::Action::Registered)
     end
 
     it "accepts ordering and pagination parameters" do

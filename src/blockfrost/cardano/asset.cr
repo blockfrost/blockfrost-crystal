@@ -78,10 +78,15 @@ struct Blockfrost::Asset < Blockfrost::BaseResource
   struct Event
     include JSON::Serializable
 
+    Blockfrost.enum_castable_from_string(Action, {
+      Minted,
+      Burned,
+    })
+
     getter tx_hash : String
     @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
     getter amount : Int64
-    getter action : String
+    getter action : Action
   end
 
   struct Transaction

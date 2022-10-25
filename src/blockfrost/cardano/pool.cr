@@ -172,8 +172,13 @@ struct Blockfrost::Pool < Blockfrost::BaseResource
   struct Update
     include JSON::Serializable
 
+    Blockfrost.enum_castable_from_string(Action, {
+      Registered,
+      Deregistered,
+    })
+
     getter tx_hash : String
     getter cert_index : Int32
-    getter action : String
+    getter action : Action
   end
 end

@@ -51,7 +51,7 @@ struct Blockfrost::Account < Blockfrost::BaseResource
   struct Reward
     include JSON::Serializable
 
-    Blockfrost.castable_enum_from_string(Type, {
+    Blockfrost.enum_castable_from_string(Type, {
       Leader,
       Member,
       PoolDepositRefund,
@@ -86,8 +86,13 @@ struct Blockfrost::Account < Blockfrost::BaseResource
   struct Registration
     include JSON::Serializable
 
+    Blockfrost.enum_castable_from_string(Action, {
+      Registered,
+      Deregistered,
+    })
+
     getter tx_hash : String
-    getter action : String
+    getter action : Action
   end
 
   struct Withdrawal

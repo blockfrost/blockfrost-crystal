@@ -1,5 +1,5 @@
 module Blockfrost
-  macro castable_enum_from_string(name, types, stringify = underscore)
+  macro enum_castable_from_string(name, types, stringify = underscore)
     enum {{name}}
       {% for type in types %}
         {{type}}

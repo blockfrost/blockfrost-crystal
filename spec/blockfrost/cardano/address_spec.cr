@@ -18,7 +18,7 @@ describe Blockfrost::Address do
       address.stake_address.should eq(
         "stake1ux3g2c9dx2nhhehyrezyxpkstartcqmu9hk63qgfkccw5rqttygt7"
       )
-      address.type.should eq("shelley")
+      address.type.should eq(Blockfrost::Address::Type::Shelley)
       address.script.should be_falsey
     end
   end
@@ -39,7 +39,7 @@ describe Blockfrost::Address do
       address.stake_address.should eq(
         "stake1ux3g2c9dx2nhhehyrezyxpkstartcqmu9hk63qgfkccw5rqttygt7"
       )
-      address.type.should eq("shelley")
+      address.type.should eq(Blockfrost::Address::Type::Shelley)
       address.script.should be_falsey
     end
   end
@@ -196,6 +196,23 @@ describe Blockfrost::Address do
 
       Blockfrost::Address.get(fake_address).transactions(from: "8929261")
         .should be_a(Array(Blockfrost::Address::Transaction))
+    end
+  end
+
+  describe Blockfrost::Address::Type do
+    it "allows being strict about address types" do
+      address = Blockfrost::Address.from_json(
+        read_fixture("address/get.200.json")
+      )
+
+      expect_raises(Exception, "it's shelley") do
+        case address.type
+        in Blockfrost::Address::Type::Byron
+          raise "it's byron"
+        in Blockfrost::Address::Type::Shelley
+          raise "it's shelley"
+        end
+      end
     end
   end
 end

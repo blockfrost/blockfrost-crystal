@@ -108,7 +108,8 @@ describe Blockfrost::Account do
       registration.tx_hash.should eq(
         "2dd15e0ef6e6a17841cb9541c27724072ce4d4b79b91e58432fbaa32d9572531"
       )
-      registration.action.should eq("registered")
+      registration.action
+        .should eq(Blockfrost::Account::Registration::Action::Registered)
     end
 
     it "accepts parameters for ordering and pagination" do

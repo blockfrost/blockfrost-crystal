@@ -4,7 +4,7 @@ module Blockfrost
   alias QueryCount = Int32
   alias QueryPage = Int32
 
-  Blockfrost.castable_enum_from_string(QueryOrder, {
+  Blockfrost.enum_castable_from_string(QueryOrder, {
     ASC,
     DESC,
   }, downcase)
