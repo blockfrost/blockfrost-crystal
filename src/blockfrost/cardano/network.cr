@@ -1,9 +1,11 @@
-struct Blockfrost::Network < Blockfrost::BaseResource
+struct Blockfrost::Network
+  include JSON::Serializable
+
   getter supply : Supply
   getter stake : Stake
 
   def self.get
-    Network.from_json(client.get("network"))
+    Network.from_json(Client.get("network"))
   end
 
   struct Supply

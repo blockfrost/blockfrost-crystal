@@ -1,4 +1,6 @@
-struct Blockfrost::Pool < Blockfrost::BaseResource
+struct Blockfrost::Pool
+  include JSON::Serializable
+
   include JSON::Serializable
 
   getter pool_id : String
@@ -51,7 +53,7 @@ struct Blockfrost::Pool < Blockfrost::BaseResource
   )
 
   def self.get(pool_id : String)
-    Pool.from_json(client.get("pools/#{pool_id}"))
+    Pool.from_json(Client.get("pools/#{pool_id}"))
   end
 
   Blockfrost.gets_all_with_order_and_pagination(
@@ -62,7 +64,7 @@ struct Blockfrost::Pool < Blockfrost::BaseResource
   )
 
   def self.metadata(pool_id : String)
-    Metadata.from_json(client.get("pools/#{pool_id}/metadata"))
+    Metadata.from_json(Client.get("pools/#{pool_id}/metadata"))
   end
 
   def metadata
@@ -70,7 +72,7 @@ struct Blockfrost::Pool < Blockfrost::BaseResource
   end
 
   def self.relays(pool_id : String)
-    Array(Relay).from_json(client.get("pools/#{pool_id}/relays"))
+    Array(Relay).from_json(Client.get("pools/#{pool_id}/relays"))
   end
 
   def relays

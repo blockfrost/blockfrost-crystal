@@ -1,4 +1,6 @@
-struct Blockfrost::Client
+module Blockfrost::Client
+  extend self
+
   enum Method
     GET
     POST

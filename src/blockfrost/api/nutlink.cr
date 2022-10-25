@@ -1,11 +1,13 @@
-struct Blockfrost::Nutlink < Blockfrost::BaseResource
+struct Blockfrost::Nutlink
+  include JSON::Serializable
+
   getter address : String
   getter metadata_url : String
   getter metadata_hash : String
   getter metadata : JSON::Any?
 
   def self.get(address : String)
-    Nutlink.from_json(client.get("nutlink/#{address}"))
+    Nutlink.from_json(Client.get("nutlink/#{address}"))
   end
 
   Blockfrost.gets_all_with_order_and_pagination(

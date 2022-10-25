@@ -24,7 +24,7 @@ module Blockfrost
     end
   end
 
-  struct Client
+  module Client
     {% begin %}
       {% for name in Blockfrost
                        .annotation(Blockfrost::RequestExceptions)

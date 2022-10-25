@@ -1,4 +1,6 @@
-struct Blockfrost::Asset < Blockfrost::BaseResource
+struct Blockfrost::Asset
+  include JSON::Serializable
+
   getter asset : String
   @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
   getter quantity : Int64
@@ -17,7 +19,7 @@ struct Blockfrost::Asset < Blockfrost::BaseResource
   )
 
   def self.get(asset : String)
-    Asset.from_json(client.get("assets/#{asset}"))
+    Asset.from_json(Client.get("assets/#{asset}"))
   end
 
   {% for method, model in {

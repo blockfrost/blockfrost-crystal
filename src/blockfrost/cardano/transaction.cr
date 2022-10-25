@@ -1,4 +1,6 @@
-struct Blockfrost::Transaction < Blockfrost::BaseResource
+struct Blockfrost::Transaction
+  include JSON::Serializable
+
   getter hash : String
   getter block : String
   getter block_height : Int32
@@ -28,6 +30,6 @@ struct Blockfrost::Transaction < Blockfrost::BaseResource
   getter valid_contract : Bool
 
   def self.get(hash : String)
-    Transaction.from_json(client.get("txs/#{hash}"))
+    Transaction.from_json(Client.get("txs/#{hash}"))
   end
 end

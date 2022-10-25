@@ -8,15 +8,15 @@ struct Blockfrost::Address < Blockfrost::BaseAddress
   getter type : Type
 
   def self.get(address : String)
-    Address.from_json(client.get("addresses/#{address}"))
+    Address.from_json(Client.get("addresses/#{address}"))
   end
 
   def self.extended(address : String)
-    Address::Extended.from_json(client.get("addresses/#{address}/extended"))
+    Address::Extended.from_json(Client.get("addresses/#{address}/extended"))
   end
 
   def self.total(address : String)
-    Total.from_json(client.get("addresses/#{address}/total"))
+    Total.from_json(Client.get("addresses/#{address}/total"))
   end
 
   Blockfrost.gets_all_with_order_and_pagination(

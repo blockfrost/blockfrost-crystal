@@ -1,4 +1,6 @@
-struct Blockfrost::Block < Blockfrost::BaseResource
+struct Blockfrost::Block
+  include JSON::Serializable
+
   @[JSON::Field(converter: Blockfrost::Json::TimeFromInt)]
   getter time : Time
   getter height : Int32?
@@ -22,7 +24,7 @@ struct Blockfrost::Block < Blockfrost::BaseResource
   getter confirmations : Int32
 
   def self.get(hash_or_number : Int32 | String)
-    Block.from_json(client.get("blocks/#{hash_or_number}"))
+    Block.from_json(Client.get("blocks/#{hash_or_number}"))
   end
 
   def self.latest
@@ -50,7 +52,7 @@ struct Blockfrost::Block < Blockfrost::BaseResource
   {% end %}
 
   def self.in_slot(slot_number : Int32)
-    Block.from_json(client.get("blocks/slot/#{slot_number}"))
+    Block.from_json(Client.get("blocks/slot/#{slot_number}"))
   end
 
   def self.in_epoch_in_slot(
@@ -58,7 +60,7 @@ struct Blockfrost::Block < Blockfrost::BaseResource
     slot_number : Int32
   ) : Block
     Block.from_json(
-      client.get("blocks/epoch/#{epoch_number}/slot/#{slot_number}")
+      Client.get("blocks/epoch/#{epoch_number}/slot/#{slot_number}")
     )
   end
 

@@ -1,4 +1,6 @@
-struct Blockfrost::Account < Blockfrost::BaseResource
+struct Blockfrost::Account
+  include JSON::Serializable
+
   getter stake_address : String
   getter active : Bool
   getter active_epoch : Int32?
@@ -17,7 +19,7 @@ struct Blockfrost::Account < Blockfrost::BaseResource
   getter pool_id : String?
 
   def self.get(stake_address : String)
-    Account.from_json(client.get("accounts/#{stake_address}"))
+    Account.from_json(Client.get("accounts/#{stake_address}"))
   end
 
   {% for method, model in {
@@ -45,7 +47,7 @@ struct Blockfrost::Account < Blockfrost::BaseResource
   )
 
   def self.total_from_addresses(stake_address : String)
-    Total.from_json(client.get("accounts/#{stake_address}/addresses/total"))
+    Total.from_json(Client.get("accounts/#{stake_address}/addresses/total"))
   end
 
   struct Reward

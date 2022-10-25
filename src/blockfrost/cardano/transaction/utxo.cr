@@ -1,10 +1,12 @@
-struct Blockfrost::Transaction::Utxo < Blockfrost::BaseResource
+struct Blockfrost::Transaction::Utxo
+  include JSON::Serializable
+
   getter hash : String
   getter inputs : Array(Input)
   getter outputs : Array(Output)
 
   def self.get(hash : String)
-    Utxo.from_json(client.get("txs/#{hash}/utxos"))
+    Utxo.from_json(Client.get("txs/#{hash}/utxos"))
   end
 
   struct Input

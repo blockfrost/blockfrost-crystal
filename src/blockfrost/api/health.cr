@@ -1,12 +1,14 @@
-struct Blockfrost::Health < Blockfrost::BaseResource
+struct Blockfrost::Health
+  include JSON::Serializable
+
   getter is_healthy : Bool
 
   def self.get
-    Health.from_json(client.get("/health"))
+    Health.from_json(Client.get("/health"))
   end
 
   def self.clock
-    Clock.from_json(client.get("/health/clock"))
+    Clock.from_json(Client.get("/health/clock"))
   end
 
   struct Clock

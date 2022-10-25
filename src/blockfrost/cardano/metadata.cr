@@ -1,4 +1,6 @@
-struct Blockfrost::Metadata < Blockfrost::BaseResource
+struct Blockfrost::Metadata
+  include JSON::Serializable
+
   Blockfrost.gets_all_with_order_and_pagination(
     :labels,
     Array(Label),

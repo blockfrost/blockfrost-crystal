@@ -1,6 +1,8 @@
-struct Blockfrost::Ledger < Blockfrost::BaseResource
+struct Blockfrost::Ledger
+  include JSON::Serializable
+
   def self.genesis
-    Genesis.from_json(client.get("genesis"))
+    Genesis.from_json(Client.get("genesis"))
   end
 
   struct Genesis

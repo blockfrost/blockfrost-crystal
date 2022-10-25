@@ -1,4 +1,6 @@
-struct Blockfrost::Script < Blockfrost::BaseResource
+struct Blockfrost::Script
+  include JSON::Serializable
+
   Blockfrost.enum_castable_from_string(Type, {
     Timelock,
     PlutusV1,
@@ -16,15 +18,15 @@ struct Blockfrost::Script < Blockfrost::BaseResource
   )
 
   def self.get(script_hash : String)
-    Script.from_json(client.get("scripts/#{script_hash}"))
+    Script.from_json(Client.get("scripts/#{script_hash}"))
   end
 
   def self.json(script_hash : String)
-    TimelockJson.from_json(client.get("scripts/#{script_hash}/json"))
+    TimelockJson.from_json(Client.get("scripts/#{script_hash}/json"))
   end
 
   def self.cbor(script_hash : String)
-    PlutusCbor.from_json(client.get("scripts/#{script_hash}/cbor"))
+    PlutusCbor.from_json(Client.get("scripts/#{script_hash}/cbor"))
   end
 
   Blockfrost.gets_all_with_order_and_pagination(
@@ -73,5 +75,11 @@ struct Blockfrost::Script < Blockfrost::BaseResource
     getter unit_steps : Int64
     @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
     getter fee : Int64
+  end
+
+  struct Datum
+    include JSON::Serializable
+
+    getter json : JSON::Any
   end
 end

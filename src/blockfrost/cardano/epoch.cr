@@ -1,4 +1,6 @@
-struct Blockfrost::Epoch < Blockfrost::BaseResource
+struct Blockfrost::Epoch
+  include JSON::Serializable
+
   getter epoch : Int32
   @[JSON::Field(converter: Blockfrost::Json::TimeFromInt)]
   getter start_time : Time
@@ -18,11 +20,11 @@ struct Blockfrost::Epoch < Blockfrost::BaseResource
   getter active_stake : Int64
 
   def self.get(epoch : Int32)
-    Epoch.from_json(client.get("epochs/#{epoch}"))
+    Epoch.from_json(Client.get("epochs/#{epoch}"))
   end
 
   def self.latest
-    Epoch.from_json(client.get("epochs/latest"))
+    Epoch.from_json(Client.get("epochs/latest"))
   end
 
   {% for method in %w[next previous] %}
@@ -65,7 +67,7 @@ struct Blockfrost::Epoch < Blockfrost::BaseResource
   )
 
   def self.parameters(epoch : Int32)
-    Parameters.from_json(client.get("epochs/#{epoch}/parameters"))
+    Parameters.from_json(Client.get("epochs/#{epoch}/parameters"))
   end
 
   struct Stake

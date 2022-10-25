@@ -31,7 +31,7 @@ module Blockfrost
       page : QueryPage? = nil
     )
       {{return_type}}.from_json(
-        client.get({{resource_path}}, {
+        Client.get({{resource_path}}, {
           "count" => count,
           "page" => page
         })
@@ -57,7 +57,7 @@ module Blockfrost
       page : QueryPage? = nil
     )
       {{return_type}}.from_json(
-        client.get({{resource_path}}, {
+        Client.get({{resource_path}}, {
           "count" => count,
           "page" => page
         })
@@ -91,7 +91,7 @@ module Blockfrost
       page : QueryPage? = nil
     )
       {{return_type}}.from_json(
-        client.get({{resource_path}}, {
+        Client.get({{resource_path}}, {
           "order" => order.try(&.to_s),
           "count" => count,
           "page"  => page,
@@ -111,7 +111,7 @@ module Blockfrost
         {% unless argument_type_declaration.nil? %}
           {{argument_type_declaration.var}},
         {% end %}
-        order_from_string(order),
+        QueryOrder.from_string(order),
         count,
         page
       )
@@ -139,7 +139,7 @@ module Blockfrost
       page : QueryPage? = nil
     )
       {{return_type}}.from_json(
-        client.get({{resource_path}}, {
+        Client.get({{resource_path}}, {
           "order" => order.try(&.to_s),
           "count" => count,
           "page"  => page,
@@ -157,7 +157,7 @@ module Blockfrost
       {{method_name.id}}(
         {{argument_type_declaration.var}},
         {{scope_argument_type_declaration.var}},
-        order_from_string(order),
+        QueryOrder.from_string(order),
         count,
         page
       )
@@ -194,7 +194,7 @@ module Blockfrost
       to : String? = nil
     )
       {{return_type}}.from_json(
-        client.get({{resource_path}}, {
+        Client.get({{resource_path}}, {
           "order" => order.try(&.to_s),
           "count" => count,
           "page"  => page,
@@ -218,7 +218,7 @@ module Blockfrost
         {% unless argument_type_declaration.nil? %}
           {{argument_type_declaration.var}},
         {% end %}
-        order_from_string(order),
+        QueryOrder.from_string(order),
         count,
         page,
         from,
