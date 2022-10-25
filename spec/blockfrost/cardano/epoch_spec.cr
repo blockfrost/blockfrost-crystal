@@ -201,12 +201,12 @@ describe Blockfrost::Epoch do
   describe ".block_hashes_by_pool" do
     it "fetches the block ids the given epoch for a given pool" do
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/blocks/#{fake_pool_id}?count=3&page=2")
+        "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/blocks/#{test_pool_id}?count=3&page=2")
         .to_return(body: read_fixture("epoch/blocks.200.json"))
 
       Blockfrost::Epoch.block_hashes_by_pool(
         225,
-        fake_pool_id,
+        test_pool_id,
         count: 3,
         page: 2
       ).should be_a(Array(String))
@@ -219,10 +219,10 @@ describe Blockfrost::Epoch do
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/latest")
         .to_return(body: read_fixture("epoch/latest.200.json"))
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/blocks/#{fake_pool_id}")
+        "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/blocks/#{test_pool_id}")
         .to_return(body: read_fixture("epoch/blocks.200.json"))
 
-      Blockfrost::Epoch.latest.block_hashes_by_pool(fake_pool_id)
+      Blockfrost::Epoch.latest.block_hashes_by_pool(test_pool_id)
         .should be_a(Array(String))
     end
   end
@@ -248,6 +248,6 @@ describe Blockfrost::Epoch do
   end
 end
 
-private def fake_pool_id
+private def test_pool_id
   "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy"
 end

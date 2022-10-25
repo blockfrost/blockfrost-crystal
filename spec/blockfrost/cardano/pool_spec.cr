@@ -102,11 +102,11 @@ describe Blockfrost::Pool do
   describe ".get" do
     it "fetches a pool for the given pool id" do
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{fake_pool_id}")
+        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}")
         .to_return(body: read_fixture("pool/get.200.json"))
 
-      pool = Blockfrost::Pool.get(fake_pool_id)
-      pool.pool_id.should eq(fake_pool_id)
+      pool = Blockfrost::Pool.get(test_pool_id)
+      pool.pool_id.should eq(test_pool_id)
       pool.hex.should eq(
         "0f292fcaa02b8b2f9b3c8f9fd8e0bb21abedb692a6d5058df3ef2735"
       )
@@ -134,10 +134,10 @@ describe Blockfrost::Pool do
   describe ".history" do
     it "fetches a pool's history" do
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{fake_pool_id}/history")
+        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}/history")
         .to_return(body: read_fixture("pool/history.200.json"))
 
-      history = Blockfrost::Pool.history(fake_pool_id)
+      history = Blockfrost::Pool.history(test_pool_id)
       history.first.epoch.should eq(233)
       history.first.blocks.should eq(22)
       history.first.active_stake.should eq(20485965693569)
@@ -149,10 +149,10 @@ describe Blockfrost::Pool do
 
     it "accepts ordering and pagination parameters" do
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{fake_pool_id}/history?order=asc&count=2&page=3")
+        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}/history?order=asc&count=2&page=3")
         .to_return(body: read_fixture("pool/history.200.json"))
 
-      Blockfrost::Pool.history(fake_pool_id, Blockfrost::QueryOrder::ASC, 2, 3)
+      Blockfrost::Pool.history(test_pool_id, Blockfrost::QueryOrder::ASC, 2, 3)
         .should be_a(Array(Blockfrost::Pool::Event))
     end
   end
@@ -160,13 +160,13 @@ describe Blockfrost::Pool do
   describe "#history" do
     it "fetches the current pool's history" do
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{fake_pool_id}")
+        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}")
         .to_return(body: read_fixture("pool/get.200.json"))
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{fake_pool_id}/history")
+        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}/history")
         .to_return(body: read_fixture("pool/history.200.json"))
 
-      Blockfrost::Pool.get(fake_pool_id).history
+      Blockfrost::Pool.get(test_pool_id).history
         .should be_a(Array(Blockfrost::Pool::Event))
     end
   end
@@ -174,11 +174,11 @@ describe Blockfrost::Pool do
   describe ".metadata" do
     it "fetches a pool's metadata" do
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{fake_pool_id}/metadata")
+        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}/metadata")
         .to_return(body: read_fixture("pool/metadata.200.json"))
 
-      metadata = Blockfrost::Pool.metadata(fake_pool_id)
-      metadata.pool_id.should eq(fake_pool_id)
+      metadata = Blockfrost::Pool.metadata(test_pool_id)
+      metadata.pool_id.should eq(test_pool_id)
       metadata.hex.should eq(
         "0f292fcaa02b8b2f9b3c8f9fd8e0bb21abedb692a6d5058df3ef2735"
       )
@@ -196,13 +196,13 @@ describe Blockfrost::Pool do
   describe "#metadata" do
     it "fetches the current pool's metadata" do
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{fake_pool_id}")
+        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}")
         .to_return(body: read_fixture("pool/get.200.json"))
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{fake_pool_id}/metadata")
+        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}/metadata")
         .to_return(body: read_fixture("pool/metadata.200.json"))
 
-      Blockfrost::Pool.get(fake_pool_id).metadata
+      Blockfrost::Pool.get(test_pool_id).metadata
         .should be_a(Blockfrost::Pool::Metadata)
     end
   end
@@ -210,10 +210,10 @@ describe Blockfrost::Pool do
   describe ".relays" do
     it "fetches a pool's relays" do
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{fake_pool_id}/relays")
+        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}/relays")
         .to_return(body: read_fixture("pool/relays.200.json"))
 
-      relay = Blockfrost::Pool.relays(fake_pool_id).first
+      relay = Blockfrost::Pool.relays(test_pool_id).first
       relay.ipv4.should eq("4.4.4.4")
       relay.ipv6.should eq("https://stakenuts.com/mainnet.json")
       relay.dns.should eq("relay1.stakenuts.com")
@@ -225,13 +225,13 @@ describe Blockfrost::Pool do
   describe "#relays" do
     it "fetches the current pool's relays" do
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{fake_pool_id}")
+        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}")
         .to_return(body: read_fixture("pool/get.200.json"))
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{fake_pool_id}/relays")
+        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}/relays")
         .to_return(body: read_fixture("pool/relays.200.json"))
 
-      Blockfrost::Pool.get(fake_pool_id).relays
+      Blockfrost::Pool.get(test_pool_id).relays
         .should be_a(Array(Blockfrost::Pool::Relay))
     end
   end
@@ -239,10 +239,10 @@ describe Blockfrost::Pool do
   describe ".delegators" do
     it "fetches a pool's delegators" do
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{fake_pool_id}/delegators")
+        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}/delegators")
         .to_return(body: read_fixture("pool/delegators.200.json"))
 
-      delegator = Blockfrost::Pool.delegators(fake_pool_id).first
+      delegator = Blockfrost::Pool.delegators(test_pool_id).first
       delegator.address.should eq(
         "stake1ux4vspfvwuus9uwyp5p3f0ky7a30jq5j80jxse0fr7pa56sgn8kha"
       )
@@ -251,10 +251,10 @@ describe Blockfrost::Pool do
 
     it "accepts ordering and pagination parameters" do
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{fake_pool_id}/delegators?order=asc&count=1&page=2")
+        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}/delegators?order=asc&count=1&page=2")
         .to_return(body: read_fixture("pool/delegators.200.json"))
 
-      Blockfrost::Pool.delegators(fake_pool_id, "asc", 1, 2)
+      Blockfrost::Pool.delegators(test_pool_id, "asc", 1, 2)
         .should be_a(Array(Blockfrost::Pool::Delegator))
     end
   end
@@ -262,13 +262,13 @@ describe Blockfrost::Pool do
   describe "#delegators" do
     it "fetches the current pool's delegators" do
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{fake_pool_id}")
+        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}")
         .to_return(body: read_fixture("pool/get.200.json"))
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{fake_pool_id}/delegators?count=10")
+        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}/delegators?count=10")
         .to_return(body: read_fixture("pool/delegators.200.json"))
 
-      Blockfrost::Pool.get(fake_pool_id).delegators(count: 10)
+      Blockfrost::Pool.get(test_pool_id).delegators(count: 10)
         .should be_a(Array(Blockfrost::Pool::Delegator))
     end
   end
@@ -276,20 +276,20 @@ describe Blockfrost::Pool do
   describe ".block_hashes" do
     it "fetches a pool's block_hashes" do
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{fake_pool_id}/blocks")
+        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}/blocks")
         .to_return(body: read_fixture("pool/block_hashes.200.json"))
 
-      Blockfrost::Pool.block_hashes(fake_pool_id).first.should eq(
+      Blockfrost::Pool.block_hashes(test_pool_id).first.should eq(
         "d8982ca42cfe76b747cc681d35d671050a9e41e9cfe26573eb214e94fe6ff21d"
       )
     end
 
     it "accepts ordering and pagination parameters" do
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{fake_pool_id}/blocks?order=asc&count=1&page=2")
+        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}/blocks?order=asc&count=1&page=2")
         .to_return(body: read_fixture("pool/block_hashes.200.json"))
 
-      Blockfrost::Pool.block_hashes(fake_pool_id, "asc", 1, 2)
+      Blockfrost::Pool.block_hashes(test_pool_id, "asc", 1, 2)
         .should be_a(Array(String))
     end
   end
@@ -297,13 +297,13 @@ describe Blockfrost::Pool do
   describe "#block_hashes" do
     it "fetches the current pool's block_hashes" do
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{fake_pool_id}")
+        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}")
         .to_return(body: read_fixture("pool/get.200.json"))
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{fake_pool_id}/blocks?count=10")
+        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}/blocks?count=10")
         .to_return(body: read_fixture("pool/block_hashes.200.json"))
 
-      Blockfrost::Pool.get(fake_pool_id).block_hashes(count: 10)
+      Blockfrost::Pool.get(test_pool_id).block_hashes(count: 10)
         .should be_a(Array(String))
     end
   end
@@ -311,10 +311,10 @@ describe Blockfrost::Pool do
   describe ".updates" do
     it "fetches a pool's updates" do
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{fake_pool_id}/updates")
+        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}/updates")
         .to_return(body: read_fixture("pool/updates.200.json"))
 
-      update = Blockfrost::Pool.updates(fake_pool_id).first
+      update = Blockfrost::Pool.updates(test_pool_id).first
       update.tx_hash.should eq(
         "6804edf9712d2b619edb6ac86861fe93a730693183a262b165fcc1ba1bc99cad"
       )
@@ -324,10 +324,10 @@ describe Blockfrost::Pool do
 
     it "accepts ordering and pagination parameters" do
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{fake_pool_id}/updates?order=asc&count=1&page=2")
+        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}/updates?order=asc&count=1&page=2")
         .to_return(body: read_fixture("pool/updates.200.json"))
 
-      Blockfrost::Pool.updates(fake_pool_id, "asc", 1, 2)
+      Blockfrost::Pool.updates(test_pool_id, "asc", 1, 2)
         .should be_a(Array(Blockfrost::Pool::Update))
     end
   end
@@ -335,18 +335,18 @@ describe Blockfrost::Pool do
   describe "#updates" do
     it "fetches the current pool's updates" do
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{fake_pool_id}")
+        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}")
         .to_return(body: read_fixture("pool/get.200.json"))
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{fake_pool_id}/updates?page=2")
+        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}/updates?page=2")
         .to_return(body: read_fixture("pool/updates.200.json"))
 
-      Blockfrost::Pool.get(fake_pool_id).updates(page: 2)
+      Blockfrost::Pool.get(test_pool_id).updates(page: 2)
         .should be_a(Array(Blockfrost::Pool::Update))
     end
   end
 end
 
-private def fake_pool_id
+private def test_pool_id
   "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy"
 end

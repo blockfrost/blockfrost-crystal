@@ -4,15 +4,15 @@ describe Blockfrost do
   describe ".settings" do
     it "accepts a valid api key and api version" do
       Blockfrost.configure do |settings|
-        settings.cardano_api_key = fake_cardano_api_key
+        settings.cardano_api_key = test_cardano_api_key
         settings.cardano_api_version = "v0"
-        settings.ipfs_api_key = fake_ipfs_api_key
+        settings.ipfs_api_key = test_ipfs_api_key
         settings.ipfs_api_version = "v1"
       end
 
-      Blockfrost.settings.cardano_api_key.should eq(fake_cardano_api_key)
+      Blockfrost.settings.cardano_api_key.should eq(test_cardano_api_key)
       Blockfrost.settings.cardano_api_version.should eq("v0")
-      Blockfrost.settings.ipfs_api_key.should eq(fake_ipfs_api_key)
+      Blockfrost.settings.ipfs_api_key.should eq(test_ipfs_api_key)
       Blockfrost.settings.ipfs_api_version.should eq("v1")
     end
 
@@ -154,9 +154,9 @@ describe Blockfrost do
   describe ".api_version_for_path" do
     it "returns the appropriate api key for a given path" do
       Blockfrost.configure do |settings|
-        settings.cardano_api_key = fake_cardano_api_key
+        settings.cardano_api_key = test_cardano_api_key
         settings.cardano_api_version = "v0"
-        settings.ipfs_api_key = fake_ipfs_api_key
+        settings.ipfs_api_key = test_ipfs_api_key
         settings.ipfs_api_version = "v1"
       end
 

@@ -2,17 +2,17 @@ require "spec"
 require "webmock"
 require "../src/blockfrost"
 
-def fake_cardano_api_key
+def test_cardano_api_key
   "testnetVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE"
 end
 
-def fake_ipfs_api_key
+def test_ipfs_api_key
   "ipfsVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE"
 end
 
 def configure_api_keys(
-  cardano_api_key : String = fake_cardano_api_key,
-  ipfs_api_key : String = fake_ipfs_api_key
+  cardano_api_key : String = test_cardano_api_key,
+  ipfs_api_key : String = test_ipfs_api_key
 ) : Void
   Blockfrost.configure do |settings|
     settings.cardano_api_key = cardano_api_key
