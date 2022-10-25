@@ -45,8 +45,7 @@ describe Blockfrost::Script do
         .to_return(body: read_fixture("script/json.200.json"))
 
       json = Blockfrost::Script.json(test_script_hash)
-      json.json.should be_a(JSON::Any)
-      json.json.dig?("scripts", 0, "type").should eq("sig")
+      json.dig?("scripts", 0, "type").should eq("sig")
     end
   end
 
@@ -57,7 +56,7 @@ describe Blockfrost::Script do
         .to_return(body: read_fixture("script/cbor.200.json"))
 
       cbor = Blockfrost::Script.cbor(test_script_hash)
-      cbor.cbor.should eq("4e4d01000033222220051200120011")
+      cbor.should eq("4e4d01000033222220051200120011")
     end
   end
 

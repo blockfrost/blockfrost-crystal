@@ -22,11 +22,11 @@ struct Blockfrost::Script
   end
 
   def self.json(script_hash : String)
-    TimelockJson.from_json(Client.get("scripts/#{script_hash}/json"))
+    TimelockJSON.from_json(Client.get("scripts/#{script_hash}/json")).value
   end
 
   def self.cbor(script_hash : String)
-    PlutusCbor.from_json(Client.get("scripts/#{script_hash}/cbor"))
+    PlutusCBOR.from_json(Client.get("scripts/#{script_hash}/cbor")).value
   end
 
   Blockfrost.gets_all_with_order_and_pagination(
@@ -42,16 +42,18 @@ struct Blockfrost::Script
     getter script_hash : String
   end
 
-  struct TimelockJson
+  struct TimelockJSON
     include JSON::Serializable
 
-    getter json : JSON::Any
+    @[JSON::Field(key: "json")]
+    getter value : JSON::Any
   end
 
-  struct PlutusCbor
+  struct PlutusCBOR
     include JSON::Serializable
 
-    getter cbor : String
+    @[JSON::Field(key: "cbor")]
+    getter value : String
   end
 
   struct Redeemer
@@ -75,11 +77,5 @@ struct Blockfrost::Script
     getter unit_steps : Int64
     @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
     getter fee : Int64
-  end
-
-  struct Datum
-    include JSON::Serializable
-
-    getter json : JSON::Any
   end
 end
