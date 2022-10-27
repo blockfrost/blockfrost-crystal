@@ -153,6 +153,34 @@ describe Blockfrost::Transaction do
         .should be_a(Array(Blockfrost::Transaction::Delegation))
     end
   end
+
+  describe ".withdrawals" do
+    it "fetches information about withdrawals of a specific transaction" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/withdrawals")
+        .to_return(body: read_fixture("tx/withdrawals.200.json"))
+
+      withdrawal = Blockfrost::Transaction.withdrawals(test_tx_hash).first
+      withdrawal.address.should eq(
+        "stake1u9r76ypf5fskppa0cmttas05cgcswrttn6jrq4yd7jpdnvc7gt0yc"
+      )
+      withdrawal.amount.should eq(431_833_601)
+    end
+  end
+
+  describe "#withdrawals" do
+    it "fetches information about withdrawals of the current transaction" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}")
+        .to_return(body: read_fixture("tx/get.200.json"))
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/withdrawals")
+        .to_return(body: read_fixture("tx/withdrawals.200.json"))
+
+      Blockfrost::Transaction.get(test_tx_hash).withdrawals
+        .should be_a(Array(Blockfrost::Transaction::Withdrawal))
+    end
+  end
 end
 
 private def test_tx_hash

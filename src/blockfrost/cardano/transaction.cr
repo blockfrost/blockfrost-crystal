@@ -57,6 +57,14 @@ struct Blockfrost::Transaction
     self.class.delegations(hash)
   end
 
+  def self.withdrawals(hash : String)
+    Array(Withdrawal).from_json(Client.get("txs/#{hash}/withdrawals"))
+  end
+
+  def withdrawals
+    self.class.withdrawals(hash)
+  end
+
   struct Utxo
     include JSON::Serializable
 
@@ -106,5 +114,13 @@ struct Blockfrost::Transaction
     getter address : String
     getter pool_id : String
     getter active_epoch : Int32
+  end
+
+  struct Withdrawal
+    include JSON::Serializable
+
+    getter address : String
+    @[JSON::Field(converter: Blockfrost::Int64FromString)]
+    getter amount : Int64
   end
 end
