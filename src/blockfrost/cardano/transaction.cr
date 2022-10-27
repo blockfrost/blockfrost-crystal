@@ -65,6 +65,14 @@ struct Blockfrost::Transaction
     self.class.withdrawals(hash)
   end
 
+  def self.mirs(hash : String)
+    Array(Mir).from_json(Client.get("txs/#{hash}/mirs"))
+  end
+
+  def mirs
+    self.class.mirs(hash)
+  end
+
   struct Utxo
     include JSON::Serializable
 
@@ -119,6 +127,21 @@ struct Blockfrost::Transaction
   struct Withdrawal
     include JSON::Serializable
 
+    getter address : String
+    @[JSON::Field(converter: Blockfrost::Int64FromString)]
+    getter amount : Int64
+  end
+
+  struct Mir
+    include JSON::Serializable
+
+    Blockfrost.enum_castable_from_string(Pot, {
+      Reserve,
+      Treasury,
+    })
+
+    getter pot : Pot
+    getter cert_index : Int32
     getter address : String
     @[JSON::Field(converter: Blockfrost::Int64FromString)]
     getter amount : Int64

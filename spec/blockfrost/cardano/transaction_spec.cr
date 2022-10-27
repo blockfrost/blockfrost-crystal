@@ -181,6 +181,36 @@ describe Blockfrost::Transaction do
         .should be_a(Array(Blockfrost::Transaction::Withdrawal))
     end
   end
+
+  describe ".mirs" do
+    it "fetches information about Move Instantaneous Rewards (MIRs) of a specific transaction" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/mirs")
+        .to_return(body: read_fixture("tx/mirs.200.json"))
+
+      mir = Blockfrost::Transaction.mirs(test_tx_hash).first
+      mir.pot.should eq(Blockfrost::Transaction::Mir::Pot::Reserve)
+      mir.cert_index.should eq(0)
+      mir.address.should eq(
+        "stake1u9r76ypf5fskppa0cmttas05cgcswrttn6jrq4yd7jpdnvc7gt0yc"
+      )
+      mir.amount.should eq(431_833_601)
+    end
+  end
+
+  describe "#mirs" do
+    it "fetches information about mirs of the current transaction" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}")
+        .to_return(body: read_fixture("tx/get.200.json"))
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/mirs")
+        .to_return(body: read_fixture("tx/mirs.200.json"))
+
+      Blockfrost::Transaction.get(test_tx_hash).mirs
+        .should be_a(Array(Blockfrost::Transaction::Mir))
+    end
+  end
 end
 
 private def test_tx_hash
