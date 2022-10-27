@@ -32,4 +32,45 @@ struct Blockfrost::Transaction
   def self.get(hash : String)
     Transaction.from_json(Client.get("txs/#{hash}"))
   end
+
+  def self.utxos(hash : String)
+    Utxo.from_json(Client.get("txs/#{hash}/utxos"))
+  end
+
+  def utxos
+    self.class.utxos(hash)
+  end
+
+  struct Utxo
+    include JSON::Serializable
+
+    getter hash : String
+    getter inputs : Array(Input)
+    getter outputs : Array(Output)
+
+    struct Input
+      include JSON::Serializable
+
+      getter address : String
+      getter amount : Array(Token)
+      getter tx_hash : String
+      getter output_index : Int32
+      getter data_hash : String?
+      getter inline_datum : String?
+      getter reference_script_hash : String?
+      getter collateral : Bool
+      getter reference : Bool
+    end
+
+    struct Output
+      include JSON::Serializable
+
+      getter address : String
+      getter amount : Array(Token)
+      getter output_index : Int32
+      getter data_hash : String?
+      getter inline_datum : String?
+      getter reference_script_hash : String?
+    end
+  end
 end
