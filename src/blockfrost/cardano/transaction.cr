@@ -41,6 +41,14 @@ struct Blockfrost::Transaction
     self.class.utxos(hash)
   end
 
+  def self.stakes(hash : String)
+    Array(Stake).from_json(Client.get("txs/#{hash}/stakes"))
+  end
+
+  def stakes
+    self.class.stakes(hash)
+  end
+
   struct Utxo
     include JSON::Serializable
 
@@ -72,5 +80,13 @@ struct Blockfrost::Transaction
       getter inline_datum : String?
       getter reference_script_hash : String?
     end
+  end
+
+  struct Stake
+    include JSON::Serializable
+
+    getter cert_index : Int32
+    getter address : String
+    getter registration : Bool
   end
 end

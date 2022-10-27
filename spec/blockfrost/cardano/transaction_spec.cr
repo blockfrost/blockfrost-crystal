@@ -91,6 +91,35 @@ describe Blockfrost::Transaction do
       )
     end
   end
+
+  describe ".stakes" do
+    it "fetches information about (de)registration of stake addresses within a given transaction" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/stakes")
+        .to_return(body: read_fixture("tx/stakes.200.json"))
+
+      stake = Blockfrost::Transaction.stakes(test_tx_hash).first
+      stake.cert_index.should eq(0)
+      stake.address.should eq(
+        "stake1u9t3a0tcwune5xrnfjg4q7cpvjlgx9lcv0cuqf5mhfjwrvcwrulda"
+      )
+      stake.registration.should be_truthy
+    end
+  end
+
+  describe "#stakes" do
+    it "fetches information about (de)registration of stake addresses within the current transaction" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}")
+        .to_return(body: read_fixture("tx/get.200.json"))
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/stakes")
+        .to_return(body: read_fixture("tx/stakes.200.json"))
+
+      Blockfrost::Transaction.get(test_tx_hash).stakes
+        .should be_a(Array(Blockfrost::Transaction::Stake))
+    end
+  end
 end
 
 private def test_tx_hash
