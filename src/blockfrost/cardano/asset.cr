@@ -2,7 +2,7 @@ struct Blockfrost::Asset
   include JSON::Serializable
 
   getter asset : String
-  @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+  @[JSON::Field(converter: Blockfrost::Int64FromString)]
   getter quantity : Int64
   getter policy_id : String
   getter asset_name : String?
@@ -47,7 +47,7 @@ struct Blockfrost::Asset
     include JSON::Serializable
 
     getter asset : String
-    @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+    @[JSON::Field(converter: Blockfrost::Int64FromString)]
     getter quantity : Int64
   end
 
@@ -73,7 +73,7 @@ struct Blockfrost::Asset
     include JSON::Serializable
 
     getter address : String
-    @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+    @[JSON::Field(converter: Blockfrost::Int64FromString)]
     getter quantity : Int64
   end
 
@@ -86,7 +86,7 @@ struct Blockfrost::Asset
     })
 
     getter tx_hash : String
-    @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+    @[JSON::Field(converter: Blockfrost::Int64FromString)]
     getter amount : Int64
     getter action : Action
   end
@@ -97,7 +97,7 @@ struct Blockfrost::Asset
     getter tx_hash : String
     getter tx_index : Int32
     getter block_height : Int32
-    @[JSON::Field(converter: Blockfrost::Json::TimeFromInt)]
+    @[JSON::Field(converter: Blockfrost::TimeFromInt)]
     getter block_time : Time
   end
 end

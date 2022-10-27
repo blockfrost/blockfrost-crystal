@@ -71,11 +71,11 @@ struct Blockfrost::Script
     getter purpose : Purpose
     getter redeemer_data_hash : String
     getter datum_hash : String
-    @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+    @[JSON::Field(converter: Blockfrost::Int64FromString)]
     getter unit_mem : Int64
-    @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+    @[JSON::Field(converter: Blockfrost::Int64FromString)]
     getter unit_steps : Int64
-    @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+    @[JSON::Field(converter: Blockfrost::Int64FromString)]
     getter fee : Int64
   end
 end

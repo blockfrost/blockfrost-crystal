@@ -1,7 +1,7 @@
 struct Blockfrost::Block
   include JSON::Serializable
 
-  @[JSON::Field(converter: Blockfrost::Json::TimeFromInt)]
+  @[JSON::Field(converter: Blockfrost::TimeFromInt)]
   getter time : Time
   getter height : Int32?
   getter hash : String
@@ -11,13 +11,13 @@ struct Blockfrost::Block
   getter slot_leader : String
   getter size : Int32
   getter tx_count : Int32
-  @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+  @[JSON::Field(converter: Blockfrost::Int64FromString)]
   getter output : Int64?
-  @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+  @[JSON::Field(converter: Blockfrost::Int64FromString)]
   getter fees : Int64?
   getter block_vrf : String?
   getter op_cert : String?
-  @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+  @[JSON::Field(converter: Blockfrost::Int64FromString)]
   getter op_cert_counter : Int64?
   getter previous_block : String?
   getter next_block : String?

@@ -4,17 +4,17 @@ struct Blockfrost::Account
   getter stake_address : String
   getter active : Bool
   getter active_epoch : Int32?
-  @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+  @[JSON::Field(converter: Blockfrost::Int64FromString)]
   getter controlled_amount : Int64
-  @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+  @[JSON::Field(converter: Blockfrost::Int64FromString)]
   getter rewards_sum : Int64
-  @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+  @[JSON::Field(converter: Blockfrost::Int64FromString)]
   getter withdrawals_sum : Int64
-  @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+  @[JSON::Field(converter: Blockfrost::Int64FromString)]
   getter reserves_sum : Int64
-  @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+  @[JSON::Field(converter: Blockfrost::Int64FromString)]
   getter treasury_sum : Int64
-  @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+  @[JSON::Field(converter: Blockfrost::Int64FromString)]
   getter withdrawable_amount : Int64
   getter pool_id : String?
 
@@ -60,7 +60,7 @@ struct Blockfrost::Account
     })
 
     getter epoch : Int32
-    @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+    @[JSON::Field(converter: Blockfrost::Int64FromString)]
     getter amount : Int64
     getter pool_id : String
     getter type : Type
@@ -70,7 +70,7 @@ struct Blockfrost::Account
     include JSON::Serializable
 
     getter active_epoch : Int32
-    @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+    @[JSON::Field(converter: Blockfrost::Int64FromString)]
     getter amount : Int64
     getter pool_id : String
   end
@@ -80,7 +80,7 @@ struct Blockfrost::Account
 
     getter active_epoch : Int32
     getter tx_hash : String
-    @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+    @[JSON::Field(converter: Blockfrost::Int64FromString)]
     getter amount : Int64
     getter pool_id : String
   end
@@ -101,7 +101,7 @@ struct Blockfrost::Account
     include JSON::Serializable
 
     getter tx_hash : String
-    @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+    @[JSON::Field(converter: Blockfrost::Int64FromString)]
     getter amount : Int64
   end
 
@@ -109,7 +109,7 @@ struct Blockfrost::Account
     include JSON::Serializable
 
     getter tx_hash : String
-    @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+    @[JSON::Field(converter: Blockfrost::Int64FromString)]
     getter amount : Int64
   end
 

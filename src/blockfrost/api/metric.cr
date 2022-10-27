@@ -1,7 +1,7 @@
 struct Blockfrost::Metric
   include JSON::Serializable
 
-  @[JSON::Field(converter: Blockfrost::Json::TimeFromInt)]
+  @[JSON::Field(converter: Blockfrost::TimeFromInt)]
   getter time : Time
   getter calls : Int32
 
@@ -16,7 +16,7 @@ struct Blockfrost::Metric
   struct Endpoint
     include JSON::Serializable
 
-    @[JSON::Field(converter: Blockfrost::Json::TimeFromInt)]
+    @[JSON::Field(converter: Blockfrost::TimeFromInt)]
     getter time : Time
     getter calls : Int32
     getter endpoint : String

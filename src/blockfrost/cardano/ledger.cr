@@ -10,7 +10,7 @@ struct Blockfrost::Ledger
 
     getter active_slots_coefficient : Float64
     getter update_quorum : Int32
-    @[JSON::Field(converter: Blockfrost::Json::Int64FromString)]
+    @[JSON::Field(converter: Blockfrost::Int64FromString)]
     getter max_lovelace_supply : Int64
     getter network_magic : Int32
     getter epoch_length : Int32

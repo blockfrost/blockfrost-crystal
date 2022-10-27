@@ -14,7 +14,7 @@ struct Blockfrost::Health
   struct Clock
     include JSON::Serializable
 
-    @[JSON::Field(converter: Blockfrost::Json::TimeMsFromInt)]
+    @[JSON::Field(converter: Blockfrost::TimeMsFromInt)]
     getter server_time : Time
   end
 end
