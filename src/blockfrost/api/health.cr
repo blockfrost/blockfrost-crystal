@@ -4,11 +4,11 @@ struct Blockfrost::Health
   getter is_healthy : Bool
 
   def self.get
-    Health.from_json(Client.get("/health"))
+    Health.from_json(Client.get("health"))
   end
 
   def self.clock
-    Clock.from_json(Client.get("/health/clock"))
+    Clock.from_json(Client.get("health/clock"))
   end
 
   struct Clock
