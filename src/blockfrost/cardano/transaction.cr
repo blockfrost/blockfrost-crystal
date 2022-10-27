@@ -49,6 +49,14 @@ struct Blockfrost::Transaction
     self.class.stakes(hash)
   end
 
+  def self.delegations(hash : String)
+    Array(Delegation).from_json(Client.get("txs/#{hash}/delegations"))
+  end
+
+  def delegations
+    self.class.delegations(hash)
+  end
+
   struct Utxo
     include JSON::Serializable
 
@@ -88,5 +96,15 @@ struct Blockfrost::Transaction
     getter cert_index : Int32
     getter address : String
     getter registration : Bool
+  end
+
+  struct Delegation
+    include JSON::Serializable
+
+    getter index : Int32
+    getter cert_index : Int32
+    getter address : String
+    getter pool_id : String
+    getter active_epoch : Int32
   end
 end

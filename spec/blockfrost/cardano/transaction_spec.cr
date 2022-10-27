@@ -120,6 +120,39 @@ describe Blockfrost::Transaction do
         .should be_a(Array(Blockfrost::Transaction::Stake))
     end
   end
+
+  describe ".delegations" do
+    it "fetches information about delegation certificates of a specific transaction" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/delegations")
+        .to_return(body: read_fixture("tx/delegations.200.json"))
+
+      delegation = Blockfrost::Transaction.delegations(test_tx_hash).first
+      delegation.index.should eq(0)
+      delegation.cert_index.should eq(0)
+      delegation.address.should eq(
+        "stake1u9r76ypf5fskppa0cmttas05cgcswrttn6jrq4yd7jpdnvc7gt0yc"
+      )
+      delegation.pool_id.should eq(
+        "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy"
+      )
+      delegation.active_epoch.should eq(210)
+    end
+  end
+
+  describe "#delegations" do
+    it "fetches information about delegation certificates of the current transaction" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}")
+        .to_return(body: read_fixture("tx/get.200.json"))
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/delegations")
+        .to_return(body: read_fixture("tx/delegations.200.json"))
+
+      Blockfrost::Transaction.get(test_tx_hash).delegations
+        .should be_a(Array(Blockfrost::Transaction::Delegation))
+    end
+  end
 end
 
 private def test_tx_hash
