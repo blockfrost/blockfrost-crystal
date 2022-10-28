@@ -237,16 +237,17 @@ describe Blockfrost::Transaction do
         "stake1u98nnlkvkk23vtvf9273uq7cph5ww6u2yq2389psuqet90sv4xv9v",
       ])
 
-      pool_update.metadata.url.should eq(
+      metadata = pool_update.metadata.as(Blockfrost::Transaction::PoolUpdate::Metadata)
+      metadata.url.should eq(
         "https://stakenuts.com/mainnet.json"
       )
-      pool_update.metadata.hash.should eq(
+      metadata.hash.should eq(
         "47c0c68cb57f4a5b4a87bad896fc274678e7aea98e200fa14a1cb40c0cab1d8c"
       )
-      pool_update.metadata.ticker.should eq("NUTS")
-      pool_update.metadata.name.should eq("Stake Nuts")
-      pool_update.metadata.description.should eq("The best pool ever")
-      pool_update.metadata.homepage.should eq("https://stakentus.com/")
+      metadata.ticker.should eq("NUTS")
+      metadata.name.should eq("Stake Nuts")
+      metadata.description.should eq("The best pool ever")
+      metadata.homepage.should eq("https://stakentus.com/")
 
       relay = pool_update.relays.first
       relay.ipv4.should eq("4.4.4.4")
@@ -299,6 +300,34 @@ describe Blockfrost::Transaction do
 
       Blockfrost::Transaction.get(test_tx_hash).pool_retires
         .should be_a(Array(Blockfrost::Transaction::PoolRetire))
+    end
+  end
+
+  describe ".metadata" do
+    it "fetches metadata of a specific transaction" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/metadata")
+        .to_return(body: read_fixture("tx/metadata.200.json"))
+
+      metadata = Blockfrost::Transaction.metadata(test_tx_hash)
+      metadata.first.label.should eq("1967")
+      metadata.first.json_metadata.dig("metadata").should eq(
+        "https://nut.link/metadata.json"
+      )
+    end
+  end
+
+  describe "#metadata" do
+    it "fetches metadata of the current transaction" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}")
+        .to_return(body: read_fixture("tx/get.200.json"))
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/metadata")
+        .to_return(body: read_fixture("tx/metadata.200.json"))
+
+      Blockfrost::Transaction.get(test_tx_hash).metadata
+        .should be_a(Array(Blockfrost::Transaction::Metadata))
     end
   end
 end

@@ -89,6 +89,14 @@ struct Blockfrost::Transaction
     self.class.pool_retires(hash)
   end
 
+  def self.metadata(hash : String)
+    Array(Metadata).from_json(Client.get("txs/#{hash}/metadata"))
+  end
+
+  def metadata
+    self.class.metadata(hash)
+  end
+
   struct Utxo
     include JSON::Serializable
 
@@ -176,7 +184,7 @@ struct Blockfrost::Transaction
     getter fixed_cost : Int64
     getter reward_account : String
     getter owners : Array(String)
-    getter metadata : Metadata
+    getter metadata : Metadata?
     getter relays : Array(Relay)
     getter active_epoch : Int32
 
@@ -197,5 +205,12 @@ struct Blockfrost::Transaction
     getter cert_index : Int32
     getter pool_id : String
     getter retiring_epoch : Int32
+  end
+
+  struct Metadata
+    include JSON::Serializable
+
+    getter label : String
+    getter json_metadata : JSON::Any
   end
 end
