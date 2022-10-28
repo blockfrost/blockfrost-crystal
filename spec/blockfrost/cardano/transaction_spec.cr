@@ -272,6 +272,35 @@ describe Blockfrost::Transaction do
         .should be_a(Array(Blockfrost::Transaction::PoolUpdate))
     end
   end
+
+  describe ".pool_retires" do
+    it "fetches information about stake pool retirements within a specific transaction" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/pool_retires")
+        .to_return(body: read_fixture("tx/pool-retires.200.json"))
+
+      pool_retire = Blockfrost::Transaction.pool_retires(test_tx_hash).first
+      pool_retire.cert_index.should eq(0)
+      pool_retire.pool_id.should eq(
+        "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy"
+      )
+      pool_retire.retiring_epoch.should eq(216)
+    end
+  end
+
+  describe "#pool_retires" do
+    it "fetches information about stake pool retirements within the current transaction" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}")
+        .to_return(body: read_fixture("tx/get.200.json"))
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/pool_retires")
+        .to_return(body: read_fixture("tx/pool-retires.200.json"))
+
+      Blockfrost::Transaction.get(test_tx_hash).pool_retires
+        .should be_a(Array(Blockfrost::Transaction::PoolRetire))
+    end
+  end
 end
 
 private def test_tx_hash

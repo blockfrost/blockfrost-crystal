@@ -81,6 +81,14 @@ struct Blockfrost::Transaction
     self.class.pool_updates(hash)
   end
 
+  def self.pool_retires(hash : String)
+    Array(PoolRetire).from_json(Client.get("txs/#{hash}/pool_retires"))
+  end
+
+  def pool_retires
+    self.class.pool_retires(hash)
+  end
+
   struct Utxo
     include JSON::Serializable
 
@@ -181,5 +189,13 @@ struct Blockfrost::Transaction
       include JSON::Serializable
       include Shared::PoolRelay
     end
+  end
+
+  struct PoolRetire
+    include JSON::Serializable
+
+    getter cert_index : Int32
+    getter pool_id : String
+    getter retiring_epoch : Int32
   end
 end
