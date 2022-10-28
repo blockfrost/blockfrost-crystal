@@ -58,7 +58,7 @@ struct Blockfrost::Script
 
   struct Redeemer
     include JSON::Serializable
-    include Shared::Redeemer
+    include Shared::RedeemerFields
 
     getter tx_hash : String
   end

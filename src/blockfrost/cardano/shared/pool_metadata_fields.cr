@@ -1,4 +1,4 @@
-module Blockfrost::Shared::PoolMetadata
+module Blockfrost::Shared::PoolMetadataFields
   getter url : String?
   getter hash : String?
   getter ticker : String?

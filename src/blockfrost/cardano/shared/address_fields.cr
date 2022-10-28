@@ -1,6 +1,4 @@
-abstract struct Blockfrost::BaseAddress
-  include JSON::Serializable
-
+module Blockfrost::Shared::AddressFields
   getter address : String
   getter stake_address : String?
   getter script : Bool

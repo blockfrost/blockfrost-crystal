@@ -1,6 +1,4 @@
-abstract struct Blockfrost::BaseToken
-  include JSON::Serializable
-
+module Blockfrost::Shared::TokenFields
   getter unit : String
   @[JSON::Field(converter: Blockfrost::Int64FromString)]
   getter quantity : Int64

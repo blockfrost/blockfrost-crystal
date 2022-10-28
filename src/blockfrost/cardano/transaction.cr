@@ -122,27 +122,19 @@ struct Blockfrost::Transaction
 
     struct Input
       include JSON::Serializable
+      include Shared::UTXOFields
 
       getter address : String
-      getter amount : Array(Token)
-      getter tx_hash : String
-      getter output_index : Int32
-      getter data_hash : String?
-      getter inline_datum : String?
-      getter reference_script_hash : String?
       getter collateral : Bool
       getter reference : Bool
+      getter tx_hash : String
     end
 
     struct Output
       include JSON::Serializable
+      include Shared::UTXOFields
 
       getter address : String
-      getter amount : Array(Token)
-      getter output_index : Int32
-      getter data_hash : String?
-      getter inline_datum : String?
-      getter reference_script_hash : String?
     end
   end
 
@@ -206,12 +198,12 @@ struct Blockfrost::Transaction
 
     struct Metadata
       include JSON::Serializable
-      include Shared::PoolMetadata
+      include Shared::PoolMetadataFields
     end
 
     struct Relay
       include JSON::Serializable
-      include Shared::PoolRelay
+      include Shared::PoolRelayFields
     end
   end
 
@@ -239,7 +231,7 @@ struct Blockfrost::Transaction
 
   struct Redeemer
     include JSON::Serializable
-    include Shared::Redeemer
+    include Shared::RedeemerFields
 
     getter script_hash : String
   end

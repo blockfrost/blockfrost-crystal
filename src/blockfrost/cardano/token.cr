@@ -1,5 +1,11 @@
-struct Blockfrost::Token < Blockfrost::BaseToken
-  struct Extended < Blockfrost::BaseToken
+struct Blockfrost::Token
+  include JSON::Serializable
+  include Shared::TokenFields
+
+  struct Extended
+    include JSON::Serializable
+    include Shared::TokenFields
+
     getter decimals : Int32?
     getter has_nft_onchain_metadata : Bool
 

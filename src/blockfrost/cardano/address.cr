@@ -1,4 +1,7 @@
-struct Blockfrost::Address < Blockfrost::BaseAddress
+struct Blockfrost::Address
+  include JSON::Serializable
+  include Shared::AddressFields
+
   Blockfrost.enum_castable_from_string(Type, {
     Byron,
     Shelley,
@@ -41,7 +44,10 @@ struct Blockfrost::Address < Blockfrost::BaseAddress
     address : String
   )
 
-  struct Extended < BaseAddress
+  struct Extended
+    include JSON::Serializable
+    include Shared::AddressFields
+
     getter amount : Array(Token::Extended)
     getter type : Type
   end
@@ -55,9 +61,21 @@ struct Blockfrost::Address < Blockfrost::BaseAddress
     getter tx_count : Int32
   end
 
-  struct UTXO < BaseUTXO
+  struct UTXO
+    include JSON::Serializable
+    include Shared::UTXOFields
+
+    getter tx_hash : String
+    getter block : String
   end
 
-  struct Transaction < BaseTransaction
+  struct Transaction
+    include JSON::Serializable
+
+    getter tx_hash : String
+    getter tx_index : Int32
+    getter block_height : Int32
+    @[JSON::Field(converter: Blockfrost::TimeFromInt)]
+    getter block_time : Time
   end
 end

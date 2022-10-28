@@ -1,4 +1,4 @@
-module Blockfrost::Shared::Redeemer
+module Blockfrost::Shared::RedeemerFields
   Blockfrost.enum_castable_from_string(Purpose, {
     Spend,
     Mint,

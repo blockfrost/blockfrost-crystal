@@ -1,4 +1,4 @@
-module Blockfrost::Shared::PoolRelay
+module Blockfrost::Shared::PoolRelayFields
   getter ipv4 : String?
   getter ipv6 : String?
   getter dns : String?

@@ -142,7 +142,7 @@ struct Blockfrost::Pool
 
   struct Metadata
     include JSON::Serializable
-    include Shared::PoolMetadata
+    include Shared::PoolMetadataFields
 
     getter pool_id : String
     getter hex : String
@@ -150,7 +150,7 @@ struct Blockfrost::Pool
 
   struct Relay
     include JSON::Serializable
-    include Shared::PoolRelay
+    include Shared::PoolRelayFields
   end
 
   struct Delegator
