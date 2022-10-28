@@ -34,7 +34,7 @@ struct Blockfrost::Transaction
   end
 
   def self.utxos(hash : String)
-    Utxo.from_json(Client.get("txs/#{hash}/utxos"))
+    UTXO.from_json(Client.get("txs/#{hash}/utxos"))
   end
 
   def utxos
@@ -113,7 +113,7 @@ struct Blockfrost::Transaction
     self.class.redeemers(hash)
   end
 
-  struct Utxo
+  struct UTXO
     include JSON::Serializable
 
     getter hash : String
