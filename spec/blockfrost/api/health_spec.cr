@@ -14,12 +14,12 @@ describe Blockfrost::Health do
     end
   end
 
-  describe ".is_healthy" do
+  describe ".is_healthy?" do
     it "fetches the actual health status" do
       WebMock.stub(:get, "https://cardano-testnet.blockfrost.io/api/v0/health")
         .to_return(body: read_fixture("health/get.200.json"))
 
-      Blockfrost::Health.is_healthy.should be_truthy
+      Blockfrost::Health.is_healthy?.should be_truthy
     end
   end
 

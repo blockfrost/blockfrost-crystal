@@ -7,7 +7,7 @@ struct Blockfrost::Health
     Health.from_json(Client.get("health"))
   end
 
-  def self.is_healthy
+  def self.is_healthy?
     get.is_healthy
   end
 
