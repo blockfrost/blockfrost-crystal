@@ -358,6 +358,46 @@ describe Blockfrost::Transaction do
         .should be_a(Array(Blockfrost::Transaction::MetadataCBOR))
     end
   end
+
+  describe ".redeemers" do
+    it "fetches redeemers of a specific transaction" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/redeemers")
+        .to_return(body: read_fixture("tx/redeemers.200.json"))
+
+      redeemer = Blockfrost::Transaction.redeemers(test_tx_hash).first
+      redeemer.tx_index.should eq(0)
+      redeemer.purpose.should eq(
+        Blockfrost::Transaction::Redeemer::Purpose::Spend
+      )
+      redeemer.script_hash.should eq(
+        "ec26b89af41bef0f7585353831cb5da42b5b37185e0c8a526143b824"
+      )
+      redeemer.redeemer_data_hash.should eq(
+        "923918e403bf43c34b4ef6b48eb2ee04babed17320d8d1b9ff9ad086e86f44ec"
+      )
+      redeemer.datum_hash.should eq(
+        "923918e403bf43c34b4ef6b48eb2ee04babed17320d8d1b9ff9ad086e86f44ec"
+      )
+      redeemer.unit_mem.should eq(1700)
+      redeemer.unit_steps.should eq(476468)
+      redeemer.fee.should eq(172033)
+    end
+  end
+
+  describe "#redeemers" do
+    it "fetches redeemers of the current transaction" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}")
+        .to_return(body: read_fixture("tx/get.200.json"))
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/redeemers")
+        .to_return(body: read_fixture("tx/redeemers.200.json"))
+
+      Blockfrost::Transaction.get(test_tx_hash).redeemers
+        .should be_a(Array(Blockfrost::Transaction::Redeemer))
+    end
+  end
 end
 
 private def test_tx_hash

@@ -105,6 +105,14 @@ struct Blockfrost::Transaction
     self.class.metadata_in_cbor(hash)
   end
 
+  def self.redeemers(hash : String)
+    Array(Redeemer).from_json(Client.get("txs/#{hash}/redeemers"))
+  end
+
+  def redeemers
+    self.class.redeemers(hash)
+  end
+
   struct Utxo
     include JSON::Serializable
 
@@ -227,5 +235,12 @@ struct Blockfrost::Transaction
 
     getter label : String
     getter metadata : String?
+  end
+
+  struct Redeemer
+    include JSON::Serializable
+    include Shared::Redeemer
+
+    getter script_hash : String
   end
 end
