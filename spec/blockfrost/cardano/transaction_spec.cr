@@ -211,6 +211,67 @@ describe Blockfrost::Transaction do
         .should be_a(Array(Blockfrost::Transaction::Mir))
     end
   end
+
+  describe ".pool_updates" do
+    it "fetches information about stake pool registration and update certificates of a specific transaction" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/pool_updates")
+        .to_return(body: read_fixture("tx/pool-updates.200.json"))
+
+      pool_update = Blockfrost::Transaction.pool_updates(test_tx_hash).first
+      pool_update.cert_index.should eq(0)
+      pool_update.pool_id.should eq(
+        "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy"
+      )
+      pool_update.vrf_key.should eq(
+        "0b5245f9934ec2151116fb8ec00f35fd00e0aa3b075c4ed12cce440f999d8233"
+      )
+      pool_update.pledge.should eq(5000000000)
+      pool_update.margin_cost.should eq(0.05)
+      pool_update.fixed_cost.should eq(340000000)
+      pool_update.reward_account.should eq(
+        "stake1uxkptsa4lkr55jleztw43t37vgdn88l6ghclfwuxld2eykgpgvg3f"
+      )
+
+      pool_update.owners.should eq([
+        "stake1u98nnlkvkk23vtvf9273uq7cph5ww6u2yq2389psuqet90sv4xv9v",
+      ])
+
+      pool_update.metadata.url.should eq(
+        "https://stakenuts.com/mainnet.json"
+      )
+      pool_update.metadata.hash.should eq(
+        "47c0c68cb57f4a5b4a87bad896fc274678e7aea98e200fa14a1cb40c0cab1d8c"
+      )
+      pool_update.metadata.ticker.should eq("NUTS")
+      pool_update.metadata.name.should eq("Stake Nuts")
+      pool_update.metadata.description.should eq("The best pool ever")
+      pool_update.metadata.homepage.should eq("https://stakentus.com/")
+
+      relay = pool_update.relays.first
+      relay.ipv4.should eq("4.4.4.4")
+      relay.ipv6.should eq("https://stakenuts.com/mainnet.json")
+      relay.dns.should eq("relay1.stakenuts.com")
+      relay.dns_srv.should eq("_relays._tcp.relays.stakenuts.com")
+      relay.port.should eq(3001)
+
+      pool_update.active_epoch.should eq(210)
+    end
+  end
+
+  describe "#pool_updates" do
+    it "fetches information about stake pool registration and update certificates of the current transaction" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}")
+        .to_return(body: read_fixture("tx/get.200.json"))
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/pool_updates")
+        .to_return(body: read_fixture("tx/pool-updates.200.json"))
+
+      Blockfrost::Transaction.get(test_tx_hash).pool_updates
+        .should be_a(Array(Blockfrost::Transaction::PoolUpdate))
+    end
+  end
 end
 
 private def test_tx_hash

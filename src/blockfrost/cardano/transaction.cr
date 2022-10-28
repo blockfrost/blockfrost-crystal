@@ -73,6 +73,14 @@ struct Blockfrost::Transaction
     self.class.mirs(hash)
   end
 
+  def self.pool_updates(hash : String)
+    Array(PoolUpdate).from_json(Client.get("txs/#{hash}/pool_updates"))
+  end
+
+  def pool_updates
+    self.class.pool_updates(hash)
+  end
+
   struct Utxo
     include JSON::Serializable
 
@@ -145,5 +153,33 @@ struct Blockfrost::Transaction
     getter address : String
     @[JSON::Field(converter: Blockfrost::Int64FromString)]
     getter amount : Int64
+  end
+
+  struct PoolUpdate
+    include JSON::Serializable
+
+    getter cert_index : Int32
+    getter pool_id : String
+    getter vrf_key : String
+    @[JSON::Field(converter: Blockfrost::Int64FromString)]
+    getter pledge : Int64
+    getter margin_cost : Float64
+    @[JSON::Field(converter: Blockfrost::Int64FromString)]
+    getter fixed_cost : Int64
+    getter reward_account : String
+    getter owners : Array(String)
+    getter metadata : Metadata
+    getter relays : Array(Relay)
+    getter active_epoch : Int32
+
+    struct Metadata
+      include JSON::Serializable
+      include Shared::PoolMetadata
+    end
+
+    struct Relay
+      include JSON::Serializable
+      include Shared::PoolRelay
+    end
   end
 end

@@ -142,25 +142,15 @@ struct Blockfrost::Pool
 
   struct Metadata
     include JSON::Serializable
+    include Shared::PoolMetadata
 
     getter pool_id : String
     getter hex : String
-    getter url : String?
-    getter hash : String?
-    getter ticker : String?
-    getter name : String?
-    getter description : String?
-    getter homepage : String?
   end
 
   struct Relay
     include JSON::Serializable
-
-    getter ipv4 : String?
-    getter ipv6 : String?
-    getter dns : String?
-    getter dns_srv : String?
-    getter port : Int32
+    include Shared::PoolRelay
   end
 
   struct Delegator
