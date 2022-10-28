@@ -90,11 +90,19 @@ struct Blockfrost::Transaction
   end
 
   def self.metadata(hash : String)
-    Array(Metadata).from_json(Client.get("txs/#{hash}/metadata"))
+    Array(MetadataJSON).from_json(Client.get("txs/#{hash}/metadata"))
   end
 
   def metadata
     self.class.metadata(hash)
+  end
+
+  def self.metadata_in_cbor(hash : String)
+    Array(MetadataCBOR).from_json(Client.get("txs/#{hash}/metadata/cbor"))
+  end
+
+  def metadata_in_cbor
+    self.class.metadata_in_cbor(hash)
   end
 
   struct Utxo
@@ -207,10 +215,17 @@ struct Blockfrost::Transaction
     getter retiring_epoch : Int32
   end
 
-  struct Metadata
+  struct MetadataJSON
     include JSON::Serializable
 
     getter label : String
     getter json_metadata : JSON::Any
+  end
+
+  struct MetadataCBOR
+    include JSON::Serializable
+
+    getter label : String
+    getter metadata : String?
   end
 end

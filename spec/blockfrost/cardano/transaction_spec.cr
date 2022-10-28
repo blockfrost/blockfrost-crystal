@@ -327,7 +327,35 @@ describe Blockfrost::Transaction do
         .to_return(body: read_fixture("tx/metadata.200.json"))
 
       Blockfrost::Transaction.get(test_tx_hash).metadata
-        .should be_a(Array(Blockfrost::Transaction::Metadata))
+        .should be_a(Array(Blockfrost::Transaction::MetadataJSON))
+    end
+  end
+
+  describe ".metadata_in_cbor" do
+    it "fetches metadata of a specific transaction in CBOR" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/metadata/cbor")
+        .to_return(body: read_fixture("tx/metadata-cbor.200.json"))
+
+      metadata = Blockfrost::Transaction.metadata_in_cbor(test_tx_hash)
+      metadata.first.label.should eq("1968")
+      metadata.first.metadata.should eq(
+        "a100a16b436f6d62696e6174696f6e8601010101010c"
+      )
+    end
+  end
+
+  describe "#metadata_in_cbor" do
+    it "fetches metadata of the current transaction in CBOR" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}")
+        .to_return(body: read_fixture("tx/get.200.json"))
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/metadata/cbor")
+        .to_return(body: read_fixture("tx/metadata-cbor.200.json"))
+
+      Blockfrost::Transaction.get(test_tx_hash).metadata_in_cbor
+        .should be_a(Array(Blockfrost::Transaction::MetadataCBOR))
     end
   end
 end
