@@ -17,7 +17,7 @@ A Crystal SDK for the Blockfrost.io API.
 
 2. Run `shards install`
 
-## Configuration
+## Usage
 
 ```crystal
 require "blockfrost"
@@ -34,20 +34,101 @@ end
 ```
 
 Or wrap your code in a block where different credentials are required:
-
+ 
 ```crystal
 Blockfrost.temp_config(cardano_api_key: "testnetAbC...xYz") do
   # your code here
 end
 ```
 
-## Usage
+Every endpoint of the [Blockfrost API](https://docs.blockfrost.io/) is covered
+by this library. It's too much to cover them all here, but below are a few
+examples of its usage.
+
+### Single resources
+
+Get the latest block:
 
 ```crystal
-epochs = Blockfrost::Epoch.all
+block = Blockfrost::Block.latest
 ```
 
-TODO: Write usage instructions here
+Or a specific block:
+
+```crystal
+block_hash = "4ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a"
+block = Blockfrost::Block.get(block_hash)
+```
+
+Then get the transaction ids of it:
+
+```crystal
+block.tx_ids
+```
+
+The same can be done in one go as well:
+
+```crystal
+Blockfrost::Block.tx_ids(block_hash)
+```
+
+This pattern is used throughout the library. There will always be a class method
+and a corresponding instance method for nested resources.
+
+### Collections
+
+Get all assets:
+
+```crystal
+assets = Blockfrost::Asset.all
+```
+
+Almost all collection methods accept three arguments for ordering and
+pagination:
+
+```crystal
+assets = Blockfrost::Asset.all(
+  order: "desc",
+  count: 20,
+  page: 1
+)
+```
+
+The `order` parameter is converted to an enum in the background, so the 
+underlying enum values are also accepted:
+
+```crystal
+assets = Blockfrost::Asset.all(
+  order: Blockfrost::QueryOrder::DESC,
+  count: 20,
+  page: 1
+)
+```
+
+The `transactions` method for addresses exceptionally accepts two additional
+arguments:
+
+```crystal
+address = "addr1qxqs59lphg8g6qndelq8xwqn60ag3aeyfcp33c2kdp46a09re5df3pzwwmyq..."
+Blockfrost::Address.transactions(
+  address,
+  order: "desc",
+  count: 10,
+  page: 1,
+  from: "8929261",
+  to: "9999269:10"
+)
+```
+
+### Post endpoints
+
+Submit an already serialized transaction to the network:
+
+```crystal
+tx_data = File.open("path/to/cbor_data")
+Blockfrost::Transaction.submit(tx_data)
+# => "d1662b24fa9fe985fc2dce47455df399cb2e31e1e1819339e885801cc3578908"
+```
 
 ## Documentation
 
@@ -55,7 +136,18 @@ TODO: Write usage instructions here
 
 ## Development
 
-TODO: Write development instructions here
+Make sure you have [Guardian.cr](https://github.com/f/guardian) installed. Then
+run:
+
+```bash
+$ guardian
+```
+
+This will automatically:
+- run ameba for src and spec files
+- run the relevant spec for any file in the src dir
+- run a spec file whenever they are saved
+- install shards whenever you save shard.yml
 
 ## Contributing
 
