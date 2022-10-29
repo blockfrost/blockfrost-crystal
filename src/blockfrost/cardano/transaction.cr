@@ -113,6 +113,16 @@ struct Blockfrost::Transaction
     self.class.redeemers(hash)
   end
 
+  def submit(data : BodyData)
+    String.from_json(
+      Client.post(
+        "tx/submit",
+        body: data,
+        content_type: ContentType::CBOR
+      )
+    )
+  end
+
   struct UTXO
     include JSON::Serializable
 
