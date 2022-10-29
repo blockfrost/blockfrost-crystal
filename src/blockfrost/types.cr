@@ -1,5 +1,6 @@
 module Blockfrost
-  alias RequestData = Hash(String, Int32 | String?)
+  alias QueryData = Hash(String, Int32 | String?)
+  alias BodyData = IO | String
 
   alias QueryCount = Int32
   alias QueryPage = Int32
@@ -10,8 +11,8 @@ module Blockfrost
   }, downcase)
 
   enum ContentType
-    Json
-    Cbor
+    JSON
+    CBOR
 
     def to_s
       "application/#{super.downcase}"

@@ -8,15 +8,15 @@ module Blockfrost::Client
 
   def get(
     resource : String,
-    query : RequestData = RequestData.new
+    query : QueryData = QueryData.new
   ) : String
     perform_http_call(Method::GET, resource, query: query)
   end
 
   def post(
     resource : String,
-    body : RequestData,
-    content_type : ContentType = ContentType::Json
+    body : BodyData,
+    content_type : ContentType = ContentType::JSON
   ) : String
     perform_http_call(
       Method::POST,
@@ -29,9 +29,9 @@ module Blockfrost::Client
   private def perform_http_call(
     method : Method,
     path : String,
-    body : RequestData = RequestData.new,
-    query : RequestData = RequestData.new,
-    content_type : ContentType = ContentType::Json
+    body : BodyData? = nil,
+    query : QueryData = QueryData.new,
+    content_type : ContentType = ContentType::JSON
   ) : String
     begin
       case method
@@ -44,11 +44,10 @@ module Blockfrost::Client
         )
       else
         render(
-          HTTP::Client.exec(
-            method.to_s,
+          HTTP::Client.post(
             build_uri(path, query),
             headers: headers(path, content_type),
-            body: body.compact.to_json
+            body: body
           )
         )
       end
@@ -61,7 +60,7 @@ module Blockfrost::Client
 
   private def build_uri(
     path : String,
-    query : RequestData
+    query : QueryData
   ) : String
     uri = URI.parse(Blockfrost.host_for_path(path))
     uri.path = File.join("/api", Blockfrost.api_version_for_path(path), path)
