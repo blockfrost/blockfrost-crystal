@@ -1,9 +1,33 @@
 # blockfrost-crystal
-A Crystal SDK for the Blockfrost.io API.
+
+<p align="center">
+  <img src="https://blockfrost.io/images/logo.svg"
+       width="250"
+       align="right"
+       height="90">
+</p>
+
+<p align="center">A Crystal SDK for Blockfrost.io API.</p>
+<p align="center">
+  <a href="#getting-started">Getting started</a> •
+  <a href="#installation">Installation</a> •
+  <a href="#usage">Usage</a>
+</p>
+<br>
 
 ![GitHub](https://img.shields.io/github/license/wout/blockfrost-crystal)
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/wout/blockfrost-crystal)
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/wout/blockfrost-crystal/blockfrost-crystal%20CI)
+
+## Getting started
+
+To use this SDK, you first need login into to
+[blockfrost.io](https://blockfrost.io) create your project to retrieve your API
+key.
+
+<img src="https://i.imgur.com/smY12ro.png">
+
+<br>
 
 ## Installation
 
