@@ -6,6 +6,7 @@
        align="right"
        height="90">
 </p>
+<br>
 
 <p align="center">A Crystal SDK for Blockfrost.io API.</p>
 <p align="center">
