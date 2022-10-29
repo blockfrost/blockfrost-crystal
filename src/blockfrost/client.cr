@@ -33,29 +33,27 @@ module Blockfrost::Client
     query : QueryData = QueryData.new,
     content_type : ContentType = ContentType::JSON
   ) : String
-    begin
-      case method
-      when Method::GET
-        render(
-          HTTP::Client.get(
-            build_uri(path, query),
-            headers: headers(path, content_type)
-          )
+    case method
+    when Method::GET
+      render(
+        HTTP::Client.get(
+          build_uri(path, query),
+          headers: headers(path, content_type)
         )
-      else
-        render(
-          HTTP::Client.post(
-            build_uri(path, query),
-            headers: headers(path, content_type),
-            body: body
-          )
+      )
+    else
+      render(
+        HTTP::Client.post(
+          build_uri(path, query),
+          headers: headers(path, content_type),
+          body: body
         )
-      end
-    rescue e : IO::TimeoutError
-      raise TimeoutException.new(e.message)
-    rescue e : IO::EOFError
-      raise Exception.new(e.message)
+      )
     end
+  rescue e : IO::TimeoutError
+    raise TimeoutException.new(e.message)
+  rescue e : IO::EOFError
+    raise Exception.new(e.message)
   end
 
   private def build_uri(
