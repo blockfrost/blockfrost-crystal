@@ -401,7 +401,20 @@ describe Blockfrost::Transaction do
 
   describe ".submit" do
     it "submit an already serialized transaction to the network" do
-      # Blockfrost::Transaction.submit()
+      WebMock.stub(:post,
+        "https://cardano-testnet.blockfrost.io/api/v0/tx/submit")
+        .with(
+          body: read_fixture("tx/cbor-data").gets_to_end,
+          headers: {
+            "Accept"       => "application/json",
+            "Content-Type" => "application/cbor",
+            "project_id"   => test_cardano_api_key,
+          })
+        .to_return(body_io: read_fixture("tx/submit.200.json"))
+
+      Blockfrost::Transaction.submit(read_fixture("tx/cbor-data")).should eq(
+        "d1662b24fa9fe985fc2dce47455df399cb2e31e1e1819339e885801cc3578908"
+      )
     end
   end
 end

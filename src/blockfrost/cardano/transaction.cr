@@ -113,7 +113,7 @@ struct Blockfrost::Transaction
     self.class.redeemers(hash)
   end
 
-  def submit(data : BodyData)
+  def self.submit(data : BodyData)
     String.from_json(
       Client.post(
         "tx/submit",
