@@ -9,7 +9,7 @@ describe Blockfrost::Transaction do
     it "fetches a specific transaction" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}")
-        .to_return(body: read_fixture("tx/get.200.json"))
+        .to_return(body_io: read_fixture("tx/get.200.json"))
 
       tx = Blockfrost::Transaction.get(test_tx_hash)
       tx.hash.should eq(test_tx_hash)
@@ -49,7 +49,7 @@ describe Blockfrost::Transaction do
     it "fetches the utxos of a given transaction" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/utxos")
-        .to_return(body: read_fixture("tx/utxos.200.json"))
+        .to_return(body_io: read_fixture("tx/utxos.200.json"))
 
       tx = Blockfrost::Transaction.utxos(test_tx_hash)
       tx.hash.should eq(test_tx_hash)
@@ -96,7 +96,7 @@ describe Blockfrost::Transaction do
     it "fetches information about (de)registration of stake addresses within a given transaction" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/stakes")
-        .to_return(body: read_fixture("tx/stakes.200.json"))
+        .to_return(body_io: read_fixture("tx/stakes.200.json"))
 
       stake = Blockfrost::Transaction.stakes(test_tx_hash).first
       stake.cert_index.should eq(0)
@@ -111,10 +111,10 @@ describe Blockfrost::Transaction do
     it "fetches information about (de)registration of stake addresses within the current transaction" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}")
-        .to_return(body: read_fixture("tx/get.200.json"))
+        .to_return(body_io: read_fixture("tx/get.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/stakes")
-        .to_return(body: read_fixture("tx/stakes.200.json"))
+        .to_return(body_io: read_fixture("tx/stakes.200.json"))
 
       Blockfrost::Transaction.get(test_tx_hash).stakes
         .should be_a(Array(Blockfrost::Transaction::Stake))
@@ -125,7 +125,7 @@ describe Blockfrost::Transaction do
     it "fetches information about delegation certificates of a specific transaction" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/delegations")
-        .to_return(body: read_fixture("tx/delegations.200.json"))
+        .to_return(body_io: read_fixture("tx/delegations.200.json"))
 
       delegation = Blockfrost::Transaction.delegations(test_tx_hash).first
       delegation.index.should eq(0)
@@ -144,10 +144,10 @@ describe Blockfrost::Transaction do
     it "fetches information about delegation certificates of the current transaction" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}")
-        .to_return(body: read_fixture("tx/get.200.json"))
+        .to_return(body_io: read_fixture("tx/get.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/delegations")
-        .to_return(body: read_fixture("tx/delegations.200.json"))
+        .to_return(body_io: read_fixture("tx/delegations.200.json"))
 
       Blockfrost::Transaction.get(test_tx_hash).delegations
         .should be_a(Array(Blockfrost::Transaction::Delegation))
@@ -158,7 +158,7 @@ describe Blockfrost::Transaction do
     it "fetches information about withdrawals of a specific transaction" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/withdrawals")
-        .to_return(body: read_fixture("tx/withdrawals.200.json"))
+        .to_return(body_io: read_fixture("tx/withdrawals.200.json"))
 
       withdrawal = Blockfrost::Transaction.withdrawals(test_tx_hash).first
       withdrawal.address.should eq(
@@ -172,10 +172,10 @@ describe Blockfrost::Transaction do
     it "fetches information about withdrawals of the current transaction" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}")
-        .to_return(body: read_fixture("tx/get.200.json"))
+        .to_return(body_io: read_fixture("tx/get.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/withdrawals")
-        .to_return(body: read_fixture("tx/withdrawals.200.json"))
+        .to_return(body_io: read_fixture("tx/withdrawals.200.json"))
 
       Blockfrost::Transaction.get(test_tx_hash).withdrawals
         .should be_a(Array(Blockfrost::Transaction::Withdrawal))
@@ -186,7 +186,7 @@ describe Blockfrost::Transaction do
     it "fetches information about Move Instantaneous Rewards (MIRs) of a specific transaction" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/mirs")
-        .to_return(body: read_fixture("tx/mirs.200.json"))
+        .to_return(body_io: read_fixture("tx/mirs.200.json"))
 
       mir = Blockfrost::Transaction.mirs(test_tx_hash).first
       mir.pot.should eq(Blockfrost::Transaction::Mir::Pot::Reserve)
@@ -202,10 +202,10 @@ describe Blockfrost::Transaction do
     it "fetches information about mirs of the current transaction" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}")
-        .to_return(body: read_fixture("tx/get.200.json"))
+        .to_return(body_io: read_fixture("tx/get.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/mirs")
-        .to_return(body: read_fixture("tx/mirs.200.json"))
+        .to_return(body_io: read_fixture("tx/mirs.200.json"))
 
       Blockfrost::Transaction.get(test_tx_hash).mirs
         .should be_a(Array(Blockfrost::Transaction::Mir))
@@ -216,7 +216,7 @@ describe Blockfrost::Transaction do
     it "fetches information about stake pool registration and update certificates of a specific transaction" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/pool_updates")
-        .to_return(body: read_fixture("tx/pool-updates.200.json"))
+        .to_return(body_io: read_fixture("tx/pool-updates.200.json"))
 
       pool_update = Blockfrost::Transaction.pool_updates(test_tx_hash).first
       pool_update.cert_index.should eq(0)
@@ -264,10 +264,10 @@ describe Blockfrost::Transaction do
     it "fetches information about stake pool registration and update certificates of the current transaction" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}")
-        .to_return(body: read_fixture("tx/get.200.json"))
+        .to_return(body_io: read_fixture("tx/get.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/pool_updates")
-        .to_return(body: read_fixture("tx/pool-updates.200.json"))
+        .to_return(body_io: read_fixture("tx/pool-updates.200.json"))
 
       Blockfrost::Transaction.get(test_tx_hash).pool_updates
         .should be_a(Array(Blockfrost::Transaction::PoolUpdate))
@@ -278,7 +278,7 @@ describe Blockfrost::Transaction do
     it "fetches information about stake pool retirements within a specific transaction" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/pool_retires")
-        .to_return(body: read_fixture("tx/pool-retires.200.json"))
+        .to_return(body_io: read_fixture("tx/pool-retires.200.json"))
 
       pool_retire = Blockfrost::Transaction.pool_retires(test_tx_hash).first
       pool_retire.cert_index.should eq(0)
@@ -293,10 +293,10 @@ describe Blockfrost::Transaction do
     it "fetches information about stake pool retirements within the current transaction" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}")
-        .to_return(body: read_fixture("tx/get.200.json"))
+        .to_return(body_io: read_fixture("tx/get.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/pool_retires")
-        .to_return(body: read_fixture("tx/pool-retires.200.json"))
+        .to_return(body_io: read_fixture("tx/pool-retires.200.json"))
 
       Blockfrost::Transaction.get(test_tx_hash).pool_retires
         .should be_a(Array(Blockfrost::Transaction::PoolRetire))
@@ -307,7 +307,7 @@ describe Blockfrost::Transaction do
     it "fetches metadata of a specific transaction" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/metadata")
-        .to_return(body: read_fixture("tx/metadata.200.json"))
+        .to_return(body_io: read_fixture("tx/metadata.200.json"))
 
       metadata = Blockfrost::Transaction.metadata(test_tx_hash)
       metadata.first.label.should eq("1967")
@@ -321,10 +321,10 @@ describe Blockfrost::Transaction do
     it "fetches metadata of the current transaction" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}")
-        .to_return(body: read_fixture("tx/get.200.json"))
+        .to_return(body_io: read_fixture("tx/get.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/metadata")
-        .to_return(body: read_fixture("tx/metadata.200.json"))
+        .to_return(body_io: read_fixture("tx/metadata.200.json"))
 
       Blockfrost::Transaction.get(test_tx_hash).metadata
         .should be_a(Array(Blockfrost::Transaction::MetadataJSON))
@@ -335,7 +335,7 @@ describe Blockfrost::Transaction do
     it "fetches metadata of a specific transaction in CBOR" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/metadata/cbor")
-        .to_return(body: read_fixture("tx/metadata-cbor.200.json"))
+        .to_return(body_io: read_fixture("tx/metadata-cbor.200.json"))
 
       metadata = Blockfrost::Transaction.metadata_in_cbor(test_tx_hash)
       metadata.first.label.should eq("1968")
@@ -349,10 +349,10 @@ describe Blockfrost::Transaction do
     it "fetches metadata of the current transaction in CBOR" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}")
-        .to_return(body: read_fixture("tx/get.200.json"))
+        .to_return(body_io: read_fixture("tx/get.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/metadata/cbor")
-        .to_return(body: read_fixture("tx/metadata-cbor.200.json"))
+        .to_return(body_io: read_fixture("tx/metadata-cbor.200.json"))
 
       Blockfrost::Transaction.get(test_tx_hash).metadata_in_cbor
         .should be_a(Array(Blockfrost::Transaction::MetadataCBOR))
@@ -363,7 +363,7 @@ describe Blockfrost::Transaction do
     it "fetches redeemers of a specific transaction" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/redeemers")
-        .to_return(body: read_fixture("tx/redeemers.200.json"))
+        .to_return(body_io: read_fixture("tx/redeemers.200.json"))
 
       redeemer = Blockfrost::Transaction.redeemers(test_tx_hash).first
       redeemer.tx_index.should eq(0)
@@ -389,13 +389,19 @@ describe Blockfrost::Transaction do
     it "fetches redeemers of the current transaction" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}")
-        .to_return(body: read_fixture("tx/get.200.json"))
+        .to_return(body_io: read_fixture("tx/get.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/txs/#{test_tx_hash}/redeemers")
-        .to_return(body: read_fixture("tx/redeemers.200.json"))
+        .to_return(body_io: read_fixture("tx/redeemers.200.json"))
 
       Blockfrost::Transaction.get(test_tx_hash).redeemers
         .should be_a(Array(Blockfrost::Transaction::Redeemer))
+    end
+  end
+
+  describe ".submit" do
+    it "submit an already serialized transaction to the network" do
+      # Blockfrost::Transaction.submit()
     end
   end
 end

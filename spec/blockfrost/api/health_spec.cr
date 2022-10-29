@@ -8,7 +8,7 @@ describe Blockfrost::Health do
   describe ".get" do
     it "fetches the health endpoint" do
       WebMock.stub(:get, "https://cardano-testnet.blockfrost.io/api/v0/health")
-        .to_return(body: read_fixture("health/get.200.json"))
+        .to_return(body_io: read_fixture("health/get.200.json"))
 
       Blockfrost::Health.get.is_healthy.should be_truthy
     end
@@ -17,7 +17,7 @@ describe Blockfrost::Health do
   describe ".is_healthy?" do
     it "fetches the actual health status" do
       WebMock.stub(:get, "https://cardano-testnet.blockfrost.io/api/v0/health")
-        .to_return(body: read_fixture("health/get.200.json"))
+        .to_return(body_io: read_fixture("health/get.200.json"))
 
       Blockfrost::Health.is_healthy?.should be_truthy
     end
@@ -27,7 +27,7 @@ describe Blockfrost::Health do
     it "fetches the health clock endpoint" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/health/clock")
-        .to_return(body: read_fixture("health/clock.200.json"))
+        .to_return(body_io: read_fixture("health/clock.200.json"))
 
       Blockfrost::Health.clock.server_time
         .should eq(Time.unix_ms(1603400958947))
@@ -38,7 +38,7 @@ describe Blockfrost::Health do
     it "returns the value of the clock endpoint" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/health/clock")
-        .to_return(body: read_fixture("health/clock.200.json"))
+        .to_return(body_io: read_fixture("health/clock.200.json"))
 
       Blockfrost::Health.server_time
         .should eq(Time.unix_ms(1603400958947))

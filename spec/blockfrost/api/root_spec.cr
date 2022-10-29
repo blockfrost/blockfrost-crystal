@@ -8,7 +8,7 @@ describe Blockfrost::Root do
   describe ".get" do
     it "fetches the root endpoint" do
       WebMock.stub(:get, "https://cardano-testnet.blockfrost.io/api/v0/")
-        .to_return(body: read_fixture("root/get.200.json"))
+        .to_return(body_io: read_fixture("root/get.200.json"))
 
       root = Blockfrost::Root.get
       root.url.should eq("https://blockfrost.io/")

@@ -8,7 +8,7 @@ describe Blockfrost::Asset do
   describe ".all" do
     it "fetches all assets in abbreviated form" do
       WebMock.stub(:get, "https://cardano-testnet.blockfrost.io/api/v0/assets")
-        .to_return(body: read_fixture("asset/all.200.json"))
+        .to_return(body_io: read_fixture("asset/all.200.json"))
 
       assets = Blockfrost::Asset.all
       assets.should be_a(Array(Blockfrost::Asset::Abbreviated))
@@ -21,7 +21,7 @@ describe Blockfrost::Asset do
     it "accepts ordering and pagination parameters" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/assets?order=desc&count=10&page=2"
-      ).to_return(body: read_fixture("asset/all.200.json"))
+      ).to_return(body_io: read_fixture("asset/all.200.json"))
 
       Blockfrost::Asset.all(order: "desc", count: 10, page: 2)
         .should be_a(Array(Blockfrost::Asset::Abbreviated))
@@ -32,7 +32,7 @@ describe Blockfrost::Asset do
     it "fetches a specific asset" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/assets/b0d07d45...")
-        .to_return(body: read_fixture("asset/asset.200.json"))
+        .to_return(body_io: read_fixture("asset/asset.200.json"))
 
       asset = Blockfrost::Asset.get("b0d07d45...")
       asset.asset.should eq(
@@ -71,7 +71,7 @@ describe Blockfrost::Asset do
     it "fetches all events for a given asset" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/assets/b0d07d45.../history")
-        .to_return(body: read_fixture("asset/history.200.json"))
+        .to_return(body_io: read_fixture("asset/history.200.json"))
 
       events = Blockfrost::Asset.history("b0d07d45...")
       events.first.tx_hash.should start_with("2dd15e0ef6")
@@ -83,7 +83,7 @@ describe Blockfrost::Asset do
     it "accepts ordering and pagination parameters" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/assets/b0d07d45.../history?order=desc&count=3&page=5")
-        .to_return(body: read_fixture("asset/history.200.json"))
+        .to_return(body_io: read_fixture("asset/history.200.json"))
 
       Blockfrost::Asset.history("b0d07d45...", order: "desc", count: 3, page: 5)
         .should be_a(Array(Blockfrost::Asset::Event))
@@ -94,10 +94,10 @@ describe Blockfrost::Asset do
     it "fetches events for the current asset" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/assets/b0d07d45...")
-        .to_return(body: read_fixture("asset/asset.200.json"))
+        .to_return(body_io: read_fixture("asset/asset.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/assets/b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb38a76e7574636f696e/history")
-        .to_return(body: read_fixture("asset/history.200.json"))
+        .to_return(body_io: read_fixture("asset/history.200.json"))
 
       Blockfrost::Asset.get("b0d07d45...").history
         .should be_a(Array(Blockfrost::Asset::Event))
@@ -108,7 +108,7 @@ describe Blockfrost::Asset do
     it "fetches all transactions for a given asset" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/assets/b0d07d45.../transactions")
-        .to_return(body: read_fixture("asset/transactions.200.json"))
+        .to_return(body_io: read_fixture("asset/transactions.200.json"))
 
       transaction = Blockfrost::Asset.transactions("b0d07d45...").first
       transaction.tx_hash.should start_with("8788591983")
@@ -120,7 +120,7 @@ describe Blockfrost::Asset do
     it "accepts ordering and pagination parameters" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/assets/b0d07d45.../transactions?order=desc&count=3&page=5")
-        .to_return(body: read_fixture("asset/transactions.200.json"))
+        .to_return(body_io: read_fixture("asset/transactions.200.json"))
 
       Blockfrost::Asset.transactions("b0d07d45...", order: "desc", count: 3, page: 5)
         .should be_a(Array(Blockfrost::Asset::Transaction))
@@ -131,10 +131,10 @@ describe Blockfrost::Asset do
     it "fetches transactions for the current asset" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/assets/b0d07d45...")
-        .to_return(body: read_fixture("asset/asset.200.json"))
+        .to_return(body_io: read_fixture("asset/asset.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/assets/b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb38a76e7574636f696e/transactions")
-        .to_return(body: read_fixture("asset/transactions.200.json"))
+        .to_return(body_io: read_fixture("asset/transactions.200.json"))
 
       Blockfrost::Asset.get("b0d07d45...").transactions
         .should be_a(Array(Blockfrost::Asset::Transaction))
@@ -145,7 +145,7 @@ describe Blockfrost::Asset do
     it "fetches all addresses for a given asset" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/assets/b0d07d45.../addresses")
-        .to_return(body: read_fixture("asset/addresses.200.json"))
+        .to_return(body_io: read_fixture("asset/addresses.200.json"))
 
       address = Blockfrost::Asset.addresses("b0d07d45...").first
       address.address.should start_with("addr1qxqs59lp")
@@ -155,7 +155,7 @@ describe Blockfrost::Asset do
     it "accepts ordering and pagination parameters" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/assets/b0d07d45.../addresses?order=desc&count=3&page=5")
-        .to_return(body: read_fixture("asset/addresses.200.json"))
+        .to_return(body_io: read_fixture("asset/addresses.200.json"))
 
       Blockfrost::Asset.addresses("b0d07d45...", order: "desc", count: 3, page: 5)
         .should be_a(Array(Blockfrost::Asset::Address))
@@ -166,10 +166,10 @@ describe Blockfrost::Asset do
     it "fetches addresses for the current asset" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/assets/b0d07d45...")
-        .to_return(body: read_fixture("asset/asset.200.json"))
+        .to_return(body_io: read_fixture("asset/asset.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/assets/b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb38a76e7574636f696e/addresses")
-        .to_return(body: read_fixture("asset/addresses.200.json"))
+        .to_return(body_io: read_fixture("asset/addresses.200.json"))
 
       Blockfrost::Asset.get("b0d07d45...").addresses
         .should be_a(Array(Blockfrost::Asset::Address))
@@ -179,7 +179,7 @@ describe Blockfrost::Asset do
   describe ".all_of_policy" do
     it "fetches all assets for a given policy id" do
       WebMock.stub(:get, "https://cardano-testnet.blockfrost.io/api/v0/assets/policy/476039a0...")
-        .to_return(body: read_fixture("asset/policy.200.json"))
+        .to_return(body_io: read_fixture("asset/policy.200.json"))
 
       Blockfrost::Asset.all_of_policy("476039a0...")
         .should be_a(Array(Blockfrost::Asset::Abbreviated))
@@ -188,7 +188,7 @@ describe Blockfrost::Asset do
     it "accepts ordering and pagination parameters" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/assets/policy/476039a0...?order=desc&count=10&page=2"
-      ).to_return(body: read_fixture("asset/policy.200.json"))
+      ).to_return(body_io: read_fixture("asset/policy.200.json"))
 
       Blockfrost::Asset.all_of_policy(
         policy_id: "476039a0...",

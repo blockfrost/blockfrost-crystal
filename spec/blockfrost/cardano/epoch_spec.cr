@@ -9,7 +9,7 @@ describe Blockfrost::Epoch do
     it "fetches a given epoch" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/225")
-        .to_return(body: read_fixture("epoch/epoch.200.json"))
+        .to_return(body_io: read_fixture("epoch/epoch.200.json"))
 
       Blockfrost::Epoch.get(225).should be_a(Blockfrost::Epoch)
     end
@@ -19,7 +19,7 @@ describe Blockfrost::Epoch do
     it "fetches the latest epoch" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/latest")
-        .to_return(body: read_fixture("epoch/latest.200.json"))
+        .to_return(body_io: read_fixture("epoch/latest.200.json"))
 
       epoch = Blockfrost::Epoch.latest
       epoch.epoch.should eq(225)
@@ -39,7 +39,7 @@ describe Blockfrost::Epoch do
     it "fetches the next epoch for a given hash" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/next")
-        .to_return(body: read_fixture("epoch/next.200.json"))
+        .to_return(body_io: read_fixture("epoch/next.200.json"))
 
       Blockfrost::Epoch.next(225).first.should be_a(Blockfrost::Epoch)
     end
@@ -47,7 +47,7 @@ describe Blockfrost::Epoch do
     it "fetches the next number of epochs at a given page" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/next?count=3&page=2")
-        .to_return(body: read_fixture("epoch/next.200.json"))
+        .to_return(body_io: read_fixture("epoch/next.200.json"))
 
       Blockfrost::Epoch.next(225, count: 3, page: 2).first
         .should be_a(Blockfrost::Epoch)
@@ -58,10 +58,10 @@ describe Blockfrost::Epoch do
     it "fetches the next epoch in relation to the current epoch" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/225")
-        .to_return(body: read_fixture("epoch/epoch.200.json"))
+        .to_return(body_io: read_fixture("epoch/epoch.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/next")
-        .to_return(body: read_fixture("epoch/next.200.json"))
+        .to_return(body_io: read_fixture("epoch/next.200.json"))
 
       Blockfrost::Epoch.get(225).next.first
         .should be_a(Blockfrost::Epoch)
@@ -72,7 +72,7 @@ describe Blockfrost::Epoch do
     it "fetches the previous block for a given hash" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/previous")
-        .to_return(body: read_fixture("epoch/previous.200.json"))
+        .to_return(body_io: read_fixture("epoch/previous.200.json"))
 
       Blockfrost::Epoch.previous(225).first.should be_a(Blockfrost::Epoch)
     end
@@ -80,7 +80,7 @@ describe Blockfrost::Epoch do
     it "fetches the previous number of epochs at a given page" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/previous?count=3&page=2")
-        .to_return(body: read_fixture("epoch/previous.200.json"))
+        .to_return(body_io: read_fixture("epoch/previous.200.json"))
 
       Blockfrost::Epoch.previous(225, count: 3, page: 2).first
         .should be_a(Blockfrost::Epoch)
@@ -91,10 +91,10 @@ describe Blockfrost::Epoch do
     it "fetches the previous block in relation to the current block" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/225")
-        .to_return(body: read_fixture("epoch/epoch.200.json"))
+        .to_return(body_io: read_fixture("epoch/epoch.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/previous")
-        .to_return(body: read_fixture("epoch/previous.200.json"))
+        .to_return(body_io: read_fixture("epoch/previous.200.json"))
 
       Blockfrost::Epoch.get(225).previous.first
         .should be_a(Blockfrost::Epoch)
@@ -105,7 +105,7 @@ describe Blockfrost::Epoch do
     it "fetches the stakes for an epoch" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/stakes")
-        .to_return(body: read_fixture("epoch/stakes.200.json"))
+        .to_return(body_io: read_fixture("epoch/stakes.200.json"))
 
       stakes = Blockfrost::Epoch.stakes(225)
       stakes.should be_a(Array(Blockfrost::Epoch::Stake))
@@ -121,7 +121,7 @@ describe Blockfrost::Epoch do
     it "fetches the stakes with pagination parameters" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/stakes?count=3&page=2")
-        .to_return(body: read_fixture("epoch/stakes.200.json"))
+        .to_return(body_io: read_fixture("epoch/stakes.200.json"))
 
       Blockfrost::Epoch.stakes(225, count: 3, page: 2)
         .should be_a(Array(Blockfrost::Epoch::Stake))
@@ -132,10 +132,10 @@ describe Blockfrost::Epoch do
     it "fetches the stakes for the current epoch" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/latest")
-        .to_return(body: read_fixture("epoch/latest.200.json"))
+        .to_return(body_io: read_fixture("epoch/latest.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/stakes")
-        .to_return(body: read_fixture("epoch/stakes.200.json"))
+        .to_return(body_io: read_fixture("epoch/stakes.200.json"))
 
       Blockfrost::Epoch.latest.stakes
         .should be_a(Array(Blockfrost::Epoch::Stake))
@@ -146,7 +146,7 @@ describe Blockfrost::Epoch do
     it "fetches the stakes by pool with pagination parameters" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/stakes/pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy?count=3&page=2")
-        .to_return(body: read_fixture("epoch/stakes.200.json"))
+        .to_return(body_io: read_fixture("epoch/stakes.200.json"))
 
       pool_id = "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy"
 
@@ -159,10 +159,10 @@ describe Blockfrost::Epoch do
     it "fetches the stakes by pool with pagination parameters" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/latest")
-        .to_return(body: read_fixture("epoch/latest.200.json"))
+        .to_return(body_io: read_fixture("epoch/latest.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/stakes/pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy?count=3&page=2")
-        .to_return(body: read_fixture("epoch/stakes.200.json"))
+        .to_return(body_io: read_fixture("epoch/stakes.200.json"))
 
       pool_id = "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy"
 
@@ -175,7 +175,7 @@ describe Blockfrost::Epoch do
     it "fetches the block ids the given epoch" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/blocks?count=3&page=2")
-        .to_return(body: read_fixture("epoch/blocks.200.json"))
+        .to_return(body_io: read_fixture("epoch/blocks.200.json"))
 
       Blockfrost::Epoch.block_hashes(225, count: 3, page: 2).should eq([
         "d0fa315687e99ccdc96b14cc2ea74a767405d64427b648c470731a9b69e4606e",
@@ -189,10 +189,10 @@ describe Blockfrost::Epoch do
     it "fetches block ids for the current epoch" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/latest")
-        .to_return(body: read_fixture("epoch/latest.200.json"))
+        .to_return(body_io: read_fixture("epoch/latest.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/blocks")
-        .to_return(body: read_fixture("epoch/blocks.200.json"))
+        .to_return(body_io: read_fixture("epoch/blocks.200.json"))
 
       Blockfrost::Epoch.latest.block_hashes.should be_a(Array(String))
     end
@@ -202,7 +202,7 @@ describe Blockfrost::Epoch do
     it "fetches the block ids the given epoch for a given pool" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/blocks/#{test_pool_id}?count=3&page=2")
-        .to_return(body: read_fixture("epoch/blocks.200.json"))
+        .to_return(body_io: read_fixture("epoch/blocks.200.json"))
 
       Blockfrost::Epoch.block_hashes_by_pool(
         225,
@@ -217,10 +217,10 @@ describe Blockfrost::Epoch do
     it "fetches block ids for the current epoch for a given pool" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/latest")
-        .to_return(body: read_fixture("epoch/latest.200.json"))
+        .to_return(body_io: read_fixture("epoch/latest.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/blocks/#{test_pool_id}")
-        .to_return(body: read_fixture("epoch/blocks.200.json"))
+        .to_return(body_io: read_fixture("epoch/blocks.200.json"))
 
       Blockfrost::Epoch.latest.block_hashes_by_pool(test_pool_id)
         .should be_a(Array(String))
@@ -231,7 +231,7 @@ describe Blockfrost::Epoch do
     it "fetches the parameters for the given epoch" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/parameters")
-        .to_return(body: read_fixture("epoch/parameters.200.json"))
+        .to_return(body_io: read_fixture("epoch/parameters.200.json"))
 
       Blockfrost::Epoch.parameters(225).tap do |parameters|
         parameters.should be_a(Blockfrost::Epoch::Parameters)

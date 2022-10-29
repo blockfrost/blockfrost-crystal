@@ -9,7 +9,7 @@ describe Blockfrost::Account do
     it "fetches a specific account" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/accounts/#{stake_address}")
-        .to_return(body: read_fixture("account/get.200.json"))
+        .to_return(body_io: read_fixture("account/get.200.json"))
 
       account = Blockfrost::Account.get(stake_address)
       account.stake_address.should eq(stake_address)
@@ -30,7 +30,7 @@ describe Blockfrost::Account do
     it "fetches the rewards for a given account" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/accounts/#{stake_address}/rewards")
-        .to_return(body: read_fixture("account/rewards.200.json"))
+        .to_return(body_io: read_fixture("account/rewards.200.json"))
 
       reward = Blockfrost::Account.rewards(stake_address).first
       reward.epoch.should eq(215)
@@ -43,7 +43,7 @@ describe Blockfrost::Account do
 
     it "accepts parameters for ordering and pagination" do
       WebMock.stub(:get, "https://cardano-testnet.blockfrost.io/api/v0/accounts/#{stake_address}/rewards?order=desc&count=2&page=3")
-        .to_return(body: read_fixture("account/rewards.200.json"))
+        .to_return(body_io: read_fixture("account/rewards.200.json"))
 
       Blockfrost::Account.rewards(stake_address, "desc", 2, 3)
         .should be_a(Array(Blockfrost::Account::Reward))
@@ -54,7 +54,7 @@ describe Blockfrost::Account do
     it "fetches the history for a given account" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/accounts/#{stake_address}/history")
-        .to_return(body: read_fixture("account/history.200.json"))
+        .to_return(body_io: read_fixture("account/history.200.json"))
 
       history = Blockfrost::Account.history(stake_address)
       history.first.active_epoch.should eq(210)
@@ -65,7 +65,7 @@ describe Blockfrost::Account do
 
     it "accepts parameters for ordering and pagination" do
       WebMock.stub(:get, "https://cardano-testnet.blockfrost.io/api/v0/accounts/#{stake_address}/history?order=desc&count=2&page=3")
-        .to_return(body: read_fixture("account/history.200.json"))
+        .to_return(body_io: read_fixture("account/history.200.json"))
 
       Blockfrost::Account.history(stake_address, "desc", 2, 3)
         .should be_a(Array(Blockfrost::Account::Event))
@@ -76,7 +76,7 @@ describe Blockfrost::Account do
     it "fetches the delegations for a given account" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/accounts/#{stake_address}/delegations")
-        .to_return(body: read_fixture("account/delegations.200.json"))
+        .to_return(body_io: read_fixture("account/delegations.200.json"))
 
       delegation = Blockfrost::Account.delegations(stake_address).first
       delegation.active_epoch.should eq(210)
@@ -91,7 +91,7 @@ describe Blockfrost::Account do
 
     it "accepts parameters for ordering and pagination" do
       WebMock.stub(:get, "https://cardano-testnet.blockfrost.io/api/v0/accounts/#{stake_address}/delegations?order=desc&count=2&page=3")
-        .to_return(body: read_fixture("account/delegations.200.json"))
+        .to_return(body_io: read_fixture("account/delegations.200.json"))
 
       Blockfrost::Account.delegations(stake_address, "desc", 2, 3)
         .should be_a(Array(Blockfrost::Account::Delegation))
@@ -102,7 +102,7 @@ describe Blockfrost::Account do
     it "fetches the registrations for a given account" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/accounts/#{stake_address}/registrations")
-        .to_return(body: read_fixture("account/registrations.200.json"))
+        .to_return(body_io: read_fixture("account/registrations.200.json"))
 
       registration = Blockfrost::Account.registrations(stake_address).first
       registration.tx_hash.should eq(
@@ -114,7 +114,7 @@ describe Blockfrost::Account do
 
     it "accepts parameters for ordering and pagination" do
       WebMock.stub(:get, "https://cardano-testnet.blockfrost.io/api/v0/accounts/#{stake_address}/registrations?order=desc&count=2&page=3")
-        .to_return(body: read_fixture("account/registrations.200.json"))
+        .to_return(body_io: read_fixture("account/registrations.200.json"))
 
       Blockfrost::Account.registrations(stake_address, "desc", 2, 3)
         .should be_a(Array(Blockfrost::Account::Registration))
@@ -125,7 +125,7 @@ describe Blockfrost::Account do
     it "fetches the withdrawals for a given account" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/accounts/#{stake_address}/withdrawals")
-        .to_return(body: read_fixture("account/withdrawals.200.json"))
+        .to_return(body_io: read_fixture("account/withdrawals.200.json"))
 
       withdrawal = Blockfrost::Account.withdrawals(stake_address).first
       withdrawal.tx_hash.should eq(
@@ -136,7 +136,7 @@ describe Blockfrost::Account do
 
     it "accepts parameters for ordering and pagination" do
       WebMock.stub(:get, "https://cardano-testnet.blockfrost.io/api/v0/accounts/#{stake_address}/withdrawals?order=desc&count=2&page=3")
-        .to_return(body: read_fixture("account/withdrawals.200.json"))
+        .to_return(body_io: read_fixture("account/withdrawals.200.json"))
 
       Blockfrost::Account.withdrawals(stake_address, "desc", 2, 3)
         .should be_a(Array(Blockfrost::Account::Withdrawal))
@@ -147,7 +147,7 @@ describe Blockfrost::Account do
     it "fetches the mirs for a given account" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/accounts/#{stake_address}/mirs")
-        .to_return(body: read_fixture("account/mirs.200.json"))
+        .to_return(body_io: read_fixture("account/mirs.200.json"))
 
       mir = Blockfrost::Account.mirs(stake_address).first
       mir.tx_hash.should eq(
@@ -158,7 +158,7 @@ describe Blockfrost::Account do
 
     it "accepts parameters for ordering and pagination" do
       WebMock.stub(:get, "https://cardano-testnet.blockfrost.io/api/v0/accounts/#{stake_address}/mirs?order=desc&count=2&page=3")
-        .to_return(body: read_fixture("account/mirs.200.json"))
+        .to_return(body_io: read_fixture("account/mirs.200.json"))
 
       Blockfrost::Account.mirs(stake_address, "desc", 2, 3)
         .should be_a(Array(Blockfrost::Account::Mir))
@@ -169,7 +169,7 @@ describe Blockfrost::Account do
     it "fetches the addresses for a given account" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/accounts/#{stake_address}/addresses")
-        .to_return(body: read_fixture("account/addresses.200.json"))
+        .to_return(body_io: read_fixture("account/addresses.200.json"))
 
       Blockfrost::Account.addresses(stake_address).first.address
         .should eq(
@@ -179,7 +179,7 @@ describe Blockfrost::Account do
 
     it "accepts parameters for ordering and pagination" do
       WebMock.stub(:get, "https://cardano-testnet.blockfrost.io/api/v0/accounts/#{stake_address}/addresses?order=desc&count=2&page=3")
-        .to_return(body: read_fixture("account/addresses.200.json"))
+        .to_return(body_io: read_fixture("account/addresses.200.json"))
 
       Blockfrost::Account.addresses(stake_address, "desc", 2, 3)
         .should be_a(Array(Blockfrost::Account::Address))
@@ -190,7 +190,7 @@ describe Blockfrost::Account do
     it "fetches the assets from the addresses for a given account" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/accounts/#{stake_address}/addresses/assets")
-        .to_return(body: read_fixture("account/assets.200.json"))
+        .to_return(body_io: read_fixture("account/assets.200.json"))
 
       asset = Blockfrost::Account.assets_from_addresses(stake_address).first
       asset.unit.should eq(
@@ -201,7 +201,7 @@ describe Blockfrost::Account do
 
     it "accepts parameters for ordering and pagination" do
       WebMock.stub(:get, "https://cardano-testnet.blockfrost.io/api/v0/accounts/#{stake_address}/addresses/assets?order=desc&count=2&page=3")
-        .to_return(body: read_fixture("account/assets.200.json"))
+        .to_return(body_io: read_fixture("account/assets.200.json"))
 
       Blockfrost::Account.assets_from_addresses(stake_address, "desc", 2, 3)
         .should be_a(Array(Blockfrost::Token))
@@ -212,7 +212,7 @@ describe Blockfrost::Account do
     it "fetches the totals of all addresses combined" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/accounts/#{stake_address}/addresses/total")
-        .to_return(body: read_fixture("account/total.200.json"))
+        .to_return(body_io: read_fixture("account/total.200.json"))
 
       total = Blockfrost::Account.total_from_addresses(stake_address)
       total.stake_address.should eq(

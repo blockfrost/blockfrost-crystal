@@ -9,7 +9,7 @@ describe Blockfrost::Metadata do
     it "fetches labels" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/metadata/txs/labels")
-        .to_return(body: read_fixture("metadata/labels.200.json"))
+        .to_return(body_io: read_fixture("metadata/labels.200.json"))
 
       labels = Blockfrost::Metadata.labels
       labels.first.label.should eq("1990")
@@ -23,7 +23,7 @@ describe Blockfrost::Metadata do
     it "accepts ordering and pagination labels" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/metadata/txs/labels?order=desc&count=1&page=1")
-        .to_return(body: read_fixture("metadata/labels.200.json"))
+        .to_return(body_io: read_fixture("metadata/labels.200.json"))
 
       Blockfrost::Metadata.labels("desc", 1, 1)
         .should be_a(Array(Blockfrost::Metadata::Label))
@@ -34,7 +34,7 @@ describe Blockfrost::Metadata do
     it "fetches the transaction metadata for the given label" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/metadata/txs/labels/1990")
-        .to_return(body: read_fixture("metadata/json-content.200.json"))
+        .to_return(body_io: read_fixture("metadata/json-content.200.json"))
 
       txs = Blockfrost::Metadata.label_json_content("1990")
       txs.first.tx_hash.should eq(
@@ -56,10 +56,10 @@ describe Blockfrost::Metadata do
     it "accepts ordering and pagination parameters" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/metadata/txs/labels/1990?order=desc&count=1&page=1")
-        .to_return(body: read_fixture("metadata/json-content.200.json"))
+        .to_return(body_io: read_fixture("metadata/json-content.200.json"))
 
       Blockfrost::Metadata.label_json_content("1990", "desc", 1, 1)
-        .should be_a(Array(Blockfrost::Metadata::JsonContent))
+        .should be_a(Array(Blockfrost::Metadata::ContentJSON))
     end
   end
 
@@ -67,7 +67,7 @@ describe Blockfrost::Metadata do
     it "fetches the transaction metadata for the given label" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/metadata/txs/labels/1990/cbor")
-        .to_return(body: read_fixture("metadata/cbor-content.200.json"))
+        .to_return(body_io: read_fixture("metadata/cbor-content.200.json"))
 
       txs = Blockfrost::Metadata.label_cbor_content("1990")
       txs.first.tx_hash.should eq(
@@ -90,10 +90,10 @@ describe Blockfrost::Metadata do
     it "accepts ordering and pagination parameters" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/metadata/txs/labels/1990/cbor?order=desc&count=1&page=1")
-        .to_return(body: read_fixture("metadata/cbor-content.200.json"))
+        .to_return(body_io: read_fixture("metadata/cbor-content.200.json"))
 
       Blockfrost::Metadata.label_cbor_content("1990", "desc", 1, 1)
-        .should be_a(Array(Blockfrost::Metadata::CborContent))
+        .should be_a(Array(Blockfrost::Metadata::ContentCBOR))
     end
   end
 end

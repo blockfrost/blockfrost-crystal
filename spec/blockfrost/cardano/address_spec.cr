@@ -9,7 +9,7 @@ describe Blockfrost::Address do
     it "fetches a specific address" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/addresses/#{test_address}")
-        .to_return(body: read_fixture("address/get.200.json"))
+        .to_return(body_io: read_fixture("address/get.200.json"))
 
       address = Blockfrost::Address.get(test_address)
       address.address.should eq(test_address)
@@ -27,7 +27,7 @@ describe Blockfrost::Address do
     it "fetches a specific address with extended information" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/addresses/#{test_address}/extended")
-        .to_return(body: read_fixture("address/extended.200.json"))
+        .to_return(body_io: read_fixture("address/extended.200.json"))
 
       address = Blockfrost::Address.extended(test_address)
       address.address.should eq(test_address)
@@ -48,7 +48,7 @@ describe Blockfrost::Address do
     it "fetches the address' totals" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/addresses/#{test_address}/total")
-        .to_return(body: read_fixture("address/total.200.json"))
+        .to_return(body_io: read_fixture("address/total.200.json"))
 
       total = Blockfrost::Address.total(test_address)
       total.address.should eq(test_address)
@@ -64,7 +64,7 @@ describe Blockfrost::Address do
     it "fetches the address' current utxos" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/addresses/#{test_address}/utxos")
-        .to_return(body: read_fixture("address/utxos.200.json"))
+        .to_return(body_io: read_fixture("address/utxos.200.json"))
 
       utxo = Blockfrost::Address.utxos(test_address).first
       utxo.tx_hash.should eq(
@@ -86,7 +86,7 @@ describe Blockfrost::Address do
     it "accepts ordering and pagination parameters" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/addresses/#{test_address}/utxos?order=desc&count=10&page=1")
-        .to_return(body: read_fixture("address/utxos.200.json"))
+        .to_return(body_io: read_fixture("address/utxos.200.json"))
 
       Blockfrost::Address.utxos(test_address, "desc", 10, 1)
         .should be_a(Array(Blockfrost::Address::UTXO))
@@ -97,10 +97,10 @@ describe Blockfrost::Address do
     it "fetches current address' current utxos" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/addresses/#{test_address}")
-        .to_return(body: read_fixture("address/get.200.json"))
+        .to_return(body_io: read_fixture("address/get.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/addresses/#{test_address}/utxos")
-        .to_return(body: read_fixture("address/utxos.200.json"))
+        .to_return(body_io: read_fixture("address/utxos.200.json"))
 
       Blockfrost::Address.get(test_address).utxos
         .should be_a(Array(Blockfrost::Address::UTXO))
@@ -111,7 +111,7 @@ describe Blockfrost::Address do
     it "fetches the address' current utxos for a given asset" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/addresses/#{test_address}/utxos/#{test_asset}")
-        .to_return(body: read_fixture("address/utxos-of-asset.200.json"))
+        .to_return(body_io: read_fixture("address/utxos-of-asset.200.json"))
 
       utxo = Blockfrost::Address.utxos_of_asset(test_address, test_asset).first
       utxo.tx_hash.should eq(
@@ -133,7 +133,7 @@ describe Blockfrost::Address do
     it "accepts ordering and pagination parameters" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/addresses/#{test_address}/utxos/#{test_asset}?order=desc&count=10&page=1")
-        .to_return(body: read_fixture("address/utxos-of-asset.200.json"))
+        .to_return(body_io: read_fixture("address/utxos-of-asset.200.json"))
 
       Blockfrost::Address.utxos_of_asset(test_address, test_asset, "desc", 10, 1)
         .should be_a(Array(Blockfrost::Address::UTXO))
@@ -144,10 +144,10 @@ describe Blockfrost::Address do
     it "fetches current address' current utxos for a given asset" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/addresses/#{test_address}")
-        .to_return(body: read_fixture("address/get.200.json"))
+        .to_return(body_io: read_fixture("address/get.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/addresses/#{test_address}/utxos/#{test_asset}")
-        .to_return(body: read_fixture("address/utxos-of-asset.200.json"))
+        .to_return(body_io: read_fixture("address/utxos-of-asset.200.json"))
 
       Blockfrost::Address.get(test_address).utxos_of_asset(test_asset)
         .should be_a(Array(Blockfrost::Address::UTXO))
@@ -158,7 +158,7 @@ describe Blockfrost::Address do
     it "fetches the address' transactions" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/addresses/#{test_address}/transactions")
-        .to_return(body: read_fixture("address/transactions.200.json"))
+        .to_return(body_io: read_fixture("address/transactions.200.json"))
 
       tx = Blockfrost::Address.transactions(test_address).first
       tx.tx_hash.should eq(
@@ -172,7 +172,7 @@ describe Blockfrost::Address do
     it "accepts ordering, pagination, from and to parameters" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/addresses/#{test_address}/transactions?order=desc&count=10&page=1&from=8929261&to=9999269:10")
-        .to_return(body: read_fixture("address/transactions.200.json"))
+        .to_return(body_io: read_fixture("address/transactions.200.json"))
 
       Blockfrost::Address.transactions(
         test_address,
@@ -189,10 +189,10 @@ describe Blockfrost::Address do
     it "fetches the current address' transactions" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/addresses/#{test_address}")
-        .to_return(body: read_fixture("address/get.200.json"))
+        .to_return(body_io: read_fixture("address/get.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/addresses/#{test_address}/transactions?from=8929261")
-        .to_return(body: read_fixture("address/transactions.200.json"))
+        .to_return(body_io: read_fixture("address/transactions.200.json"))
 
       Blockfrost::Address.get(test_address).transactions(from: "8929261")
         .should be_a(Array(Blockfrost::Address::Transaction))

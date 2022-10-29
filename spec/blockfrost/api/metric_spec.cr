@@ -8,7 +8,7 @@ describe Blockfrost::Metric do
   describe ".all" do
     it "fetches the metrics endpoint " do
       WebMock.stub(:get, "https://cardano-testnet.blockfrost.io/api/v0/metrics")
-        .to_return(body: read_fixture("metric/all.200.json"))
+        .to_return(body_io: read_fixture("metric/all.200.json"))
 
       metric = Blockfrost::Metric.all.first
       metric.time.should eq(Time.unix(1612543884))
@@ -20,7 +20,7 @@ describe Blockfrost::Metric do
     it "fetches the metric endpoints endpoint " do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/metrics/endpoints")
-        .to_return(body: read_fixture("metric/endpoints.200.json"))
+        .to_return(body_io: read_fixture("metric/endpoints.200.json"))
 
       metric = Blockfrost::Metric.endpoints.first
       metric.time.should eq(Time.unix(1612543814))

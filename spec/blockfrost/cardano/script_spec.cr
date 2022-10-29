@@ -9,7 +9,7 @@ describe Blockfrost::Script do
     it "fetches all scripts" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/scripts")
-        .to_return(body: read_fixture("script/all.200.json"))
+        .to_return(body_io: read_fixture("script/all.200.json"))
 
       script = Blockfrost::Script.all.first
       script.script_hash.should eq(test_script_hash)
@@ -18,7 +18,7 @@ describe Blockfrost::Script do
     it "accepts ordering and pagination parameters" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/scripts?order=desc")
-        .to_return(body: read_fixture("script/all.200.json"))
+        .to_return(body_io: read_fixture("script/all.200.json"))
 
       Blockfrost::Script.all(order: "desc")
         .should be_a(Array(Blockfrost::Script::Abbreviated))
@@ -29,7 +29,7 @@ describe Blockfrost::Script do
     it "fetches a specific script" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/scripts/#{test_script_hash}")
-        .to_return(body: read_fixture("script/get.200.json"))
+        .to_return(body_io: read_fixture("script/get.200.json"))
 
       script = Blockfrost::Script.get(test_script_hash)
       script.script_hash.should eq(test_script_hash)
@@ -42,7 +42,7 @@ describe Blockfrost::Script do
     it "fetches the json data of a timelock script" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/scripts/#{test_script_hash}/json")
-        .to_return(body: read_fixture("script/json.200.json"))
+        .to_return(body_io: read_fixture("script/json.200.json"))
 
       json = Blockfrost::Script.json(test_script_hash)
       json.dig?("scripts", 0, "type").should eq("sig")
@@ -53,7 +53,7 @@ describe Blockfrost::Script do
     it "fetches the cbor representation of a plutus script" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/scripts/#{test_script_hash}/cbor")
-        .to_return(body: read_fixture("script/cbor.200.json"))
+        .to_return(body_io: read_fixture("script/cbor.200.json"))
 
       cbor = Blockfrost::Script.cbor(test_script_hash)
       cbor.should eq("4e4d01000033222220051200120011")
@@ -64,7 +64,7 @@ describe Blockfrost::Script do
     it "fetches the redeemers for a given script" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/scripts/#{test_script_hash}/redeemers")
-        .to_return(body: read_fixture("script/redeemers.200.json"))
+        .to_return(body_io: read_fixture("script/redeemers.200.json"))
 
       redeemer = Blockfrost::Script.redeemers(test_script_hash).first
       redeemer.tx_hash.should eq(
@@ -86,7 +86,7 @@ describe Blockfrost::Script do
     it "accepts ordering and pagination parameters" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/scripts/#{test_script_hash}/redeemers?order=desc&count=3&page=1")
-        .to_return(body: read_fixture("script/redeemers.200.json"))
+        .to_return(body_io: read_fixture("script/redeemers.200.json"))
 
       Blockfrost::Script.redeemers(test_script_hash, "desc", 3, 1)
         .should be_a(Array(Blockfrost::Script::Redeemer))
@@ -97,10 +97,10 @@ describe Blockfrost::Script do
     it "fetches the redeemers for the current script" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/scripts/#{test_script_hash}")
-        .to_return(body: read_fixture("script/get.200.json"))
+        .to_return(body_io: read_fixture("script/get.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/scripts/#{test_script_hash}/redeemers")
-        .to_return(body: read_fixture("script/redeemers.200.json"))
+        .to_return(body_io: read_fixture("script/redeemers.200.json"))
 
       script = Blockfrost::Script.get(test_script_hash)
       script.redeemers.should be_a(Array(Blockfrost::Script::Redeemer))

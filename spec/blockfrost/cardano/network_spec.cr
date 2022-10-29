@@ -8,7 +8,7 @@ describe Blockfrost::Network do
   describe ".get" do
     it "fetches fetailed network information" do
       WebMock.stub(:get, "https://cardano-testnet.blockfrost.io/api/v0/network")
-        .to_return(body: read_fixture("network/get.200.json"))
+        .to_return(body_io: read_fixture("network/get.200.json"))
 
       network = Blockfrost::Network.get
       network.supply.max.should eq(45000000000000000)

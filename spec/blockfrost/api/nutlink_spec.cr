@@ -9,7 +9,7 @@ describe Blockfrost::Nutlink do
     it "fetches a nutlink address" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/nutlink/#{test_address}")
-        .to_return(body: read_fixture("nutlink/address.200.json"))
+        .to_return(body_io: read_fixture("nutlink/address.200.json"))
 
       nutlink = Blockfrost::Nutlink.get(test_address)
       nutlink.address.should eq(test_address)
@@ -25,7 +25,7 @@ describe Blockfrost::Nutlink do
     it "fetchers records of a specific ticker" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/nutlink/#{test_address}/tickers")
-        .to_return(body: read_fixture("nutlink/tickers.200.json"))
+        .to_return(body_io: read_fixture("nutlink/tickers.200.json"))
 
       ticker = Blockfrost::Nutlink.tickers(test_address).first
       ticker.name.should eq("ADAUSD")
@@ -36,7 +36,7 @@ describe Blockfrost::Nutlink do
     it "accepts ordering and pagination parameters" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/nutlink/#{test_address}/tickers?order=desc")
-        .to_return(body: read_fixture("nutlink/tickers.200.json"))
+        .to_return(body_io: read_fixture("nutlink/tickers.200.json"))
 
       Blockfrost::Nutlink.tickers(test_address, "desc")
         .should be_a(Array(Blockfrost::Nutlink::Ticker))
@@ -47,10 +47,10 @@ describe Blockfrost::Nutlink do
     it "fetchers the current records of a specific ticker" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/nutlink/#{test_address}")
-        .to_return(body: read_fixture("nutlink/address.200.json"))
+        .to_return(body_io: read_fixture("nutlink/address.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/nutlink/#{test_address}/tickers")
-        .to_return(body: read_fixture("nutlink/tickers.200.json"))
+        .to_return(body_io: read_fixture("nutlink/tickers.200.json"))
 
       Blockfrost::Nutlink.get(test_address).tickers
         .should be_a(Array(Blockfrost::Nutlink::Ticker))
@@ -61,7 +61,7 @@ describe Blockfrost::Nutlink do
     it "fetchers a record of a specific ticker" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/nutlink/#{test_address}/tickers/#{test_ticker}")
-        .to_return(body: read_fixture("nutlink/ticker_records.200.json"))
+        .to_return(body_io: read_fixture("nutlink/ticker_records.200.json"))
 
       ticker = Blockfrost::Nutlink.ticker_records_for_address(
         test_address,
@@ -78,7 +78,7 @@ describe Blockfrost::Nutlink do
     it "accepts ordering and pagination parameters" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/nutlink/#{test_address}/tickers/#{test_ticker}?order=desc")
-        .to_return(body: read_fixture("nutlink/ticker_records.200.json"))
+        .to_return(body_io: read_fixture("nutlink/ticker_records.200.json"))
 
       Blockfrost::Nutlink.ticker_records_for_address(test_address, test_ticker, "desc")
         .should be_a(Array(Blockfrost::Nutlink::Ticker::Record))
@@ -89,7 +89,7 @@ describe Blockfrost::Nutlink do
     it "fetchers a record of a specific ticker" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/nutlink/tickers/#{test_ticker}")
-        .to_return(body: read_fixture("nutlink/ticker_records.200.json"))
+        .to_return(body_io: read_fixture("nutlink/ticker_records.200.json"))
 
       ticker = Blockfrost::Nutlink.ticker_records(test_ticker).first
       ticker.tx_hash.should eq(
@@ -103,7 +103,7 @@ describe Blockfrost::Nutlink do
     it "accepts ordering and pagination parameters" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/nutlink/tickers/#{test_ticker}?order=desc")
-        .to_return(body: read_fixture("nutlink/ticker_records.200.json"))
+        .to_return(body_io: read_fixture("nutlink/ticker_records.200.json"))
 
       Blockfrost::Nutlink.ticker_records(test_ticker, "desc")
         .should be_a(Array(Blockfrost::Nutlink::Ticker::Record))

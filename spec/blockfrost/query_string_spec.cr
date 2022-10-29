@@ -8,7 +8,7 @@ describe Blockfrost::QueryString do
     end
 
     it "returns an empty value if no data is given" do
-      Blockfrost::QueryString.new(Blockfrost::RequestData.new).build
+      Blockfrost::QueryString.new(Blockfrost::QueryData.new).build
         .should eq("")
     end
 

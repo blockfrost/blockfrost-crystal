@@ -9,7 +9,7 @@ describe Blockfrost::Block do
     it "fetches the block for a given hash" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/5ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a")
-        .to_return(body: read_fixture("block/block.200.json"))
+        .to_return(body_io: read_fixture("block/block.200.json"))
 
       Blockfrost::Block.get("5ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a")
         .should be_a(Blockfrost::Block)
@@ -18,7 +18,7 @@ describe Blockfrost::Block do
     it "fetches the block for a given height" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/15243593")
-        .to_return(body: read_fixture("block/block.200.json"))
+        .to_return(body_io: read_fixture("block/block.200.json"))
 
       Blockfrost::Block.get(15243593).should be_a(Blockfrost::Block)
     end
@@ -28,7 +28,7 @@ describe Blockfrost::Block do
     it "fetches the latest block" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/latest"
-      ).to_return(body: read_fixture("block/latest.200.json"))
+      ).to_return(body_io: read_fixture("block/latest.200.json"))
 
       block = Blockfrost::Block.latest
       block.block_vrf.should eq(
@@ -70,7 +70,8 @@ describe Blockfrost::Block do
           WebMock.stub(
             :get, "https://cardano-testnet.blockfrost.io/api/v0/blocks/latest"
           ).to_return(
-            body: read_fixture("block/latest.{{status}}.json"), status: {{status}}
+            body_io: read_fixture("block/latest.{{status}}.json"),
+            status: {{status}}
           )
 
           expect_raises(Blockfrost::Client::{{name.id}}Exception) do
@@ -83,7 +84,7 @@ describe Blockfrost::Block do
     it "handels forbidden exceptions" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/latest"
-      ).to_return(body: read_fixture("block/latest.403.json"), status: 403)
+      ).to_return(body_io: read_fixture("block/latest.403.json"), status: 403)
 
       expect_raises(
         Blockfrost::Client::ForbiddenException,
@@ -98,7 +99,7 @@ describe Blockfrost::Block do
     it "fetches transaction ids for the latest transaction" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/latest/txs")
-        .to_return(body: read_fixture("block/tx_ids.200.json"))
+        .to_return(body_io: read_fixture("block/tx_ids.200.json"))
 
       Blockfrost::Block.latest_tx_ids.should eq([
         "8788591983aa73981fc92d6cddbbe643959f5a784e84b8bee0db15823f575a5b",
@@ -111,7 +112,7 @@ describe Blockfrost::Block do
     it "accepts query parameters for pagination and ordering" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/latest/txs?order=asc&count=4&page=1")
-        .to_return(body: read_fixture("block/tx_ids.200.json"))
+        .to_return(body_io: read_fixture("block/tx_ids.200.json"))
 
       Blockfrost::Block.latest_tx_ids(
         order: Blockfrost::QueryOrder::ASC,
@@ -123,7 +124,7 @@ describe Blockfrost::Block do
     it "accepts a string as query parameter for ordering" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/latest/txs?order=desc")
-        .to_return(body: read_fixture("block/tx_ids.200.json"))
+        .to_return(body_io: read_fixture("block/tx_ids.200.json"))
 
       Blockfrost::Block.latest_tx_ids(order: "desc")
     end
@@ -131,7 +132,7 @@ describe Blockfrost::Block do
     it "uses default ordering if the order query parameter is invalid" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/latest/txs?order=asc")
-        .to_return(body: read_fixture("block/tx_ids.200.json"))
+        .to_return(body_io: read_fixture("block/tx_ids.200.json"))
 
       Blockfrost::Block.latest_tx_ids(order: "forward")
     end
@@ -141,7 +142,7 @@ describe Blockfrost::Block do
     it "fetches the latest transaction ids for the given block" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/15243592/txs")
-        .to_return(body: read_fixture("block/tx_ids.200.json"))
+        .to_return(body_io: read_fixture("block/tx_ids.200.json"))
 
       Blockfrost::Block.tx_ids(15243592).should be_a(Array(String))
     end
@@ -151,10 +152,10 @@ describe Blockfrost::Block do
     it "fetches the latest transaction ids for the current block" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/latest")
-        .to_return(body: read_fixture("block/block.200.json"))
+        .to_return(body_io: read_fixture("block/block.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/4ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a/txs")
-        .to_return(body: read_fixture("block/tx_ids.200.json"))
+        .to_return(body_io: read_fixture("block/tx_ids.200.json"))
 
       Blockfrost::Block.latest.tx_ids.should be_a(Array(String))
     end
@@ -164,7 +165,7 @@ describe Blockfrost::Block do
     it "fetches the next block for a given hash" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/5ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a/next")
-        .to_return(body: read_fixture("block/next.200.json"))
+        .to_return(body_io: read_fixture("block/next.200.json"))
 
       hash = "5ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a"
 
@@ -174,7 +175,7 @@ describe Blockfrost::Block do
     it "fetches the next block for a given block height" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/15243592/next")
-        .to_return(body: read_fixture("block/next.200.json"))
+        .to_return(body_io: read_fixture("block/next.200.json"))
 
       Blockfrost::Block.next(15243592).first.should be_a(Blockfrost::Block)
     end
@@ -182,7 +183,7 @@ describe Blockfrost::Block do
     it "fetches the next number of blocks at a given page" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/15243592/next?count=3&page=2")
-        .to_return(body: read_fixture("block/next.200.json"))
+        .to_return(body_io: read_fixture("block/next.200.json"))
 
       Blockfrost::Block.next(15243592, count: 3, page: 2).first
         .should be_a(Blockfrost::Block)
@@ -193,10 +194,10 @@ describe Blockfrost::Block do
     it "fetches the next block in relation to the current block" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/15243592")
-        .to_return(body: read_fixture("block/block.200.json"))
+        .to_return(body_io: read_fixture("block/block.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/4ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a/next")
-        .to_return(body: read_fixture("block/next.200.json"))
+        .to_return(body_io: read_fixture("block/next.200.json"))
 
       Blockfrost::Block.get(15243592).next.first
         .should be_a(Blockfrost::Block)
@@ -207,7 +208,7 @@ describe Blockfrost::Block do
     it "fetches the previous block for a given hash" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/5ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a/previous")
-        .to_return(body: read_fixture("block/previous.200.json"))
+        .to_return(body_io: read_fixture("block/previous.200.json"))
 
       hash = "5ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a"
 
@@ -217,7 +218,7 @@ describe Blockfrost::Block do
     it "fetches the previous block for a given block height" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/15243592/previous")
-        .to_return(body: read_fixture("block/previous.200.json"))
+        .to_return(body_io: read_fixture("block/previous.200.json"))
 
       height = 15243592
 
@@ -227,7 +228,7 @@ describe Blockfrost::Block do
     it "fetches the previous number of blocks at a given page" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/15243592/previous?count=3&page=2")
-        .to_return(body: read_fixture("block/previous.200.json"))
+        .to_return(body_io: read_fixture("block/previous.200.json"))
 
       Blockfrost::Block.previous(15243592, count: 3, page: 2).first
         .should be_a(Blockfrost::Block)
@@ -238,10 +239,10 @@ describe Blockfrost::Block do
     it "fetches the previous block in relation to the current block" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/15243592")
-        .to_return(body: read_fixture("block/block.200.json"))
+        .to_return(body_io: read_fixture("block/block.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/4ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a/previous")
-        .to_return(body: read_fixture("block/previous.200.json"))
+        .to_return(body_io: read_fixture("block/previous.200.json"))
 
       Blockfrost::Block.get(15243592).previous.first
         .should be_a(Blockfrost::Block)
@@ -252,7 +253,7 @@ describe Blockfrost::Block do
     it "fetches the block for a given slot number" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/slot/30895909")
-        .to_return(body: read_fixture("block/block.200.json"))
+        .to_return(body_io: read_fixture("block/block.200.json"))
 
       Blockfrost::Block.in_slot(30895909).should be_a(Blockfrost::Block)
     end
@@ -262,7 +263,7 @@ describe Blockfrost::Block do
     it "fetches the block for a given epoch and slot number" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/epoch/219/slot/30895909")
-        .to_return(body: read_fixture("block/block.200.json"))
+        .to_return(body_io: read_fixture("block/block.200.json"))
 
       Blockfrost::Block.in_epoch_in_slot(219, 30895909)
         .should be_a(Blockfrost::Block)
@@ -273,7 +274,7 @@ describe Blockfrost::Block do
     it "fetches addresses with transactions for a given block height" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/15243593/addresses")
-        .to_return(body: read_fixture("block/addresses.200.json"))
+        .to_return(body_io: read_fixture("block/addresses.200.json"))
 
       Blockfrost::Block.addresses(15243593)
         .should be_a(Array(Blockfrost::Block::Address))
@@ -282,7 +283,7 @@ describe Blockfrost::Block do
     it "accepts pagination parameters" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/15243593/addresses?count=3&page=2")
-        .to_return(body: read_fixture("block/addresses.200.json"))
+        .to_return(body_io: read_fixture("block/addresses.200.json"))
 
       Blockfrost::Block.addresses(15243593, count: 3, page: 2)
         .should be_a(Array(Blockfrost::Block::Address))
@@ -293,10 +294,10 @@ describe Blockfrost::Block do
     it "fetches addresses with transactions for the current block" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/latest")
-        .to_return(body: read_fixture("block/block.200.json"))
+        .to_return(body_io: read_fixture("block/block.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/4ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a/addresses")
-        .to_return(body: read_fixture("block/addresses.200.json"))
+        .to_return(body_io: read_fixture("block/addresses.200.json"))
 
       addresses = Blockfrost::Block.latest.addresses
       addresses.should be_a(Array(Blockfrost::Block::Address))

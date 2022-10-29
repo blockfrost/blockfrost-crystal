@@ -8,7 +8,7 @@ describe Blockfrost::Ledger do
   describe ".genesis" do
     it "fetches the information about blockchain genesis" do
       WebMock.stub(:get, "https://cardano-testnet.blockfrost.io/api/v0/genesis")
-        .to_return(body: read_fixture("ledger/genesis.200.json"))
+        .to_return(body_io: read_fixture("ledger/genesis.200.json"))
 
       genesis = Blockfrost::Ledger.genesis
       genesis.active_slots_coefficient.should eq(0.05)
