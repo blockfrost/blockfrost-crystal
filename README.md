@@ -1,6 +1,10 @@
 # blockfrost-crystal
 A Crystal SDK for the Blockfrost.io API.
 
+![GitHub](https://img.shields.io/github/license/wout/blockfrost-crystal)
+![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/wout/blockfrost-crystal)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/wout/blockfrost-crystal/blockfrost-crystal%20CI)
+
 ## Installation
 
 1. Add the dependency to your `shard.yml`:
