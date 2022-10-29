@@ -400,7 +400,7 @@ describe Blockfrost::Transaction do
   end
 
   describe ".submit" do
-    it "submit an already serialized transaction to the network" do
+    it "submits an already serialized transaction to the network" do
       WebMock.stub(:post,
         "https://cardano-testnet.blockfrost.io/api/v0/tx/submit")
         .with(

@@ -20,6 +20,24 @@ describe Blockfrost::Utils do
       )
     end
   end
+
+  describe ".evaluate_transaction" do
+    it "submits an already serialized transaction to evaluate how much execution units it requires" do
+      WebMock.stub(:post,
+        "https://cardano-testnet.blockfrost.io/api/v0/utils/txs/evaluate")
+        .with(
+          body: read_fixture("tx/cbor-data").gets_to_end,
+          headers: {
+            "Accept"       => "application/json",
+            "Content-Type" => "application/cbor",
+            "project_id"   => test_cardano_api_key,
+          })
+        .to_return(body_io: read_fixture("utils/evaluate-transaction.200.json"))
+
+      Blockfrost::Utils.evaluate_transaction(read_fixture("tx/cbor-data"))
+        .dig("some_key").should eq("Some Value")
+    end
+  end
 end
 
 private def test_xpub

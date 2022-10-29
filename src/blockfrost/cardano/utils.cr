@@ -11,6 +11,16 @@ struct Blockfrost::Utils
     )
   end
 
+  def self.evaluate_transaction(data : BodyData)
+    JSON::Any.from_json(
+      Client.post(
+        "/utils/txs/evaluate",
+        body: data,
+        content_type: ContentType::CBOR
+      )
+    )
+  end
+
   struct Address
     include JSON::Serializable
 
