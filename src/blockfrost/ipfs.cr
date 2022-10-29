@@ -26,6 +26,10 @@ struct Blockfrost::IPFS
     )
   end
 
+  def self.gateway(ipfs_path : String)
+    String.from_json(Client.get("ipfs/gateway/#{ipfs_path}"))
+  end
+
   struct Pin
     include JSON::Serializable
 
