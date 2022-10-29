@@ -16,7 +16,7 @@ struct Blockfrost::Utils
       Client.post(
         "/utils/txs/evaluate",
         body: data,
-        content_type: ContentType::CBOR
+        content_type: "application/cbor"
       )
     )
   end

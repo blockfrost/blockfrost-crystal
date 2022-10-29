@@ -16,7 +16,7 @@ module Blockfrost::Client
   def post(
     resource : String,
     body : BodyData,
-    content_type : ContentType = ContentType::JSON
+    content_type : String = "application/json"
   ) : String
     perform_http_call(
       Method::POST,
@@ -31,7 +31,7 @@ module Blockfrost::Client
     path : String,
     body : BodyData? = nil,
     query : QueryData = QueryData.new,
-    content_type : ContentType = ContentType::JSON
+    content_type : String = "application/json"
   ) : String
     case method
     when Method::GET
@@ -68,7 +68,7 @@ module Blockfrost::Client
 
   private def headers(
     path : String,
-    content_type : ContentType
+    content_type : String
   ) : HTTP::Headers
     HTTP::Headers{
       "Accept"       => "application/json",

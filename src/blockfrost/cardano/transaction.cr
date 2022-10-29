@@ -118,7 +118,7 @@ struct Blockfrost::Transaction
       Client.post(
         "tx/submit",
         body: data,
-        content_type: ContentType::CBOR
+        content_type: "application/cbor"
       )
     )
   end

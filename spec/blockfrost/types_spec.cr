@@ -18,13 +18,4 @@ describe Blockfrost do
       end
     end
   end
-
-  describe Blockfrost::ContentType do
-    describe "#to_s" do
-      it "converts enum values to content type strings" do
-        Blockfrost::ContentType::JSON.to_s.should eq("application/json")
-        Blockfrost::ContentType::CBOR.to_s.should eq("application/cbor")
-      end
-    end
-  end
 end

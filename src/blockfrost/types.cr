@@ -9,13 +9,4 @@ module Blockfrost
     ASC,
     DESC,
   }, downcase)
-
-  enum ContentType
-    JSON
-    CBOR
-
-    def to_s
-      "application/#{super.downcase}"
-    end
-  end
 end
