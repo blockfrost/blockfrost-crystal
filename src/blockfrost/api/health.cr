@@ -24,8 +24,8 @@ struct Blockfrost::Health
     get.is_healthy
   end
 
-  # This endpoint provides the current UNIX time. Your application might use
-  # this to verify if the client clock is not out of sync.
+  # This endpoint provides the current time. Your application might use this to
+  # verify if the client clock is not out of sync.
   #
   # ```
   # Blockfrost::Health.clock.server_time
