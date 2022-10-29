@@ -67,8 +67,8 @@ end
 ```
 
 Every endpoint of the [Blockfrost API](https://docs.blockfrost.io/) is covered
-by this library. It's too much to cover them all here, but below are a few
-examples of its usage.
+by this library. It's too much to list them all here, but below are a few
+examples of their usage.
 
 ### Single resources
 
