@@ -9,6 +9,12 @@ describe Blockfrost::Block do
     it "fetches the block for a given hash" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/blocks/5ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a")
+        .with(
+          headers: {
+            "Accept"       => "application/json",
+            "Content-Type" => "application/json",
+            "project_id"   => test_cardano_api_key,
+          })
         .to_return(body_io: read_fixture("block/block.200.json"))
 
       Blockfrost::Block.get("5ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a")
