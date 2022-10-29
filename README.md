@@ -1,6 +1,7 @@
 ![GitHub](https://img.shields.io/github/license/wout/blockfrost-crystal)
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/wout/blockfrost-crystal)
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/wout/blockfrost-crystal/blockfrost-crystal%20CI)
+<a href="https://fivebinaries.com/"><img src="https://img.shields.io/badge/made%20by-Five%20Binaries-darkviolet.svg?style=flat-square" /></a>
 
 <img src="https://blockfrost.io/images/logo.svg"
        width="250"
