@@ -49,6 +49,10 @@ epochs = Blockfrost::Epoch.all
 
 TODO: Write usage instructions here
 
+## Documentation
+
+[API (main)](https://wout.github.io/blockfrost-crystal/)
+
 ## Development
 
 TODO: Write development instructions here
