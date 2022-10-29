@@ -9,14 +9,14 @@ struct Blockfrost::Metadata
 
   Blockfrost.gets_all_with_order_and_pagination(
     :label_json_content,
-    Array(JsonContent),
+    Array(ContentJSON),
     "metadata/txs/labels/#{label}",
     label : String
   )
 
   Blockfrost.gets_all_with_order_and_pagination(
     :label_cbor_content,
-    Array(CborContent),
+    Array(ContentCBOR),
     "metadata/txs/labels/#{label}/cbor",
     label : String
   )
@@ -30,14 +30,14 @@ struct Blockfrost::Metadata
     getter count : Int64
   end
 
-  struct JsonContent
+  struct ContentJSON
     include JSON::Serializable
 
     getter tx_hash : String
     getter json_metadata : JSON::Any
   end
 
-  struct CborContent
+  struct ContentCBOR
     include JSON::Serializable
 
     getter tx_hash : String
