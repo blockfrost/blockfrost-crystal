@@ -60,7 +60,9 @@ block_hash = "4ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a"
 block = Blockfrost::Block.get(block_hash)
 ```
 
-Then get the transaction ids of it:
+### Nested resources
+
+To get the transaction ids of a loaded block:
 
 ```crystal
 block.tx_ids
@@ -75,7 +77,16 @@ Blockfrost::Block.tx_ids(block_hash)
 This pattern is used throughout the library. There will always be a class method
 and a corresponding instance method for nested resources.
 
-### Collections
+Some nested resources have an additional scope parameter, like the utxos of an
+asset of an address:
+
+```crystal
+address = "addr1qxqs59lphg8g6qndelq8xwqn60ag3aeyfcp33c2kdp46a09re5df3pzwwmyq..."
+asset = "b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb38a76e7574636f696e"
+utxos = Blockfrost::Address.utxos_of_asset(address, asset)
+```
+
+### Collections, ordering and pagination
 
 Get all assets:
 
@@ -103,6 +114,13 @@ assets = Blockfrost::Asset.all(
   count: 20,
   page: 1
 )
+```
+
+Some endpoints don't have an order parameter, like `.previous`/`next` on blocks:
+
+```crystal
+block_height = 15243592
+Blockfrost::Block.get(block_height).next(count: 5, page: 2)
 ```
 
 The `transactions` method for addresses exceptionally accepts two additional
