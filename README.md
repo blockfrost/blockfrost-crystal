@@ -216,6 +216,38 @@ result.state
 # => Blockfrost::IPFS::Pin::State::Unpinned
 ```
 
+## Exception handling
+
+All exceptions from the Blockfrost API can be caught with:
+
+```crystal
+begin
+  # do something
+rescue e : Blockfrost::RequestException
+  puts e.message
+end
+```
+
+Or more specifically:
+
+```crystal
+begin
+  # do something
+rescue e : Blockfrost::Client::BadRequest
+  puts "it's a 400"
+rescue e : Blockfrost::Client::Forbidden
+  puts "it's a 403"
+rescue e : Blockfrost::Client::NotFound
+  puts "it's a 404"
+rescue e : Blockfrost::Client::IpBanned
+  puts "it's a 418"
+rescue e : Blockfrost::Client::OverLimit
+  puts "it's a 429"
+rescue e : Blockfrost::Client::ServerError
+  puts "it's a 500"
+end
+```
+
 ## Documentation
 
 - [API (main)](https://wout.github.io/blockfrost-crystal/)
