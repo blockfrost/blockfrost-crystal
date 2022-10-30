@@ -240,9 +240,13 @@ This will automatically:
 
 1. Fork it (<https://github.com/wout/blockfrost-crystal/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
+3. Commit your changes (`git commit -am 'feat: something new'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
+
+**NOTE**: Please have a look at
+[conventionalcommits](https://www.conventionalcommits.org/en/v1.0.0/) for commit
+messages.
 
 ## Contributors
 
