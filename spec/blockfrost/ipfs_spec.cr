@@ -39,18 +39,18 @@ describe Blockfrost::IPFS do
           "Content-Type" => "application/json",
           "project_id"   => test_ipfs_api_key,
         })
-        .to_return(body_io: read_fixture("ipfs/pin.200.json"))
+        .to_return(body_io: read_fixture("ipfs/add-pin.200.json"))
 
       pinned = Blockfrost::IPFS::Pin.add(test_ipfs_path)
       pinned.ipfs_hash.should eq(test_ipfs_path)
-      pinned.state.should eq(Blockfrost::IPFS::Pinning::State::Queued)
+      pinned.state.should eq(Blockfrost::IPFS::Pin::State::Queued)
     end
   end
 
   describe "::Pin.all" do
     it "lists objects pinned to local storage" do
       WebMock.stub(:get, "https://ipfs.blockfrost.io/api/v0/ipfs/pin/list")
-        .to_return(body_io: read_fixture("ipfs/all.200.json"))
+        .to_return(body_io: read_fixture("ipfs/all-pins.200.json"))
 
       pin = Blockfrost::IPFS::Pin.all.first
       pin.time_created.should eq(Time.unix(1615551024))
@@ -63,7 +63,7 @@ describe Blockfrost::IPFS do
     it "accepts ordering and pagination parameters" do
       WebMock.stub(:get,
         "https://ipfs.blockfrost.io/api/v0/ipfs/pin/list?order=desc&count=10&page=2")
-        .to_return(body_io: read_fixture("ipfs/all.200.json"))
+        .to_return(body_io: read_fixture("ipfs/all-pins.200.json"))
 
       Blockfrost::IPFS::Pin.all("desc", 10, 2)
         .should be_a(Array(Blockfrost::IPFS::Pin))
@@ -74,10 +74,28 @@ describe Blockfrost::IPFS do
     it "gets information about a locally pinned IPFS object" do
       WebMock.stub(:get,
         "https://ipfs.blockfrost.io/api/v0/ipfs/pin/list/#{test_ipfs_path}")
-        .to_return(body_io: read_fixture("ipfs/get.200.json"))
+        .to_return(body_io: read_fixture("ipfs/get-pin.200.json"))
 
       Blockfrost::IPFS::Pin.get(test_ipfs_path)
         .should be_a(Blockfrost::IPFS::Pin)
+    end
+  end
+
+  describe "::Pin.remove" do
+    it "removes pinned objects from local storage" do
+      WebMock.stub(:post,
+        "https://ipfs.blockfrost.io/api/v0/ipfs/pin/remove/#{test_ipfs_path}")
+        .with(body: "", headers: {
+          "Accept"       => "application/json",
+          "Content-Type" => "application/json",
+          "project_id"   => test_ipfs_api_key,
+        })
+        .to_return(body_io: read_fixture("ipfs/remove-pin.200.json"))
+
+      unpin = Blockfrost::IPFS::Pin.remove(test_ipfs_path)
+      unpin.should be_a(Blockfrost::IPFS::Pin::Change)
+      unpin.ipfs_hash.should eq(test_ipfs_path)
+      unpin.state.should eq(Blockfrost::IPFS::Pin::State::Unpinned)
     end
   end
 end

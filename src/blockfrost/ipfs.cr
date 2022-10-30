@@ -23,7 +23,18 @@ module Blockfrost::IPFS
     String.from_json(Client.get("ipfs/gateway/#{ipfs_path}"))
   end
 
-  module PinFields
+  struct Object
+    include JSON::Serializable
+
+    getter name : String
+    getter ipfs_hash : String
+    @[JSON::Field(converter: Blockfrost::Int64FromString)]
+    getter size : Int64
+  end
+
+  struct Pin
+    include JSON::Serializable
+
     Blockfrost.enum_castable_from_string(State, {
       Queued,
       Pinned,
@@ -34,26 +45,6 @@ module Blockfrost::IPFS
 
     getter ipfs_hash : String
     getter state : State
-  end
-
-  struct Object
-    include JSON::Serializable
-
-    getter name : String
-    getter ipfs_hash : String
-    @[JSON::Field(converter: Blockfrost::Int64FromString)]
-    getter size : Int64
-  end
-
-  struct Pinning
-    include JSON::Serializable
-    include PinFields
-  end
-
-  struct Pin
-    include JSON::Serializable
-    include PinFields
-
     @[JSON::Field(converter: Blockfrost::TimeFromInt)]
     getter time_created : Time
     @[JSON::Field(converter: Blockfrost::TimeFromInt)]
@@ -62,7 +53,11 @@ module Blockfrost::IPFS
     getter size : Int64
 
     def self.add(ipfs_path : String)
-      Pinning.from_json(Client.post("ipfs/pin/add/#{ipfs_path}", ""))
+      Change.from_json(Client.post("ipfs/pin/add/#{ipfs_path}", ""))
+    end
+
+    def self.remove(ipfs_path : String)
+      Change.from_json(Client.post("ipfs/pin/remove/#{ipfs_path}", ""))
     end
 
     def self.get(ipfs_path : String)
@@ -74,5 +69,12 @@ module Blockfrost::IPFS
       Array(Pin),
       "ipfs/pin/list"
     )
+
+    struct Change
+      include JSON::Serializable
+
+      getter ipfs_hash : String
+      getter state : State
+    end
   end
 end
