@@ -36,7 +36,7 @@ key.
 
   ```yaml
   dependencies:
-    blockfrost:
+    blockfrost-crystal:
       github: wout/blockfrost-crystal
   ```
 
