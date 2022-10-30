@@ -98,6 +98,25 @@ describe Blockfrost::IPFS do
       unpin.state.should eq(Blockfrost::IPFS::Pin::State::Unpinned)
     end
   end
+
+  describe "::Pin#remove" do
+    it "removes the current from local storage" do
+      WebMock.stub(:get,
+        "https://ipfs.blockfrost.io/api/v0/ipfs/pin/list/#{test_ipfs_path}")
+        .to_return(body_io: read_fixture("ipfs/get-pin.200.json"))
+      WebMock.stub(:post,
+        "https://ipfs.blockfrost.io/api/v0/ipfs/pin/remove/#{test_ipfs_path}")
+        .with(body: "", headers: {
+          "Accept"       => "application/json",
+          "Content-Type" => "application/json",
+          "project_id"   => test_ipfs_api_key,
+        })
+        .to_return(body_io: read_fixture("ipfs/remove-pin.200.json"))
+
+      Blockfrost::IPFS::Pin.get(test_ipfs_path).remove
+        .should be_a(Blockfrost::IPFS::Pin::Change)
+    end
+  end
 end
 
 private def test_ipfs_path

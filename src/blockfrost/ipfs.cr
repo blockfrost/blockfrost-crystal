@@ -60,6 +60,10 @@ module Blockfrost::IPFS
       Change.from_json(Client.post("ipfs/pin/remove/#{ipfs_path}", ""))
     end
 
+    def remove
+      self.class.remove(ipfs_hash)
+    end
+
     def self.get(ipfs_path : String)
       Pin.from_json(Client.get("ipfs/pin/list/#{ipfs_path}"))
     end
