@@ -23,8 +23,21 @@ module Blockfrost::IPFS
     String.from_json(Client.get("ipfs/gateway/#{ipfs_path}"))
   end
 
-  def self.pin(ipfs_path : String)
-    Pin.from_json(Client.post("ipfs/pin/add/#{ipfs_path}", ""))
+  def self.pin!(ipfs_path : String)
+    Pinning.from_json(Client.post("ipfs/pin/add/#{ipfs_path}", ""))
+  end
+
+  module PinFields
+    Blockfrost.enum_castable_from_string(State, {
+      Queued,
+      Pinned,
+      Unpinned,
+      Failed,
+      Gc,
+    })
+
+    getter ipfs_hash : String
+    getter state : State
   end
 
   struct Object
@@ -36,18 +49,26 @@ module Blockfrost::IPFS
     getter size : Int64
   end
 
+  struct Pinning
+    include JSON::Serializable
+    include PinFields
+  end
+
   struct Pin
     include JSON::Serializable
+    include PinFields
 
-    Blockfrost.enum_castable_from_string(State, {
-      Queued,
-      Pinned,
-      Unpinned,
-      Failed,
-      Gc,
-    })
+    @[JSON::Field(converter: Blockfrost::TimeFromInt)]
+    getter time_created : Time
+    @[JSON::Field(converter: Blockfrost::TimeFromInt)]
+    getter time_pinned : Time
+    @[JSON::Field(converter: Blockfrost::Int64FromString)]
+    getter size : Int64
 
-    getter ipfs_hash : String
-    getter state : State
+    Blockfrost.gets_all_with_order_and_pagination(
+      :all,
+      Array(Pin),
+      "ipfs/pin/list"
+    )
   end
 end

@@ -30,7 +30,7 @@ describe Blockfrost::IPFS do
     end
   end
 
-  describe ".pin" do
+  describe ".pin!" do
     it "pins an object" do
       WebMock.stub(:post,
         "https://ipfs.blockfrost.io/api/v0/ipfs/pin/add/#{test_ipfs_path}")
@@ -41,9 +41,32 @@ describe Blockfrost::IPFS do
         })
         .to_return(body_io: read_fixture("ipfs/pin.200.json"))
 
-      pinned = Blockfrost::IPFS.pin(test_ipfs_path)
+      pinned = Blockfrost::IPFS.pin!(test_ipfs_path)
       pinned.ipfs_hash.should eq(test_ipfs_path)
-      pinned.state.should eq(Blockfrost::IPFS::Pin::State::Queued)
+      pinned.state.should eq(Blockfrost::IPFS::Pinning::State::Queued)
+    end
+  end
+
+  describe "::Pin.all" do
+    it "lists objects pinned to local storage" do
+      WebMock.stub(:get, "https://ipfs.blockfrost.io/api/v0/ipfs/pin/list")
+        .to_return(body_io: read_fixture("ipfs/all.200.json"))
+
+      pin = Blockfrost::IPFS::Pin.all.first
+      pin.time_created.should eq(Time.unix(1615551024))
+      pin.time_pinned.should eq(Time.unix(1615551024))
+      pin.ipfs_hash.should eq("QmdVMnULrY95mth2XkwjxDtMHvzuzmvUPTotKE1tgqKbCx")
+      pin.size.should eq(1615551024)
+      pin.state.should eq(Blockfrost::IPFS::Pin::State::Pinned)
+    end
+
+    it "accepts ordering and pagination parameters" do
+      WebMock.stub(:get,
+        "https://ipfs.blockfrost.io/api/v0/ipfs/pin/list?order=desc&count=10&page=2")
+        .to_return(body_io: read_fixture("ipfs/all.200.json"))
+
+      Blockfrost::IPFS::Pin.all("desc", 10, 2)
+        .should be_a(Array(Blockfrost::IPFS::Pin))
     end
   end
 end
