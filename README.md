@@ -218,8 +218,8 @@ result.state
 
 ## Documentation
 
-[API (main)](https://wout.github.io/blockfrost-crystal/)
-[Blockfrost API](https://docs.blockfrost.io/)
+- [API (main)](https://wout.github.io/blockfrost-crystal/)
+- [Blockfrost API](https://docs.blockfrost.io/)
 
 ## Development
 
