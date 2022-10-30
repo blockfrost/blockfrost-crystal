@@ -30,7 +30,7 @@ describe Blockfrost::IPFS do
     end
   end
 
-  describe ".pin!" do
+  describe "::Pin.add" do
     it "pins an object" do
       WebMock.stub(:post,
         "https://ipfs.blockfrost.io/api/v0/ipfs/pin/add/#{test_ipfs_path}")
@@ -41,7 +41,7 @@ describe Blockfrost::IPFS do
         })
         .to_return(body_io: read_fixture("ipfs/pin.200.json"))
 
-      pinned = Blockfrost::IPFS.pin!(test_ipfs_path)
+      pinned = Blockfrost::IPFS::Pin.add(test_ipfs_path)
       pinned.ipfs_hash.should eq(test_ipfs_path)
       pinned.state.should eq(Blockfrost::IPFS::Pinning::State::Queued)
     end
@@ -67,6 +67,17 @@ describe Blockfrost::IPFS do
 
       Blockfrost::IPFS::Pin.all("desc", 10, 2)
         .should be_a(Array(Blockfrost::IPFS::Pin))
+    end
+  end
+
+  describe "::Pin.get" do
+    it "gets information about a locally pinned IPFS object" do
+      WebMock.stub(:get,
+        "https://ipfs.blockfrost.io/api/v0/ipfs/pin/list/#{test_ipfs_path}")
+        .to_return(body_io: read_fixture("ipfs/get.200.json"))
+
+      Blockfrost::IPFS::Pin.get(test_ipfs_path)
+        .should be_a(Blockfrost::IPFS::Pin)
     end
   end
 end

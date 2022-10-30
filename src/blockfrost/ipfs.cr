@@ -23,10 +23,6 @@ module Blockfrost::IPFS
     String.from_json(Client.get("ipfs/gateway/#{ipfs_path}"))
   end
 
-  def self.pin!(ipfs_path : String)
-    Pinning.from_json(Client.post("ipfs/pin/add/#{ipfs_path}", ""))
-  end
-
   module PinFields
     Blockfrost.enum_castable_from_string(State, {
       Queued,
@@ -64,6 +60,14 @@ module Blockfrost::IPFS
     getter time_pinned : Time
     @[JSON::Field(converter: Blockfrost::Int64FromString)]
     getter size : Int64
+
+    def self.add(ipfs_path : String)
+      Pinning.from_json(Client.post("ipfs/pin/add/#{ipfs_path}", ""))
+    end
+
+    def self.get(ipfs_path : String)
+      Pin.from_json(Client.get("ipfs/pin/list/#{ipfs_path}"))
+    end
 
     Blockfrost.gets_all_with_order_and_pagination(
       :all,
