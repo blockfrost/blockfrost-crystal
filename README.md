@@ -173,9 +173,53 @@ Blockfrost::Transaction.submit(tx_data)
 # => "d1662b24fa9fe985fc2dce47455df399cb2e31e1e1819339e885801cc3578908"
 ```
 
+### IPFS endpoints
+
+Add an object to IPFS:
+
+```crystal
+object = Blockfrost::IPFS.add("path/to/file")
+```
+
+Pin an object to local storage:
+
+```crystal
+result = object.pin
+result.state
+# => Blockfrost::IPFS::Pin::State::Queued
+```
+
+Or alternatively (and the same):
+
+```crystal
+Blockfrost::IPFS::Pin.add(object.ipfs_hash)
+```
+
+To get all pinned objects:
+
+```crystal
+Blockfrost::IPFS::Pin.all
+```
+
+Finally, to remove a pin:
+
+```crystal
+Blockfrost::IPFS::Pin.remove(ipfs_hash)
+```
+
+As expected the instance method is also available on a pin:
+
+```crystal
+pin = Blockfrost::IPFS::Pin.get(ipfs_hash)
+result = pin.remove
+result.state
+# => Blockfrost::IPFS::Pin::State::Unpinned
+```
+
 ## Documentation
 
 [API (main)](https://wout.github.io/blockfrost-crystal/)
+[Blockfrost API](https://docs.blockfrost.io/)
 
 ## Development
 
