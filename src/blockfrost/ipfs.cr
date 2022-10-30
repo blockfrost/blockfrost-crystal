@@ -30,6 +30,10 @@ module Blockfrost::IPFS
     getter ipfs_hash : String
     @[JSON::Field(converter: Blockfrost::Int64FromString)]
     getter size : Int64
+
+    def pin
+      Pin.add(ipfs_hash)
+    end
   end
 
   struct Pin

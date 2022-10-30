@@ -15,7 +15,13 @@ describe Blockfrost::IPFS do
         })
         .to_return(body_io: read_fixture("ipfs/add.200.json"))
 
-      Blockfrost::IPFS.add("spec/fixtures/ipfs/README.md")
+      object = Blockfrost::IPFS.add("spec/fixtures/ipfs/README.md")
+      object.should be_a(Blockfrost::IPFS::Object)
+      object.name.should eq("README.md")
+      object.ipfs_hash.should eq(
+        "QmPojRfAXYAXV92Dof7gtSgaVuxEk64xx9CKvprqu9VwA8"
+      )
+      object.size.should eq(125297)
     end
   end
 
@@ -27,6 +33,19 @@ describe Blockfrost::IPFS do
 
       Blockfrost::IPFS.gateway(test_ipfs_path)
         .should eq("ipfs.blockfrost.dev")
+    end
+  end
+
+  describe "::Object#pin" do
+    it "pins an object" do
+      WebMock.stub(:post, "https://ipfs.blockfrost.io/api/v0/ipfs/add")
+        .to_return(body_io: read_fixture("ipfs/add.200.json"))
+      WebMock.stub(:post,
+        "https://ipfs.blockfrost.io/api/v0/ipfs/pin/add/#{test_ipfs_path}")
+        .to_return(body_io: read_fixture("ipfs/add-pin.200.json"))
+
+      object = Blockfrost::IPFS.add("spec/fixtures/ipfs/README.md")
+      object.pin.should be_a(Blockfrost::IPFS::Pin::Change)
     end
   end
 
