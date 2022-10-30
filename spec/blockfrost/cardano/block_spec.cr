@@ -13,6 +13,7 @@ describe Blockfrost::Block do
           headers: {
             "Accept"       => "application/json",
             "Content-Type" => "application/json",
+            "User-Agent"   => "blockfrost-crystal/#{Blockfrost::VERSION} crystal/#{Crystal::VERSION}",
             "project_id"   => test_cardano_api_key,
           })
         .to_return(body_io: read_fixture("block/block.200.json"))

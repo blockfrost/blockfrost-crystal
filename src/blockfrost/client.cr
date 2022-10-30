@@ -73,6 +73,7 @@ module Blockfrost::Client
     HTTP::Headers{
       "Accept"       => "application/json",
       "Content-Type" => content_type.to_s,
+      "User-Agent"   => sdk_version_string,
       "project_id"   => Blockfrost.api_key_for_path(path),
     }
   end
@@ -94,5 +95,9 @@ module Blockfrost::Client
         raise response.body
       end
     {% end %}
+  end
+
+  private def sdk_version_string
+    "blockfrost-crystal/#{Blockfrost::VERSION} crystal/#{Crystal::VERSION}"
   end
 end
