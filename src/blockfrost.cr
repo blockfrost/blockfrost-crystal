@@ -1,3 +1,4 @@
+require "http"
 require "json"
 require "habitat"
 require "./blockfrost/settings"
