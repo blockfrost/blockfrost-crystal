@@ -61,7 +61,7 @@ end
 Or wrap your code in a block where different credentials are required:
  
 ```crystal
-Blockfrost.temp_config(cardano_api_key: "testnetAbC...xYz") do
+Blockfrost.temp_config(cardano_api_key: "preprodAbC...xYz") do
   # your code here
 end
 ```
@@ -216,7 +216,40 @@ result.state
 # => Blockfrost::IPFS::Pin::State::Unpinned
 ```
 
-## Exception handling
+### Network selection
+
+The Cardano network is selected based on the API key. If the configured API key starts with `preprod...`, then the **preprod** network will be used.
+
+There are a few helper methods available to verify which network is selected.
+For example, to get the current network:
+
+```crystal
+Blockfrost.configure do |config|
+  config.cardano_api_key = "preprodsSDBoik1wn1NxxhB8GB0Bcv7LuarFAKE"
+end
+
+puts Blockfrost.cardano_network
+# => "preprod"
+```
+
+Additionally, there are also methods to test the current network:
+
+```crystal
+Blockfrost.cardano_mainnet?
+# => false
+Blockfrost.cardano_preprod?
+# => true
+
+Blockfrost.temp_config(cardano_api_key: "mainnetsSDBoik1wn1NxxhB8GB0Bcv7LuarFAKE") do
+  Blockfrost.cardano_mainnet?
+  # => true
+end
+
+Blockfrost.cardano_mainnet?
+# => false
+```
+
+### Exception handling
 
 All exceptions from the Blockfrost API can be caught with:
 
