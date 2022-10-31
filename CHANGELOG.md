@@ -1,22 +1,23 @@
 # Changelog
+[keepachangelog.com](https://keepachangelog.com/en/0.3.0/)
 
-## 0.3.0 (?)
+## 0.3.0 (Unreleased)
 
-- Add `User-Agent` request header (e.g. `blockfrost-crystal/0.3.0 crystal/1.6.0`)
-- Add global `default_order` setting for collections 
-- Add global `default_count_per_page` setting for collections
-- Add CHANGELOG
-- Change query param sanitizer to limit `page` and `count` values within their
+- Added `User-Agent` request header (`blockfrost-crystal/0.3.0 crystal/1.6.0`)
+- Added global `default_order` setting for collections 
+- Added global `default_count_per_page` setting for collections
+- Added CHANGELOG
+- Changed query param sanitizer to limit `page` and `count` values within their
   respective ranges
 
 ## 0.2.1 (2022-10-30)
 
-- Fix issue with missing `http` lib
+- Fixed issue with missing `http` lib
 
 ## 0.2.0 (2022-10-30)
 
-- Add IPFS endpoints
-- Change shard name from `blockfrost-crystal` to `blockfrost`
+- Added IPFS endpoints
+- Changed shard name from `blockfrost-crystal` to `blockfrost`
 
 ## 0.1.0 (2022-10-29)
 
