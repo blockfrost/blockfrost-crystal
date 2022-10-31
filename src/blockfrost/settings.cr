@@ -99,7 +99,27 @@ module Blockfrost
 
     def validate_api_version(value : String)
       value.match(/^v\d+$/) ||
-        Habitat.raise_validation_error("API version is invalid")
+        Habitat.raise_validation_error(
+          "API version is invalid (e.g. v0)"
+        )
+    end
+
+    def validate_order(value : QueryOrder | String?)
+      return unless order = value
+
+      %w[asc desc].includes?(value.to_s) ||
+        Habitat.raise_validation_error(
+          "Default order is invalid (either asc or desc)"
+        )
+    end
+
+    def validate_count_per_page(value : Int32?)
+      return unless count = value
+
+      (1..MAX_COUNT_PER_PAGE).includes?(count) ||
+        Habitat.raise_validation_error(
+          "Default count per page is invalid (min 1 and max 100)"
+        )
     end
   {% end %}
 end
