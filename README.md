@@ -248,7 +248,7 @@ Blockfrost.cardano_network
 # => "preprod"
 ```
 
-Additionally, there are also methods to test the current network:
+Additionally, there are also methods to test against the current network:
 
 ```crystal
 Blockfrost.cardano_mainnet?
