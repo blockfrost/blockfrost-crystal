@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.0 (2022-10-31)
+## 0.3.0 (?)
 
 - Add `User-Agent` request header (e.g. `blockfrost-crystal/0.3.0 crystal/1.6.0`)
 - Add global `default_order` setting for collections 
