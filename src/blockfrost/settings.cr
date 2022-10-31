@@ -35,6 +35,8 @@ module Blockfrost
         validation: :validate_ipfs_api_key
       setting ipfs_api_version : String = "v0",
         validation: :validate_api_version
+      setting default_order : QueryOrder?
+      setting default_count_per_page : Int32?
     end
 
     def host_for_path(

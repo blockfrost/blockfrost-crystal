@@ -164,4 +164,28 @@ describe Blockfrost do
       Blockfrost.api_version_for_path("ipfs/gateway/QmZbHqiC").should eq("v1")
     end
   end
+
+  describe ".default_order" do
+    it "globally configures a default sort order" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/pools?order=desc")
+        .to_return(body_io: read_fixture("pool/all_ids.200.json"))
+
+      Blockfrost.temp_config(default_order: Blockfrost::QueryOrder::DESC) do
+        Blockfrost::Pool.all_ids
+      end
+    end
+  end
+
+  describe ".default_count_per_page" do
+    it "globally configures a default count per page" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/pools?count=42")
+        .to_return(body_io: read_fixture("pool/all_ids.200.json"))
+
+      Blockfrost.temp_config(default_count_per_page: 42) do
+        Blockfrost::Pool.all_ids
+      end
+    end
+  end
 end

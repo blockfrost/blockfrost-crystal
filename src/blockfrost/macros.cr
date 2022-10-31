@@ -32,7 +32,7 @@ module Blockfrost
     )
       {{return_type}}.from_json(
         Client.get({{resource_path}}, {
-          "count" => count,
+          "count" => count || Blockfrost.settings.default_count_per_page,
           "page" => page
         })
       )
@@ -58,7 +58,7 @@ module Blockfrost
     )
       {{return_type}}.from_json(
         Client.get({{resource_path}}, {
-          "count" => count,
+          "count" => count || Blockfrost.settings.default_count_per_page,
           "page" => page
         })
       )
@@ -92,8 +92,8 @@ module Blockfrost
     )
       {{return_type}}.from_json(
         Client.get({{resource_path}}, {
-          "order" => order.try(&.to_s),
-          "count" => count,
+          "order" => (order || Blockfrost.settings.default_order).try(&.to_s),
+          "count" => count || Blockfrost.settings.default_count_per_page,
           "page"  => page,
         })
       )
@@ -140,8 +140,8 @@ module Blockfrost
     )
       {{return_type}}.from_json(
         Client.get({{resource_path}}, {
-          "order" => order.try(&.to_s),
-          "count" => count,
+          "order" => (order || Blockfrost.settings.default_order).try(&.to_s),
+          "count" => count || Blockfrost.settings.default_count_per_page,
           "page"  => page,
         })
       )
@@ -195,8 +195,8 @@ module Blockfrost
     )
       {{return_type}}.from_json(
         Client.get({{resource_path}}, {
-          "order" => order.try(&.to_s),
-          "count" => count,
+          "order" => (order || Blockfrost.settings.default_order).try(&.to_s),
+          "count" => count || Blockfrost.settings.default_count_per_page,
           "page"  => page,
           "from"  => from,
           "to"    => to,

@@ -22,9 +22,9 @@
 
 ## Getting started
 
-To use this SDK, you first need login into to
-[blockfrost.io](https://blockfrost.io) create your project to retrieve your API
-key.
+To use this SDK, you first need to log in to
+[blockfrost.io](https://blockfrost.io) to create your project to retrieve your
+API key.
 
 <img src="https://i.imgur.com/smY12ro.png">
 
@@ -163,6 +163,16 @@ Blockfrost::Address.transactions(
 )
 ```
 
+Ordering and count per page can also be configured with the following two
+settings:
+
+```crystal
+Blockfrost.configure do |config|
+  config.default_order = Blockfrost::QueryOrder::DESC
+  config.default_count_per_page = 42
+end
+```
+
 ### Post endpoints
 
 Submit an already serialized transaction to the network:
@@ -228,7 +238,7 @@ Blockfrost.configure do |config|
   config.cardano_api_key = "preprodsSDBoik1wn1NxxhB8GB0Bcv7LuarFAKE"
 end
 
-puts Blockfrost.cardano_network
+Blockfrost.cardano_network
 # => "preprod"
 ```
 
