@@ -27,8 +27,8 @@ module Blockfrost
   )
     def self.{{method_name.id}}(
       {{argument_type_declaration}},
-      count : QueryCount? = nil,
-      page : QueryPage? = nil
+      count : Int32? = nil,
+      page : Int32? = nil
     )
       {{return_type}}.from_json(
         Client.get({{resource_path}}, {
@@ -53,8 +53,8 @@ module Blockfrost
     def self.{{method_name.id}}(
       {{argument_type_declaration}},
       {{scope_argument_type_declaration}},
-      count : QueryCount? = nil,
-      page : QueryPage? = nil
+      count : Int32? = nil,
+      page : Int32? = nil
     )
       {{return_type}}.from_json(
         Client.get({{resource_path}}, {
@@ -87,8 +87,8 @@ module Blockfrost
         {{argument_type_declaration}},
       {% end %}
       order : QueryOrder? = nil,
-      count : QueryCount? = nil,
-      page : QueryPage? = nil
+      count : Int32? = nil,
+      page : Int32? = nil
     )
       {{return_type}}.from_json(
         Client.get({{resource_path}}, {
@@ -104,8 +104,8 @@ module Blockfrost
         {{argument_type_declaration}},
       {% end %}
       order : String,
-      count : QueryCount? = nil,
-      page : QueryPage? = nil
+      count : Int32? = nil,
+      page : Int32? = nil
     )
       {{method_name.id}}(
         {% unless argument_type_declaration.nil? %}
@@ -135,8 +135,8 @@ module Blockfrost
       {{argument_type_declaration}},
       {{scope_argument_type_declaration}},
       order : QueryOrder? = nil,
-      count : QueryCount? = nil,
-      page : QueryPage? = nil
+      count : Int32? = nil,
+      page : Int32? = nil
     )
       {{return_type}}.from_json(
         Client.get({{resource_path}}, {
@@ -151,8 +151,8 @@ module Blockfrost
       {{argument_type_declaration}},
       {{scope_argument_type_declaration}},
       order : String,
-      count : QueryCount? = nil,
-      page : QueryPage? = nil
+      count : Int32? = nil,
+      page : Int32? = nil
     )
       {{method_name.id}}(
         {{argument_type_declaration.var}},
@@ -188,8 +188,8 @@ module Blockfrost
         {{argument_type_declaration}},
       {% end %}
       order : QueryOrder? = nil,
-      count : QueryCount? = nil,
-      page : QueryPage? = nil,
+      count : Int32? = nil,
+      page : Int32? = nil,
       from : String? = nil,
       to : String? = nil
     )
@@ -209,8 +209,8 @@ module Blockfrost
         {{argument_type_declaration}},
       {% end %}
       order : String,
-      count : QueryCount? = nil,
-      page : QueryPage? = nil,
+      count : Int32? = nil,
+      page : Int32? = nil,
       from : String? = nil,
       to : String? = nil
     )

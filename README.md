@@ -130,6 +130,9 @@ assets = Blockfrost::Asset.all(
 )
 ```
 
+**NOTE**: The `count` parameter should be a value between `1` and `100`. Lower
+or higher values will be coerced to fit with that range.
+
 The `order` parameter is converted to an enum in the background, so the 
 underlying enum values are also accepted:
 
@@ -168,7 +171,10 @@ settings:
 
 ```crystal
 Blockfrost.configure do |config|
+  # Blockfrost::QueryOrder::ASC or Blockfrost::QueryOrder::DESC
   config.default_order = Blockfrost::QueryOrder::DESC
+
+  # minimum 1 and maximum 100
   config.default_count_per_page = 42
 end
 ```

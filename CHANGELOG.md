@@ -6,6 +6,8 @@
 - Add global `default_order` setting for collections 
 - Add global `default_count_per_page` setting for collections
 - Add CHANGELOG
+- Change query param sanitizer to limit `page` and `count` values within their
+  respective ranges
 
 ## 0.2.1 (2022-10-30)
 
@@ -14,7 +16,7 @@
 ## 0.2.0 (2022-10-30)
 
 - Add IPFS endpoints
-- Change shard name form `blockfrost-crystal` to `blockfrost`
+- Change shard name from `blockfrost-crystal` to `blockfrost`
 
 ## 0.1.0 (2022-10-29)
 

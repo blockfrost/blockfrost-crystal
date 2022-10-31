@@ -22,6 +22,11 @@ end
 module Blockfrost
   extend self
 
+  MAX_PAGES                        = 21_474_836
+  MAX_COUNT_PER_PAGE               =        100
+  MAX_NUMBER_OF_PARALLEL_REQUESTS  =        200
+  MAX_RETRIES_IN_PARALLEL_REQUESTS =         10
+
   {% begin %}
     {% cardano_networks = Blockfrost.annotation(Blockfrost::CardanoNetworks)
          .args.first.map(&.id) %}
@@ -35,8 +40,10 @@ module Blockfrost
         validation: :validate_ipfs_api_key
       setting ipfs_api_version : String = "v0",
         validation: :validate_api_version
-      setting default_order : QueryOrder?
-      setting default_count_per_page : Int32?
+      setting default_order : QueryOrder?,
+        validation: :validate_order
+      setting default_count_per_page : Int32?,
+        validation: :validate_count_per_page
     end
 
     def host_for_path(

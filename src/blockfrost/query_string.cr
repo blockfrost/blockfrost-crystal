@@ -12,6 +12,37 @@ struct Blockfrost::QueryString
   private def sanitize_raw_query(
     raw_query : QueryData
   ) : Hash(String, String)
-    raw_query.transform_values(&.to_s).reject { |_, v| v.blank? }
+    raw_query
+      .map { |k, v| sanitize_raw_pair(k, v) }
+      .to_h
+      .reject { |_, v| v.blank? }
+  end
+
+  private def sanitize_raw_pair(
+    key : String,
+    value : Int32
+  ) : Tuple(String, String)
+    case key
+    when "count"
+      {key, limit_upper_value(value, Blockfrost::MAX_COUNT_PER_PAGE).to_s}
+    when "page"
+      {key, limit_upper_value(value, Blockfrost::MAX_PAGES).to_s}
+    else
+      {key, value.to_s}
+    end
+  end
+
+  private def sanitize_raw_pair(
+    key : String,
+    value : String?
+  ) : Tuple(String, String)
+    {key, value.to_s}
+  end
+
+  private def limit_upper_value(
+    value : Int32,
+    limit : Int32
+  ) : Int32
+    {({1, value}.max), limit}.min
   end
 end
