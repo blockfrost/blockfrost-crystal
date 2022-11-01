@@ -9,6 +9,8 @@
 - Added CHANGELOG
 - Changed query param sanitizer to limit `page` and `count` values within their
   respective ranges
+- Added global `max_parallel_requests` setting
+- Added global `sleep_between_retries_ms` setting
 
 ## 0.2.1 (2022-10-30)
 
