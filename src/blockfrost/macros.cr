@@ -266,10 +266,8 @@ module Blockfrost
       end
     end
 
-    pages.each.with_index do |page, i|
-      spawn { fetch.call(0, page, i) }
-      channel.receive.tap {|r| results[r.first] = r.last }
-    end
+    pages.each.with_index { |page, i| spawn { fetch.call(0, page, i) } }
+    pages.each { channel.receive.tap {|r| results[r.first] = r.last } }
 
     !results.includes?(nil) ||
       raise Blockfrost::AccountLimitedException.new("Please, try again later")

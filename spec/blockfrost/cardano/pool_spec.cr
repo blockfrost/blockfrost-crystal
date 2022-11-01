@@ -35,15 +35,14 @@ describe Blockfrost::Pool do
     end
 
     it "raises if one of the endpoints fails because of rate limiting" do
+      body_429 = read_fixture("pool/all-ids.429.json").gets_to_end
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/pools?page=1")
-        .to_return(
-          body: read_fixture("pool/all-ids.429.json").gets_to_end,
-          status: 429)
+        .to_return(body_io: read_fixture("pool/all-ids-page-1.200.json"))
       2.upto(3).each do |p|
         WebMock.stub(:get,
           "https://cardano-testnet.blockfrost.io/api/v0/pools?page=#{p}")
-          .to_return(body_io: read_fixture("pool/all-ids-page-#{p}.200.json"))
+          .to_return(body: body_429, status: 429)
       end
 
       expect_raises(
