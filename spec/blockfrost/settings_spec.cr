@@ -2,20 +2,28 @@ require "../spec_helper"
 
 describe Blockfrost do
   describe ".settings" do
-    it "accepts a valid api key and api version" do
+    it "accepts valid api keys" do
       Blockfrost.configure do |settings|
         settings.cardano_api_key = test_cardano_api_key
-        settings.cardano_api_version = "v0"
         settings.ipfs_api_key = test_ipfs_api_key
-        settings.ipfs_api_version = "v1"
       end
 
       Blockfrost.settings.cardano_api_key.should eq(test_cardano_api_key)
-      Blockfrost.settings.cardano_api_version.should eq("v0")
       Blockfrost.settings.ipfs_api_key.should eq(test_ipfs_api_key)
-      Blockfrost.settings.ipfs_api_version.should eq("v1")
     end
 
+    it "accepts valid api versions" do
+      Blockfrost.configure do |settings|
+        settings.cardano_api_version = "v0"
+        settings.ipfs_api_version = "v1"
+      end
+
+      Blockfrost.settings.cardano_api_version.should eq("v0")
+      Blockfrost.settings.ipfs_api_version.should eq("v1")
+    end
+  end
+
+  describe ".validate_cardano_api_key" do
     it "raises with an invalid cardano api key" do
       expect_raises(Habitat::InvalidSettingFormatError) do
         Blockfrost.configure do |settings|
@@ -23,7 +31,9 @@ describe Blockfrost do
         end
       end
     end
+  end
 
+  describe ".validate_ipfs_api_key" do
     it "raises with an invalid ipfs api key" do
       expect_raises(Habitat::InvalidSettingFormatError) do
         Blockfrost.configure do |settings|
@@ -31,7 +41,9 @@ describe Blockfrost do
         end
       end
     end
+  end
 
+  describe ".validate_api_version" do
     it "raises with an invalid cardano api version" do
       expect_raises(Habitat::InvalidSettingFormatError) do
         Blockfrost.configure do |settings|
@@ -44,6 +56,69 @@ describe Blockfrost do
       expect_raises(Habitat::InvalidSettingFormatError) do
         Blockfrost.configure do |settings|
           settings.ipfs_api_version = "v"
+        end
+      end
+    end
+  end
+
+  describe ".validate_default_order" do
+    it "raises with and invalid order value" do
+      expect_raises(Habitat::InvalidSettingFormatError) do
+        Blockfrost.configure do |settings|
+          settings.default_order = "abc"
+        end
+      end
+    end
+  end
+
+  describe ".validate_default_count_per_page" do
+    it "raises with a count per page lower than 1" do
+      expect_raises(Habitat::InvalidSettingFormatError) do
+        Blockfrost.configure do |settings|
+          settings.default_count_per_page = 0
+        end
+      end
+    end
+
+    it "raises with a count per page higher than the maximum allowd value" do
+      expect_raises(Habitat::InvalidSettingFormatError) do
+        Blockfrost.configure do |settings|
+          max = Blockfrost::MAX_COUNT_PER_PAGE
+          settings.default_count_per_page = max + 1
+        end
+      end
+    end
+  end
+
+  describe ".validate_max_parallel_requests" do
+    it "raises with max parallel requests lower than 1" do
+      expect_raises(Habitat::InvalidSettingFormatError) do
+        Blockfrost.configure do |settings|
+          settings.max_parallel_requests = 0
+        end
+      end
+
+      expect_raises(Habitat::InvalidSettingFormatError) do
+        Blockfrost.configure do |settings|
+          max = Blockfrost::MAX_NUMBER_OF_PARALLEL_REQUESTS
+          settings.max_parallel_requests = max + 1
+        end
+      end
+    end
+  end
+
+  describe ".validate_sleep_between_retries_ms" do
+    it "raises with max parallel requests lower than 1" do
+      expect_raises(Habitat::InvalidSettingFormatError) do
+        Blockfrost.configure do |settings|
+          settings.sleep_between_retries_ms = -1
+        end
+      end
+
+      expect_raises(Habitat::InvalidSettingFormatError) do
+        Blockfrost.configure do |settings|
+          max = Blockfrost::MAX_SLEEP_BETWEEN_RETRIES_MS
+          settings.sleep_between_retries_ms = max + 1
         end
       end
     end

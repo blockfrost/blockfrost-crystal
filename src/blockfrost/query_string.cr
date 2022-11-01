@@ -26,7 +26,7 @@ struct Blockfrost::QueryString
     when "count"
       {key, limit_upper_value(value, Blockfrost::MAX_COUNT_PER_PAGE).to_s}
     when "page"
-      {key, limit_upper_value(value, Blockfrost::MAX_PAGES).to_s}
+      {key, limit_upper_value(value, Blockfrost::MAX_PAGINATION_PAGES).to_s}
     else
       {key, value.to_s}
     end

@@ -277,7 +277,7 @@ rescue e : Blockfrost::RequestException
 end
 ```
 
-Or more specifically:
+Or with more specificity:
 
 ```crystal
 begin
