@@ -117,6 +117,22 @@ module Blockfrost
       )
     end
 
+    def self.{{method_name.id}}_within_page_range(
+        {% unless argument_type_declaration.nil? %}
+          {{argument_type_declaration}},
+        {% end %}
+        pages : Range,
+        order : QueryOrder | String? = nil
+      )
+        Blockfrost.within_page_range(pages, {{return_type}}, {{method_name}}, {
+          {% unless argument_type_declaration.nil? %}
+          {{argument_type_declaration.var}}: {{argument_type_declaration.var}},
+          {% end %}
+          order: order,
+          page: item
+        })
+    end
+
     {% unless argument_type_declaration.nil? %}
       def {{method_name.id}}(**args)
         self.class.{{method_name.id}}({{argument_type_declaration.var}}, **args)
@@ -231,5 +247,33 @@ module Blockfrost
         self.class.{{method_name.id}}({{argument_type_declaration.var}}, **args)
       end
     {% end %}
+  end
+
+  macro within_page_range(pages, return_type, method_name, method_arguments)
+    retry_fetch = ->(tries : Int32) {}
+    sleep_retries = Blockfrost.settings.sleep_between_retries_ms / 1000.0
+    channel = Channel({Int32, {{return_type}}}).new
+    results = ([nil] of {{return_type}}?) * pages.size
+
+    pages.each.with_index do |item, i|
+      spawn do
+        fetch = ->(tries : Int32) do
+          begin
+            channel.send({i, {{method_name.id}}(**{{method_arguments}})})
+          rescue e : Blockfrost::Client::OverLimitException
+            raise e unless tries < MAX_RETRIES_IN_PARALLEL_REQUESTS
+
+            sleep sleep_retries
+            retry_fetch.call(tries.succ)
+          end
+        end
+
+        retry_fetch = ->(tries : Int32) {fetch.call(tries)}.tap(&.call(0))
+      end
+
+      channel.receive.tap { |r| results[r.first] = r.last }
+    end
+
+    results.compact.reduce({{return_type}}.new) { |a, r| a.tap { a.concat(r) } }
   end
 end
