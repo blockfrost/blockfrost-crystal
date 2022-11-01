@@ -129,7 +129,7 @@ module Blockfrost
           {{argument_type_declaration.var}}: {{argument_type_declaration.var}},
           {% end %}
           order: order,
-          page: item
+          page: page
         })
     end
 
@@ -250,24 +250,24 @@ module Blockfrost
   end
 
   macro within_page_range(pages, return_type, method_name, method_arguments)
-    fetch = ->(tries : Int32, item : Int32, i : Int32) {}
+    fetch = ->(tries : Int32, page : Int32, i : Int32) {}
     sleep_retries = Blockfrost.settings.sleep_between_retries_ms / 1000.0
     channel = Channel({Int32, {{return_type}}?}).new
     results = ([nil] of {{return_type}}?) * pages.size
 
-    fetch = ->(tries : Int32, item : Int32, i : Int32) do
+    fetch = ->(tries : Int32, page : Int32, i : Int32) do
       channel.send({i, {{method_name.id}}(**{{method_arguments}})})
     rescue e : Blockfrost::Client::OverLimitException
       if tries < MAX_RETRIES_IN_PARALLEL_REQUESTS
         sleep sleep_retries
-        fetch.call(tries.succ, item, i)
+        fetch.call(tries.succ, page, i)
       else
         channel.send({i, nil})
       end
     end
 
-    pages.each.with_index do |item, i|
-      spawn { fetch.call(0, item, i) }
+    pages.each.with_index do |page, i|
+      spawn { fetch.call(0, page, i) }
       channel.receive.tap {|r| results[r.first] = r.last }
     end
 
