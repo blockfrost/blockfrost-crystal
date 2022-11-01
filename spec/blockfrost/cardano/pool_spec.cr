@@ -8,21 +8,52 @@ describe Blockfrost::Pool do
   describe ".all_ids" do
     it "fetches all pool ids" do
       WebMock.stub(:get, "https://cardano-testnet.blockfrost.io/api/v0/pools")
-        .to_return(body_io: read_fixture("pool/all_ids.200.json"))
+        .to_return(body_io: read_fixture("pool/all-ids.200.json"))
 
-      Blockfrost::Pool.all_ids.should eq([
-        "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy",
-        "pool1hn7hlwrschqykupwwrtdfkvt2u4uaxvsgxyh6z63703p2knj288",
-        "pool1ztjyjfsh432eqetadf82uwuxklh28xc85zcphpwq6mmezavzad2",
-      ])
+      Blockfrost::Pool.all_ids.should eq(test_pool_ids)
     end
 
     it "accepts ordering and pagination parameters" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/pools?order=desc&count=10&page=10")
-        .to_return(body_io: read_fixture("pool/all_ids.200.json"))
+        .to_return(body_io: read_fixture("pool/all-ids.200.json"))
 
       Blockfrost::Pool.all_ids("desc", 10, 10).should be_a(Array(String))
+    end
+  end
+
+  describe ".all_ids_within_page_range" do
+    it "fetches all pool ids within a page range concurrently" do
+      1.upto(3).each do |p|
+        WebMock.stub(:get,
+          "https://cardano-testnet.blockfrost.io/api/v0/pools?page=#{p}")
+          .to_return(body_io: read_fixture("pool/all-ids-page-#{p}.200.json"))
+      end
+
+      Blockfrost::Pool.all_ids_within_page_range(1..3)
+        .should eq(test_pool_ids_within_page_range)
+    end
+
+    it "raises if one of the endpoints fails because of rate limiting" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/pools?page=1")
+        .to_return(
+          body: read_fixture("pool/all-ids.429.json").gets_to_end,
+          status: 429)
+      2.upto(3).each do |p|
+        WebMock.stub(:get,
+          "https://cardano-testnet.blockfrost.io/api/v0/pools?page=#{p}")
+          .to_return(body_io: read_fixture("pool/all-ids-page-#{p}.200.json"))
+      end
+
+      expect_raises(
+        Blockfrost::AccountLimitedException,
+        "Please, try again later"
+      ) do
+        Blockfrost.temp_config(sleep_between_retries_ms: 0) do
+          Blockfrost::Pool.all_ids_within_page_range(1..3)
+        end
+      end
     end
   end
 
@@ -30,7 +61,7 @@ describe Blockfrost::Pool do
     it "fetches all pool ids with stake" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/pools/extended")
-        .to_return(body_io: read_fixture("pool/all_ids_with_stake.200.json"))
+        .to_return(body_io: read_fixture("pool/all-ids-with-stake.200.json"))
 
       pool = Blockfrost::Pool.all_ids_with_stake.first
       pool.pool_id.should eq(
@@ -46,7 +77,7 @@ describe Blockfrost::Pool do
     it "accepts ordering and pagination parameters" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/pools/extended?order=asc&count=3&page=1")
-        .to_return(body_io: read_fixture("pool/all_ids_with_stake.200.json"))
+        .to_return(body_io: read_fixture("pool/all-ids-with-stake.200.json"))
 
       Blockfrost::Pool.all_ids_with_stake("asc", 3, 1)
         .should be_a(Array(Blockfrost::Pool::Abbreviated))
@@ -57,7 +88,7 @@ describe Blockfrost::Pool do
     it "fetches all the retired pool ids" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/pools/retired")
-        .to_return(body_io: read_fixture("pool/retired_ids.200.json"))
+        .to_return(body_io: read_fixture("pool/retired-ids.200.json"))
 
       pool = Blockfrost::Pool.retired_ids.first
       pool.pool_id.should eq(
@@ -69,7 +100,7 @@ describe Blockfrost::Pool do
     it "accepts ordering and pagination parameters" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/pools/retired?order=desc&count=3&page=2")
-        .to_return(body_io: read_fixture("pool/retired_ids.200.json"))
+        .to_return(body_io: read_fixture("pool/retired-ids.200.json"))
 
       Blockfrost::Pool.retired_ids("desc", 3, 2)
         .should be_a(Array(Blockfrost::Pool::Retired))
@@ -80,7 +111,7 @@ describe Blockfrost::Pool do
     it "fetches all the retiring pool ids" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/pools/retiring")
-        .to_return(body_io: read_fixture("pool/retiring_ids.200.json"))
+        .to_return(body_io: read_fixture("pool/retiring-ids.200.json"))
 
       pools = Blockfrost::Pool.retiring_ids
       pools.first.pool_id.should eq(
@@ -92,7 +123,7 @@ describe Blockfrost::Pool do
     it "accepts ordering and pagination parameters" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/pools/retiring?order=desc&count=3&page=2")
-        .to_return(body_io: read_fixture("pool/retiring_ids.200.json"))
+        .to_return(body_io: read_fixture("pool/retiring-ids.200.json"))
 
       Blockfrost::Pool.retiring_ids("desc", 3, 2)
         .should be_a(Array(Blockfrost::Pool::Retiring))
@@ -277,7 +308,7 @@ describe Blockfrost::Pool do
     it "fetches a pool's block_hashes" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}/blocks")
-        .to_return(body_io: read_fixture("pool/block_hashes.200.json"))
+        .to_return(body_io: read_fixture("pool/block-hashes.200.json"))
 
       Blockfrost::Pool.block_hashes(test_pool_id).first.should eq(
         "d8982ca42cfe76b747cc681d35d671050a9e41e9cfe26573eb214e94fe6ff21d"
@@ -287,7 +318,7 @@ describe Blockfrost::Pool do
     it "accepts ordering and pagination parameters" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}/blocks?order=asc&count=1&page=2")
-        .to_return(body_io: read_fixture("pool/block_hashes.200.json"))
+        .to_return(body_io: read_fixture("pool/block-hashes.200.json"))
 
       Blockfrost::Pool.block_hashes(test_pool_id, "asc", 1, 2)
         .should be_a(Array(String))
@@ -301,7 +332,7 @@ describe Blockfrost::Pool do
         .to_return(body_io: read_fixture("pool/get.200.json"))
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}/blocks?count=10")
-        .to_return(body_io: read_fixture("pool/block_hashes.200.json"))
+        .to_return(body_io: read_fixture("pool/block-hashes.200.json"))
 
       Blockfrost::Pool.get(test_pool_id).block_hashes(count: 10)
         .should be_a(Array(String))
@@ -349,4 +380,26 @@ end
 
 private def test_pool_id
   "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy"
+end
+
+private def test_pool_ids
+  %w[
+    pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
+    pool1hn7hlwrschqykupwwrtdfkvt2u4uaxvsgxyh6z63703p2knj288
+    pool1ztjyjfsh432eqetadf82uwuxklh28xc85zcphpwq6mmezavzad2
+  ]
+end
+
+private def test_pool_ids_within_page_range
+  %w[
+    pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3l111
+    pool1hn7hlwrschqykupwwrtdfkvt2u4uaxvsgxyh6z63703p2knj111
+    pool1ztjyjfsh432eqetadf82uwuxklh28xc85zcphpwq6mmezavz111
+    pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3l222
+    pool1hn7hlwrschqykupwwrtdfkvt2u4uaxvsgxyh6z63703p2knj222
+    pool1ztjyjfsh432eqetadf82uwuxklh28xc85zcphpwq6mmezavz222
+    pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3l333
+    pool1hn7hlwrschqykupwwrtdfkvt2u4uaxvsgxyh6z63703p2knj333
+    pool1ztjyjfsh432eqetadf82uwuxklh28xc85zcphpwq6mmezavz333
+  ]
 end

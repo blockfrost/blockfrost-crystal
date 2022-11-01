@@ -24,6 +24,8 @@ module Blockfrost
     end
   end
 
+  class AccountLimitedException < Blockfrost::Exception; end
+
   module Client
     {% begin %}
       {% for name in Blockfrost
