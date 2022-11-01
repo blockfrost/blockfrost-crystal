@@ -244,7 +244,7 @@ describe Blockfrost do
     it "globally configures a default sort order" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/pools?order=desc")
-        .to_return(body_io: read_fixture("pool/all_ids.200.json"))
+        .to_return(body_io: read_fixture("pool/all-ids.200.json"))
 
       Blockfrost.temp_config(default_order: Blockfrost::QueryOrder::DESC) do
         Blockfrost::Pool.all_ids
@@ -256,7 +256,7 @@ describe Blockfrost do
     it "globally configures a default count per page" do
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/pools?count=42")
-        .to_return(body_io: read_fixture("pool/all_ids.200.json"))
+        .to_return(body_io: read_fixture("pool/all-ids.200.json"))
 
       Blockfrost.temp_config(default_count_per_page: 42) do
         Blockfrost::Pool.all_ids
