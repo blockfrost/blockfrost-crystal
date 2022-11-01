@@ -282,18 +282,18 @@ Or more specifically:
 ```crystal
 begin
   # do something
-rescue e : Blockfrost::Client::BadRequest
-  puts "it's a 400"
-rescue e : Blockfrost::Client::Forbidden
-  puts "it's a 403"
-rescue e : Blockfrost::Client::NotFound
-  puts "it's a 404"
-rescue e : Blockfrost::Client::IpBanned
-  puts "it's a 418"
-rescue e : Blockfrost::Client::OverLimit
-  puts "it's a 429"
-rescue e : Blockfrost::Client::ServerError
-  puts "it's a 500"
+rescue e : Blockfrost::Client::BadRequestException
+  puts "Bad request (400)"
+rescue e : Blockfrost::Client::ForbiddenException
+  puts "Authentication secret is missing or invalid (403)"
+rescue e : Blockfrost::Client::NotFoundException
+  puts "Component not found (404)"
+rescue e : Blockfrost::Client::IpBannedException
+  puts "IP has been auto-banned for extensive sending of requests after usage limit has been reached (418)"
+rescue e : Blockfrost::Client::OverLimitException
+  puts "Usage limit reached (429)"
+rescue e : Blockfrost::Client::ServerErrorException
+  puts "Internal Server Error (500)"
 end
 ```
 
