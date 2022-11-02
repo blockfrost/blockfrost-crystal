@@ -265,6 +265,7 @@ module Blockfrost
 
     fetch = ->(tries : Int32, page : Int32, i : Int32) {}
     sleep_retries = Blockfrost.settings.sleep_between_retries_ms / 1000.0
+    max_retries = Blockfrost.settings.retries_in_concurrent_requests
     channel = Channel({Int32, Exception?, {{return_type}}?}).new
     results = ([nil] of {{return_type}}?) * pages.size
     exceptions = [] of Exception
@@ -272,7 +273,7 @@ module Blockfrost
     fetch = ->(tries : Int32, page : Int32, i : Int32) do
       channel.send({i, nil, {{method_name.id}}(**{{method_arguments}})})
     rescue e : Client::OverLimitException
-      if tries < MAX_RETRIES_IN_CONCURRENT_REQUESTS
+      if tries < max_retries
         sleep sleep_retries
         fetch.call(tries.succ, page, i)
       else
