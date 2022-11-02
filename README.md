@@ -371,7 +371,7 @@ This will automatically:
 5. Create a new Pull Request
 
 **NOTE**: Please have a look at
-[conventionalcommits](https://www.conventionalcommits.org/en/v1.0.0/) for commit
+[conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) for commit
 messages.
 
 ## Contributors
