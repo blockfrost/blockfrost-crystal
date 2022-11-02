@@ -354,6 +354,17 @@ describe Blockfrost::Pool do
       Blockfrost::Pool.delegators(test_pool_id, "asc", 1, 2)
         .should be_a(Array(Blockfrost::Pool::Delegator))
     end
+
+    it "fetches a pool's delegators concurrently" do
+      1.upto(2).each do |p|
+        WebMock.stub(:get,
+          "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}/delegators?page=#{p}")
+          .to_return(body_io: read_fixture("pool/delegators.200.json"))
+      end
+
+      Blockfrost::Pool.delegators(test_pool_id, pages: 1..2)
+        .size.should eq(6)
+    end
   end
 
   describe "#delegators" do
@@ -367,6 +378,20 @@ describe Blockfrost::Pool do
 
       Blockfrost::Pool.get(test_pool_id).delegators(count: 10)
         .should be_a(Array(Blockfrost::Pool::Delegator))
+    end
+
+    it "fetches the current pool's delegators concurrently" do
+      WebMock.stub(:get,
+        "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}")
+        .to_return(body_io: read_fixture("pool/get.200.json"))
+      1.upto(2).each do |p|
+        WebMock.stub(:get,
+          "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}/delegators?page=#{p}")
+          .to_return(body_io: read_fixture("pool/delegators.200.json"))
+      end
+
+      Blockfrost::Pool.get(test_pool_id).delegators(pages: 1..2)
+        .size.should eq(6)
     end
   end
 
