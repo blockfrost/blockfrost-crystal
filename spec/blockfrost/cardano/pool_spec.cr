@@ -73,7 +73,7 @@ describe Blockfrost::Pool do
     it "raises if too many concurrent requests are created" do
       expect_raises(
         Blockfrost::ConcurrencyLimitException,
-        "Too many concurrent requests."
+        "Too many concurrent requests (200 allowed, 201 requested)"
       ) do
         over_limit = Blockfrost::MAX_NUMBER_OF_CONCURRENT_REQUESTS + 1
         Blockfrost::Pool.all_ids(1..over_limit)

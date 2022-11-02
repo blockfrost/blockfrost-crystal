@@ -309,13 +309,13 @@ module Blockfrost
   # records as if fetched in one go.
   #
   # It also handles all possible exceptions. If the account is temporarily
-  # rate-limited, it will retry several times, as defined by
-  # `MAX_RETRIES_IN_CONCURRENT_REQUESTS` in the scr/settings.cr. All other
-  # exceptions will cause immediate failure by raising the first encountered
-  # exception.
+  # rate-limited, it will retry several times, as defined by the
+  # `retries_in_concurrent_requests` setting. All other exceptions will cause
+  # immediate failure by raising the first encountered exception.
   macro within_page_range(pages, return_type, method_name, method_arguments)
     pages.size <= (max = MAX_NUMBER_OF_CONCURRENT_REQUESTS) ||
-      raise ConcurrencyLimitException.new("Too many concurrent requests.")
+      raise ConcurrencyLimitException.new(
+        "Too many concurrent requests (#{max} allowed, #{pages.size} requested)")
 
     # rate limiting settings
     sleep_retries = Blockfrost.settings.sleep_between_retries_ms / 1000.0
