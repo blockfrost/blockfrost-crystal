@@ -25,7 +25,10 @@ describe Blockfrost do
 
   describe ".validate_cardano_api_key" do
     it "raises with an invalid cardano api key" do
-      expect_raises(Habitat::InvalidSettingFormatError) do
+      expect_raises(
+        Habitat::InvalidSettingFormatError,
+        "Cardano API key is invalid"
+      ) do
         Blockfrost.configure do |settings|
           settings.cardano_api_key = "sumtingwong"
         end
@@ -35,7 +38,10 @@ describe Blockfrost do
 
   describe ".validate_ipfs_api_key" do
     it "raises with an invalid ipfs api key" do
-      expect_raises(Habitat::InvalidSettingFormatError) do
+      expect_raises(
+        Habitat::InvalidSettingFormatError,
+        "IPFS API key is invalid"
+      ) do
         Blockfrost.configure do |settings|
           settings.ipfs_api_key = "sumtingwong"
         end
@@ -45,7 +51,10 @@ describe Blockfrost do
 
   describe ".validate_api_version" do
     it "raises with an invalid cardano api version" do
-      expect_raises(Habitat::InvalidSettingFormatError) do
+      expect_raises(
+        Habitat::InvalidSettingFormatError,
+        "API version is invalid (e.g. v0)"
+      ) do
         Blockfrost.configure do |settings|
           settings.cardano_api_version = "1"
         end
@@ -53,7 +62,10 @@ describe Blockfrost do
     end
 
     it "raises with an invalid ipfs api version" do
-      expect_raises(Habitat::InvalidSettingFormatError) do
+      expect_raises(
+        Habitat::InvalidSettingFormatError,
+        "API version is invalid (e.g. v0)"
+      ) do
         Blockfrost.configure do |settings|
           settings.ipfs_api_version = "v"
         end
@@ -63,7 +75,10 @@ describe Blockfrost do
 
   describe ".validate_default_order" do
     it "raises with and invalid order value" do
-      expect_raises(Habitat::InvalidSettingFormatError) do
+      expect_raises(
+        Habitat::InvalidSettingFormatError,
+        "Default order is invalid (either asc or desc)"
+      ) do
         Blockfrost.configure do |settings|
           settings.default_order = "abc"
         end
@@ -80,7 +95,7 @@ describe Blockfrost do
       end
     end
 
-    it "raises with a count per page higher than the maximum allowd value" do
+    it "raises with a count per page higher than the maximum allowed value" do
       expect_raises(Habitat::InvalidSettingFormatError) do
         Blockfrost.configure do |settings|
           max = Blockfrost::MAX_COUNT_PER_PAGE
@@ -90,18 +105,26 @@ describe Blockfrost do
     end
   end
 
-  describe ".validate_max_concurrent_requests" do
-    it "raises with max concurrent requests lower than 1" do
-      expect_raises(Habitat::InvalidSettingFormatError) do
+  describe ".validate_retries_in_concurrent_requests" do
+    it "raises with max retries in concurrent requests lower than 0" do
+      expect_raises(
+        Habitat::InvalidSettingFormatError,
+        "Maximum retries in concurrent requests is invalid (min 0 and max 10)"
+      ) do
         Blockfrost.configure do |settings|
-          settings.max_concurrent_requests = 0
+          settings.retries_in_concurrent_requests = -1
         end
       end
+    end
 
-      expect_raises(Habitat::InvalidSettingFormatError) do
+    it "raises with max retries in concurrent requests higher than 10" do
+      expect_raises(
+        Habitat::InvalidSettingFormatError,
+        "Maximum retries in concurrent requests is invalid (min 0 and max 10)"
+      ) do
         Blockfrost.configure do |settings|
-          max = Blockfrost::MAX_NUMBER_OF_CONCURRENT_REQUESTS
-          settings.max_concurrent_requests = max + 1
+          max = Blockfrost::MAX_RETRIES_IN_CONCURRENT_REQUESTS
+          settings.retries_in_concurrent_requests = max + 1
         end
       end
     end
@@ -109,7 +132,10 @@ describe Blockfrost do
 
   describe ".validate_sleep_between_retries_ms" do
     it "raises with max concurrent requests lower than 1" do
-      expect_raises(Habitat::InvalidSettingFormatError) do
+      expect_raises(
+        Habitat::InvalidSettingFormatError,
+        "Sleep between retries must be greater than or equal to 0"
+      ) do
         Blockfrost.configure do |settings|
           settings.sleep_between_retries_ms = -1
         end

@@ -26,7 +26,6 @@ module Blockfrost
   MAX_NUMBER_OF_CONCURRENT_REQUESTS  =        200
   MAX_PAGINATION_PAGES               = 21_474_836
   MAX_RETRIES_IN_CONCURRENT_REQUESTS =         10
-  MAX_RETRIES_IN_RATE_LIMITER        =         50
 
   Habitat.create do
     setting cardano_api_key : String?,
@@ -41,8 +40,8 @@ module Blockfrost
       validation: :validate_default_order
     setting default_count_per_page : Int32?,
       validation: :validate_count_per_page
-    setting max_concurrent_requests : Int32 = 10,
-      validation: :validate_max_concurrent_requests
+    setting retries_in_concurrent_requests : Int32 = 5,
+      validation: :validate_retries_in_concurrent_requests
     setting sleep_between_retries_ms : Int32 = 500,
       validation: :validate_sleep_between_retries_ms
   end
@@ -133,11 +132,11 @@ module Blockfrost
         MAX_COUNT_PER_PAGE)
   end
 
-  def validate_max_concurrent_requests(value : Int32)
-    (1..MAX_NUMBER_OF_CONCURRENT_REQUESTS).includes?(value) ||
+  def validate_retries_in_concurrent_requests(value : Int32)
+    (0..MAX_RETRIES_IN_CONCURRENT_REQUESTS).includes?(value) ||
       Habitat.raise_validation_error(
-        "Maximum number of concurrent requests is invalid (min 0 and max %s)" %
-        MAX_NUMBER_OF_CONCURRENT_REQUESTS)
+        "Maximum retries in concurrent requests is invalid (min 0 and max %s)" %
+        MAX_RETRIES_IN_CONCURRENT_REQUESTS)
   end
 
   def validate_sleep_between_retries_ms(value : Int32)
