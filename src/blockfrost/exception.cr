@@ -24,6 +24,8 @@ module Blockfrost
     end
   end
 
+  class ConcurrencyLimitException < Blockfrost::Exception; end
+
   module Client
     {% begin %}
       {% for name in Blockfrost

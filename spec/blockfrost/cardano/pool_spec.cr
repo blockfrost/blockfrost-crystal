@@ -71,6 +71,16 @@ describe Blockfrost::Pool do
           .should eq(test_pool_ids_within_page_range)
       end
     end
+
+    it "raises if too many concurrent requests are created" do
+      expect_raises(
+        Blockfrost::ConcurrencyLimitException,
+        "Too many concurrent requests."
+      ) do
+        over_limit = Blockfrost::MAX_NUMBER_OF_CONCURRENT_REQUESTS + 1
+        Blockfrost::Pool.all_ids_within_page_range(1..over_limit)
+      end
+    end
   end
 
   describe ".all_ids_with_stake" do

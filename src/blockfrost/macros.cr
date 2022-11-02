@@ -256,10 +256,13 @@ module Blockfrost
   #
   # It also handles all possible exceptions. If the account is temporarily
   # rate-limited, it will retry several times, as defined by
-  # `MAX_RETRIES_IN_PARALLEL_REQUESTS` in the scr/settings.cr. All other
+  # `MAX_RETRIES_IN_CONCURRENT_REQUESTS` in the scr/settings.cr. All other
   # exceptions will cause immediate failure by raising the first encountered
   # exception.
   macro within_page_range(pages, return_type, method_name, method_arguments)
+    pages.size <= (max = MAX_NUMBER_OF_CONCURRENT_REQUESTS) ||
+      raise ConcurrencyLimitException.new("Too many concurrent requests.")
+
     fetch = ->(tries : Int32, page : Int32, i : Int32) {}
     sleep_retries = Blockfrost.settings.sleep_between_retries_ms / 1000.0
     channel = Channel({Int32, Exception?, {{return_type}}?}).new
@@ -268,8 +271,8 @@ module Blockfrost
 
     fetch = ->(tries : Int32, page : Int32, i : Int32) do
       channel.send({i, nil, {{method_name.id}}(**{{method_arguments}})})
-    rescue e : Blockfrost::Client::OverLimitException
-      if tries < MAX_RETRIES_IN_PARALLEL_REQUESTS
+    rescue e : Client::OverLimitException
+      if tries < MAX_RETRIES_IN_CONCURRENT_REQUESTS
         sleep sleep_retries
         fetch.call(tries.succ, page, i)
       else

@@ -90,35 +90,28 @@ describe Blockfrost do
     end
   end
 
-  describe ".validate_max_parallel_requests" do
-    it "raises with max parallel requests lower than 1" do
+  describe ".validate_max_concurrent_requests" do
+    it "raises with max concurrent requests lower than 1" do
       expect_raises(Habitat::InvalidSettingFormatError) do
         Blockfrost.configure do |settings|
-          settings.max_parallel_requests = 0
+          settings.max_concurrent_requests = 0
         end
       end
 
       expect_raises(Habitat::InvalidSettingFormatError) do
         Blockfrost.configure do |settings|
-          max = Blockfrost::MAX_NUMBER_OF_PARALLEL_REQUESTS
-          settings.max_parallel_requests = max + 1
+          max = Blockfrost::MAX_NUMBER_OF_CONCURRENT_REQUESTS
+          settings.max_concurrent_requests = max + 1
         end
       end
     end
   end
 
   describe ".validate_sleep_between_retries_ms" do
-    it "raises with max parallel requests lower than 1" do
+    it "raises with max concurrent requests lower than 1" do
       expect_raises(Habitat::InvalidSettingFormatError) do
         Blockfrost.configure do |settings|
           settings.sleep_between_retries_ms = -1
-        end
-      end
-
-      expect_raises(Habitat::InvalidSettingFormatError) do
-        Blockfrost.configure do |settings|
-          max = Blockfrost::MAX_SLEEP_BETWEEN_RETRIES_MS
-          settings.sleep_between_retries_ms = max + 1
         end
       end
     end
