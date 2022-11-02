@@ -304,7 +304,7 @@ module Blockfrost
     exceptions = [] of Exception
 
     fetch = ->(tries : Int32, page : Int32, i : Int32) {}
-    channel = Channel({Int32, Exception?, {{return_type}}?}).new
+    channel = Channel({Int32, Exception?, {{return_type}}?}).new(pages.size)
 
     # proc for recursive calling with retries
     fetch = ->(tries : Int32, page : Int32, i : Int32) do
