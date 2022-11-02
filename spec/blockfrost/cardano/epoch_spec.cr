@@ -145,12 +145,21 @@ describe Blockfrost::Epoch do
   describe ".stakes_by_pool" do
     it "fetches the stakes by pool with pagination parameters" do
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/stakes/pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy?count=3&page=2")
+        "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/stakes/#{test_pool_id}?count=3&page=2")
         .to_return(body_io: read_fixture("epoch/stakes.200.json"))
 
-      pool_id = "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy"
+      Blockfrost::Epoch.stakes_by_pool(225, test_pool_id, count: 3, page: 2)
+        .should be_a(Array(Blockfrost::Epoch::Stake))
+    end
 
-      Blockfrost::Epoch.stakes_by_pool(225, pool_id, count: 3, page: 2)
+    it "fetches the stakes by pool with pagination parameters concurrently" do
+      5.upto(7) do |p|
+        WebMock.stub(:get,
+          "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/stakes/#{test_pool_id}?page=#{p}")
+          .to_return(body_io: read_fixture("epoch/stakes.200.json"))
+      end
+
+      Blockfrost::Epoch.stakes_by_pool(225, test_pool_id, pages: 5..7)
         .should be_a(Array(Blockfrost::Epoch::Stake))
     end
   end

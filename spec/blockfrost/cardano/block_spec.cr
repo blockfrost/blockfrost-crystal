@@ -295,6 +295,17 @@ describe Blockfrost::Block do
       Blockfrost::Block.addresses(15243593, count: 3, page: 2)
         .should be_a(Array(Blockfrost::Block::Address))
     end
+
+    it "fetches addresses with transactions for a given block height concurrently" do
+      1.upto(3) do |p|
+        WebMock.stub(:get,
+          "https://cardano-testnet.blockfrost.io/api/v0/blocks/15243593/addresses?page=#{p}")
+          .to_return(body_io: read_fixture("block/addresses.200.json"))
+      end
+
+      Blockfrost::Block.addresses(15243593, 1..3)
+        .should be_a(Array(Blockfrost::Block::Address))
+    end
   end
 
   describe "#addresses" do

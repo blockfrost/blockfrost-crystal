@@ -38,6 +38,16 @@ module Blockfrost
       )
     end
 
+    def self.{{method_name.id}}(
+      {{argument_type_declaration}},
+      pages : Range
+    )
+      Blockfrost.within_page_range(pages, {{return_type}}, {{method_name}}, {
+        {{argument_type_declaration.var}}: {{argument_type_declaration.var}},
+        page: page
+      })
+    end
+
     def {{method_name.id}}(**args)
       self.class.{{method_name.id}}({{argument_type_declaration.var}}, **args)
     end
@@ -62,6 +72,18 @@ module Blockfrost
           "page" => page
         })
       )
+    end
+
+    def self.{{method_name.id}}(
+      {{argument_type_declaration}},
+      {{scope_argument_type_declaration}},
+      pages : Range
+    )
+      Blockfrost.within_page_range(pages, {{return_type}}, {{method_name}}, {
+        {{argument_type_declaration.var}}: {{argument_type_declaration.var}},
+        {{scope_argument_type_declaration.var}}: {{scope_argument_type_declaration.var}},
+        page: page
+      })
     end
 
     def {{method_name.id}}(
