@@ -179,6 +179,39 @@ Blockfrost.configure do |config|
 end
 ```
 
+### Concurrency for large collections
+
+Every method accepting pagination parameters will also have a method overload
+accepting a `pages : Range` instead of the `page : Int32` argument:
+
+```crystal
+assets = Blockfrost::Asset.all(pages: 1..10)
+assets.size
+# => 1000
+```
+
+In the background, this method will make a concurrent request, fetching 100
+records for every single page number in the range. Then those results are concatenated into one big array and returned as the result.
+
+Except for `count` and `page`, all other arguments are also still accepted. So
+the results can also be ordered:
+
+```crystal
+assets = Blockfrost::Asset.all(1..10, "asc")
+```
+
+Or with nested resources:
+
+```crystal
+pool_id = "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy"
+events = Blockfrost::Pool.history(pool_id, pages: 1..5)
+```
+
+It also handles all possible exceptions of the Blockfrost API. If your account
+is temporarily rate-limited (`Blockfrost::Client::OverLimitException`), it will
+retry 10 times and raise anyway after that. All other exceptions will be raised
+immediately.
+
 ### Post endpoints
 
 Submit an already serialized transaction to the network:
