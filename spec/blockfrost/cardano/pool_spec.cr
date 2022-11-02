@@ -55,7 +55,7 @@ describe Blockfrost::Pool do
       end
     end
 
-    it "raises if an exception is raised on" do
+    it "raises if an exception is raised on one of the requests" do
       body_500 = read_fixture("pool/all-ids.500.json").gets_to_end
       1.upto(3).each do |p|
         WebMock.stub(:get,
@@ -110,6 +110,19 @@ describe Blockfrost::Pool do
     end
   end
 
+  describe ".all_ids_with_stake_within_page_range" do
+    it "fetches all pool ids with stake within a page range concurrently" do
+      1.upto(2).each do |p|
+        WebMock.stub(:get,
+          "https://cardano-testnet.blockfrost.io/api/v0/pools/extended?page=#{p}")
+          .to_return(body_io: read_fixture("pool/all-ids-with-stake.200.json"))
+      end
+
+      Blockfrost::Pool.all_ids_with_stake_within_page_range(1..2)
+        .size.should eq(6)
+    end
+  end
+
   describe ".retired_ids" do
     it "fetches all the retired pool ids" do
       WebMock.stub(:get,
@@ -133,6 +146,19 @@ describe Blockfrost::Pool do
     end
   end
 
+  describe ".retired_ids_within_page_range" do
+    it "fetches all the retired pool ids concurrently" do
+      1.upto(2).each do |p|
+        WebMock.stub(:get,
+          "https://cardano-testnet.blockfrost.io/api/v0/pools/retired?page=#{p}")
+          .to_return(body_io: read_fixture("pool/retired-ids.200.json"))
+      end
+
+      Blockfrost::Pool.retired_ids_within_page_range(1..2)
+        .size.should eq(6)
+    end
+  end
+
   describe ".retiring_ids" do
     it "fetches all the retiring pool ids" do
       WebMock.stub(:get,
@@ -153,6 +179,19 @@ describe Blockfrost::Pool do
 
       Blockfrost::Pool.retiring_ids("desc", 3, 2)
         .should be_a(Array(Blockfrost::Pool::Retiring))
+    end
+  end
+
+  describe ".retiring_ids_within_page_range" do
+    it "fetches all the retiring pool ids concurrently" do
+      1.upto(2).each do |p|
+        WebMock.stub(:get,
+          "https://cardano-testnet.blockfrost.io/api/v0/pools/retiring?page=#{p}")
+          .to_return(body_io: read_fixture("pool/retiring-ids.200.json"))
+      end
+
+      Blockfrost::Pool.retiring_ids_within_page_range(1..2)
+        .size.should eq(6)
     end
   end
 
@@ -211,6 +250,19 @@ describe Blockfrost::Pool do
 
       Blockfrost::Pool.history(test_pool_id, Blockfrost::QueryOrder::ASC, 2, 3)
         .should be_a(Array(Blockfrost::Pool::Event))
+    end
+  end
+
+  describe ".history_within_page_range" do
+    it "fetches a pool's history concurrently" do
+      1.upto(2).each do |p|
+        WebMock.stub(:get,
+          "https://cardano-testnet.blockfrost.io/api/v0/pools/#{test_pool_id}/history?page=#{p}")
+          .to_return(body_io: read_fixture("pool/history.200.json"))
+      end
+
+      Blockfrost::Pool.history_within_page_range(test_pool_id, pages: 1..2)
+        .size.should eq(2)
     end
   end
 
