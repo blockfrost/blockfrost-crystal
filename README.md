@@ -212,6 +212,18 @@ is temporarily rate-limited (`Blockfrost::Client::OverLimitException`), it will
 retry 10 times and raise anyway after that. All other exceptions will be raised
 immediately.
 
+There are two settings related to rate-limiting:
+
+```crystal
+Blockfrost.configure do |config|
+  # minimum 0, maximum 10; defaults to 10
+  config.retries_in_concurrent_requests = 5
+
+  # minimum 0, no maximum; defaults to 500
+  config.validate_sleep_between_retries_ms = 1000
+end
+```
+
 ### Post endpoints
 
 Submit an already serialized transaction to the network:
