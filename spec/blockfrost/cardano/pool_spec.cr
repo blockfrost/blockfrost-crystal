@@ -20,9 +20,7 @@ describe Blockfrost::Pool do
 
       Blockfrost::Pool.all_ids("desc", 10, 10).should be_a(Array(String))
     end
-  end
 
-  describe ".all_ids_within_page_range" do
     it "fetches all pool ids within a page range concurrently" do
       1.upto(3).each do |p|
         WebMock.stub(:get,
@@ -30,7 +28,7 @@ describe Blockfrost::Pool do
           .to_return(body_io: read_fixture("pool/all-ids-page-#{p}.200.json"))
       end
 
-      Blockfrost::Pool.all_ids_within_page_range(1..3)
+      Blockfrost::Pool.all_ids(1..3)
         .should eq(test_pool_ids_within_page_range)
     end
 
@@ -50,7 +48,7 @@ describe Blockfrost::Pool do
         "Usage is over limit."
       ) do
         Blockfrost.temp_config(sleep_between_retries_ms: 0) do
-          Blockfrost::Pool.all_ids_within_page_range(1..3)
+          Blockfrost::Pool.all_ids(1..3)
         end
       end
     end
@@ -67,7 +65,7 @@ describe Blockfrost::Pool do
         Blockfrost::Client::ServerErrorException,
         "An unexpected response was received from the backend."
       ) do
-        Blockfrost::Pool.all_ids_within_page_range(1..3)
+        Blockfrost::Pool.all_ids(1..3)
           .should eq(test_pool_ids_within_page_range)
       end
     end
@@ -78,7 +76,7 @@ describe Blockfrost::Pool do
         "Too many concurrent requests."
       ) do
         over_limit = Blockfrost::MAX_NUMBER_OF_CONCURRENT_REQUESTS + 1
-        Blockfrost::Pool.all_ids_within_page_range(1..over_limit)
+        Blockfrost::Pool.all_ids(1..over_limit)
       end
     end
   end
@@ -108,9 +106,7 @@ describe Blockfrost::Pool do
       Blockfrost::Pool.all_ids_with_stake("asc", 3, 1)
         .should be_a(Array(Blockfrost::Pool::Abbreviated))
     end
-  end
 
-  describe ".all_ids_with_stake_within_page_range" do
     it "fetches all pool ids with stake within a page range concurrently" do
       1.upto(2).each do |p|
         WebMock.stub(:get,
@@ -118,8 +114,7 @@ describe Blockfrost::Pool do
           .to_return(body_io: read_fixture("pool/all-ids-with-stake.200.json"))
       end
 
-      Blockfrost::Pool.all_ids_with_stake_within_page_range(1..2)
-        .size.should eq(6)
+      Blockfrost::Pool.all_ids_with_stake(1..2).size.should eq(6)
     end
   end
 
@@ -144,9 +139,7 @@ describe Blockfrost::Pool do
       Blockfrost::Pool.retired_ids("desc", 3, 2)
         .should be_a(Array(Blockfrost::Pool::Retired))
     end
-  end
 
-  describe ".retired_ids_within_page_range" do
     it "fetches all the retired pool ids concurrently" do
       1.upto(2).each do |p|
         WebMock.stub(:get,
@@ -154,8 +147,7 @@ describe Blockfrost::Pool do
           .to_return(body_io: read_fixture("pool/retired-ids.200.json"))
       end
 
-      Blockfrost::Pool.retired_ids_within_page_range(1..2)
-        .size.should eq(6)
+      Blockfrost::Pool.retired_ids(1..2).size.should eq(6)
     end
   end
 
@@ -180,9 +172,7 @@ describe Blockfrost::Pool do
       Blockfrost::Pool.retiring_ids("desc", 3, 2)
         .should be_a(Array(Blockfrost::Pool::Retiring))
     end
-  end
 
-  describe ".retiring_ids_within_page_range" do
     it "fetches all the retiring pool ids concurrently" do
       1.upto(2).each do |p|
         WebMock.stub(:get,
@@ -190,7 +180,7 @@ describe Blockfrost::Pool do
           .to_return(body_io: read_fixture("pool/retiring-ids.200.json"))
       end
 
-      Blockfrost::Pool.retiring_ids_within_page_range(1..2)
+      Blockfrost::Pool.retiring_ids(1..2)
         .size.should eq(6)
     end
   end
@@ -251,9 +241,7 @@ describe Blockfrost::Pool do
       Blockfrost::Pool.history(test_pool_id, Blockfrost::QueryOrder::ASC, 2, 3)
         .should be_a(Array(Blockfrost::Pool::Event))
     end
-  end
 
-  describe ".history_within_page_range" do
     it "fetches a pool's history concurrently" do
       1.upto(2).each do |p|
         WebMock.stub(:get,
@@ -261,7 +249,7 @@ describe Blockfrost::Pool do
           .to_return(body_io: read_fixture("pool/history.200.json"))
       end
 
-      Blockfrost::Pool.history_within_page_range(test_pool_id, pages: 1..2)
+      Blockfrost::Pool.history(test_pool_id, pages: 1..2)
         .size.should eq(2)
     end
   end

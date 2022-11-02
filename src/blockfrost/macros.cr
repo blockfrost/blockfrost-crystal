@@ -117,20 +117,20 @@ module Blockfrost
       )
     end
 
-    def self.{{method_name.id}}_within_page_range(
+    def self.{{method_name.id}}(
+      {% unless argument_type_declaration.nil? %}
+        {{argument_type_declaration}},
+      {% end %}
+      pages : Range,
+      order : QueryOrder | String? = nil
+    )
+      Blockfrost.within_page_range(pages, {{return_type}}, {{method_name}}, {
         {% unless argument_type_declaration.nil? %}
-          {{argument_type_declaration}},
+        {{argument_type_declaration.var}}: {{argument_type_declaration.var}},
         {% end %}
-        pages : Range,
-        order : QueryOrder | String? = nil
-      )
-        Blockfrost.within_page_range(pages, {{return_type}}, {{method_name}}, {
-          {% unless argument_type_declaration.nil? %}
-          {{argument_type_declaration.var}}: {{argument_type_declaration.var}},
-          {% end %}
-          order: order,
-          page: page
-        })
+        order: order,
+        page: page
+      })
     end
 
     {% unless argument_type_declaration.nil? %}
