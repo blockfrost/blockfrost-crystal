@@ -91,6 +91,17 @@ describe Blockfrost::Address do
       Blockfrost::Address.utxos(test_address, "desc", 10, 1)
         .should be_a(Array(Blockfrost::Address::UTXO))
     end
+
+    it "fetches the address' current utxos concurrently" do
+      1.upto(2) do |p|
+        WebMock.stub(:get,
+          "https://cardano-testnet.blockfrost.io/api/v0/addresses/#{test_address}/utxos?order=desc&page=#{p}")
+          .to_return(body_io: read_fixture("address/utxos.200.json"))
+      end
+
+      Blockfrost::Address.utxos(test_address, pages: 1..2, order: "desc")
+        .size.should eq(6)
+    end
   end
 
   describe "#utxos" do
@@ -138,6 +149,17 @@ describe Blockfrost::Address do
       Blockfrost::Address.utxos_of_asset(test_address, test_asset, "desc", 10, 1)
         .should be_a(Array(Blockfrost::Address::UTXO))
     end
+
+    it "fetches the address' current utxos for a given asset concurrently" do
+      1.upto(2) do |p|
+        WebMock.stub(:get,
+          "https://cardano-testnet.blockfrost.io/api/v0/addresses/#{test_address}/utxos/#{test_asset}?page=#{p}")
+          .to_return(body_io: read_fixture("address/utxos-of-asset.200.json"))
+      end
+
+      Blockfrost::Address.utxos_of_asset(test_address, test_asset, pages: 1..2)
+        .size.should eq(6)
+    end
   end
 
   describe "#utxos_of_asset" do
@@ -182,6 +204,22 @@ describe Blockfrost::Address do
         from: "8929261",
         to: "9999269:10"
       ).should be_a(Array(Blockfrost::Address::Transaction))
+    end
+
+    it "fetches the address' transactions concurrently" do
+      1.upto(2) do |p|
+        WebMock.stub(:get,
+          "https://cardano-testnet.blockfrost.io/api/v0/addresses/#{test_address}/transactions?order=desc&page=#{p}&from=8929261&to=9999269:10")
+          .to_return(body_io: read_fixture("address/transactions.200.json"))
+      end
+
+      Blockfrost::Address.transactions(
+        test_address,
+        pages: 1..2,
+        order: "desc",
+        from: "8929261",
+        to: "9999269:10"
+      ).size.should eq(6)
     end
   end
 

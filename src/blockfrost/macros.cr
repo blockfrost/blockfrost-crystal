@@ -179,6 +179,20 @@ module Blockfrost
       )
     end
 
+    def self.{{method_name.id}}(
+      {{argument_type_declaration}},
+      {{scope_argument_type_declaration}},
+      pages : Range,
+      order : QueryOrder | String? = nil
+    )
+      Blockfrost.within_page_range(pages, {{return_type}}, {{method_name}}, {
+        {{argument_type_declaration.var}}: {{argument_type_declaration.var}},
+        {{scope_argument_type_declaration.var}}: {{scope_argument_type_declaration.var}},
+        order: order,
+        page: page
+      })
+    end
+
     {% unless argument_type_declaration.nil? %}
       def {{method_name.id}}(
         {{scope_argument_type_declaration.var}},
@@ -240,6 +254,24 @@ module Blockfrost
         from,
         to
       )
+    end
+
+    def self.{{method_name.id}}(
+      {% unless argument_type_declaration.nil? %}
+        {{argument_type_declaration}},
+      {% end %}
+      pages : Range,
+      order : QueryOrder | String? = nil,
+      from : String? = nil,
+      to : String? = nil
+    )
+      Blockfrost.within_page_range(pages, {{return_type}}, {{method_name}}, {
+        {{argument_type_declaration.var}}: {{argument_type_declaration.var}},
+        order: order,
+        page: page,
+        from: from,
+        to: to
+      })
     end
 
     {% unless argument_type_declaration.nil? %}
