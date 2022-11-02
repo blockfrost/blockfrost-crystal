@@ -182,7 +182,7 @@ end
 ### Concurrency for large collections
 
 Every method accepting pagination parameters will also have a method overload
-accepting a `pages : Range` instead of the `page : Int32` argument:
+accepting a `pages : Range` argument instead of `page : Int32`:
 
 ```crystal
 assets = Blockfrost::Asset.all(pages: 1..10)
