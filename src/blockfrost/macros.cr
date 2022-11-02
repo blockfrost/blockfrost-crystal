@@ -263,13 +263,18 @@ module Blockfrost
     pages.size <= (max = MAX_NUMBER_OF_CONCURRENT_REQUESTS) ||
       raise ConcurrencyLimitException.new("Too many concurrent requests.")
 
-    fetch = ->(tries : Int32, page : Int32, i : Int32) {}
+    # rate limiting settings
     sleep_retries = Blockfrost.settings.sleep_between_retries_ms / 1000.0
     max_retries = Blockfrost.settings.retries_in_concurrent_requests
-    channel = Channel({Int32, Exception?, {{return_type}}?}).new
+
+    # stores for results and/or exceptions
     results = ([nil] of {{return_type}}?) * pages.size
     exceptions = [] of Exception
 
+    fetch = ->(tries : Int32, page : Int32, i : Int32) {}
+    channel = Channel({Int32, Exception?, {{return_type}}?}).new
+
+    # proc for recursive calling with retries
     fetch = ->(tries : Int32, page : Int32, i : Int32) do
       channel.send({i, nil, {{method_name.id}}(**{{method_arguments}})})
     rescue e : Client::OverLimitException
@@ -283,12 +288,14 @@ module Blockfrost
       channel.send({i, e, nil})
     end
 
+    # spawn fibers
     pages.each.with_index do |page, i|
       spawn do
         fetch.call(0, page, i)
       end
     end
 
+    # receive results
     pages.each do
       i, e, result = channel.receive
       e ? exceptions << e : (results[i] = result)
@@ -296,6 +303,7 @@ module Blockfrost
 
     exceptions.empty? || raise exceptions.first
 
+    # concatenate all resulting arrays
     results.compact.reduce({{return_type}}.new) { |a, r| a.tap { a.concat(r) } }
   end
 end
