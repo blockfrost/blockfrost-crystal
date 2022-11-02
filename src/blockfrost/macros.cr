@@ -249,28 +249,48 @@ module Blockfrost
     {% end %}
   end
 
+  # The Blockfrost API imposes a limit of 100 records per page for a single
+  # request. This macro allows fetching multiple pages concurrently. It then
+  # concatenates all results in the correct order and returns an array of
+  # records as if fetched in one go.
+  #
+  # It also handles all possible exceptions. If the account is temporarily
+  # rate-limited, it will retry several times, as defined by
+  # `MAX_RETRIES_IN_PARALLEL_REQUESTS` in the scr/settings.cr. All other
+  # exceptions will cause immediate failure by raising the first encountered
+  # exception.
   macro within_page_range(pages, return_type, method_name, method_arguments)
     fetch = ->(tries : Int32, page : Int32, i : Int32) {}
     sleep_retries = Blockfrost.settings.sleep_between_retries_ms / 1000.0
-    channel = Channel({Int32, {{return_type}}?}).new
+    channel = Channel({Int32, Exception?, {{return_type}}?}).new
     results = ([nil] of {{return_type}}?) * pages.size
+    exceptions = [] of Exception
 
     fetch = ->(tries : Int32, page : Int32, i : Int32) do
-      channel.send({i, {{method_name.id}}(**{{method_arguments}})})
+      channel.send({i, nil, {{method_name.id}}(**{{method_arguments}})})
     rescue e : Blockfrost::Client::OverLimitException
       if tries < MAX_RETRIES_IN_PARALLEL_REQUESTS
         sleep sleep_retries
         fetch.call(tries.succ, page, i)
       else
-        channel.send({i, nil})
+        channel.send({i, e, nil})
+      end
+    rescue e : Exception
+      channel.send({i, e, nil})
+    end
+
+    pages.each.with_index do |page, i|
+      spawn do
+        fetch.call(0, page, i)
       end
     end
 
-    pages.each.with_index { |page, i| spawn { fetch.call(0, page, i) } }
-    pages.each { channel.receive.tap {|r| results[r.first] = r.last } }
+    pages.each do
+      i, e, result = channel.receive
+      e ? exceptions << e : (results[i] = result)
+    end
 
-    !results.includes?(nil) ||
-      raise Blockfrost::AccountLimitedException.new("Please, try again later")
+    exceptions.empty? || raise exceptions.first
 
     results.compact.reduce({{return_type}}.new) { |a, r| a.tap { a.concat(r) } }
   end

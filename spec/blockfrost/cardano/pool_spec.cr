@@ -46,12 +46,29 @@ describe Blockfrost::Pool do
       end
 
       expect_raises(
-        Blockfrost::AccountLimitedException,
-        "Please, try again later"
+        Blockfrost::Client::OverLimitException,
+        "Usage is over limit."
       ) do
         Blockfrost.temp_config(sleep_between_retries_ms: 0) do
           Blockfrost::Pool.all_ids_within_page_range(1..3)
         end
+      end
+    end
+
+    it "raises if an exception is raised on" do
+      body_500 = read_fixture("pool/all-ids.500.json").gets_to_end
+      1.upto(3).each do |p|
+        WebMock.stub(:get,
+          "https://cardano-testnet.blockfrost.io/api/v0/pools?page=#{p}")
+          .to_return(body: body_500, status: 500)
+      end
+
+      expect_raises(
+        Blockfrost::Client::ServerErrorException,
+        "An unexpected response was received from the backend."
+      ) do
+        Blockfrost::Pool.all_ids_within_page_range(1..3)
+          .should eq(test_pool_ids_within_page_range)
       end
     end
   end
