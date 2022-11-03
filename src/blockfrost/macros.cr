@@ -44,6 +44,7 @@ module Blockfrost
     )
       Blockfrost.within_page_range(pages, {{return_type}}, {{method_name}}, {
         {{argument_type_declaration.var}}: {{argument_type_declaration.var}},
+        count: MAX_COUNT_PER_PAGE,
         page: page
       })
     end
@@ -82,6 +83,7 @@ module Blockfrost
       Blockfrost.within_page_range(pages, {{return_type}}, {{method_name}}, {
         {{argument_type_declaration.var}}: {{argument_type_declaration.var}},
         {{scope_argument_type_declaration.var}}: {{scope_argument_type_declaration.var}},
+        count: MAX_COUNT_PER_PAGE,
         page: page
       })
     end
@@ -151,6 +153,7 @@ module Blockfrost
         {{argument_type_declaration.var}}: {{argument_type_declaration.var}},
         {% end %}
         order: order,
+        count: MAX_COUNT_PER_PAGE,
         page: page
       })
     end
@@ -211,6 +214,7 @@ module Blockfrost
         {{argument_type_declaration.var}}: {{argument_type_declaration.var}},
         {{scope_argument_type_declaration.var}}: {{scope_argument_type_declaration.var}},
         order: order,
+        count: MAX_COUNT_PER_PAGE,
         page: page
       })
     end
@@ -290,6 +294,7 @@ module Blockfrost
       Blockfrost.within_page_range(pages, {{return_type}}, {{method_name}}, {
         {{argument_type_declaration.var}}: {{argument_type_declaration.var}},
         order: order,
+        count: MAX_COUNT_PER_PAGE,
         page: page,
         from: from,
         to: to
