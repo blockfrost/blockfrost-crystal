@@ -136,9 +136,9 @@ describe Blockfrost::Block do
       Blockfrost::Block.latest_tx_ids(order: "desc")
     end
 
-    it "uses default ordering if the order query parameter is invalid" do
+    it "uses default api ordering if the order query parameter is invalid" do
       WebMock.stub(:get,
-        "https://cardano-testnet.blockfrost.io/api/v0/blocks/latest/txs?order=asc")
+        "https://cardano-testnet.blockfrost.io/api/v0/blocks/latest/txs")
         .to_return(body_io: read_fixture("block/tx_ids.200.json"))
 
       Blockfrost::Block.latest_tx_ids(order: "forward")
@@ -299,7 +299,7 @@ describe Blockfrost::Block do
     it "fetches addresses with transactions for a given block height concurrently" do
       1.upto(3) do |p|
         WebMock.stub(:get,
-          "https://cardano-testnet.blockfrost.io/api/v0/blocks/15243593/addresses?page=#{p}")
+          "https://cardano-testnet.blockfrost.io/api/v0/blocks/15243593/addresses?count=100&page=#{p}")
           .to_return(body_io: read_fixture("block/addresses.200.json"))
       end
 

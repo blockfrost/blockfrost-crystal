@@ -155,7 +155,7 @@ describe Blockfrost::Epoch do
     it "fetches the stakes by pool with pagination parameters concurrently" do
       5.upto(7) do |p|
         WebMock.stub(:get,
-          "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/stakes/#{test_pool_id}?page=#{p}")
+          "https://cardano-testnet.blockfrost.io/api/v0/epochs/225/stakes/#{test_pool_id}?count=100&page=#{p}")
           .to_return(body_io: read_fixture("epoch/stakes.200.json"))
       end
 
