@@ -110,7 +110,7 @@ module Blockfrost
       {% unless argument_type_declaration.nil? %}
         {{argument_type_declaration}},
       {% end %}
-      order : QueryOrder? = nil,
+      order : QueryOrder | String? = nil,
       count : Int32? = nil,
       page : Int32? = nil
     )
@@ -120,24 +120,6 @@ module Blockfrost
           "count" => count || Blockfrost.settings.default_count_per_page,
           "page"  => page,
         })
-      )
-    end
-
-    def self.{{method_name.id}}(
-      {% unless argument_type_declaration.nil? %}
-        {{argument_type_declaration}},
-      {% end %}
-      order : String,
-      count : Int32? = nil,
-      page : Int32? = nil
-    )
-      {{method_name.id}}(
-        {% unless argument_type_declaration.nil? %}
-          {{argument_type_declaration.var}},
-        {% end %}
-        QueryOrder.from_string(order),
-        count,
-        page
       )
     end
 
@@ -175,7 +157,7 @@ module Blockfrost
     def self.{{method_name.id}}(
       {{argument_type_declaration}},
       {{scope_argument_type_declaration}},
-      order : QueryOrder? = nil,
+      order : QueryOrder | String? = nil,
       count : Int32? = nil,
       page : Int32? = nil
     )
@@ -185,22 +167,6 @@ module Blockfrost
           "count" => count || Blockfrost.settings.default_count_per_page,
           "page"  => page,
         })
-      )
-    end
-
-    def self.{{method_name.id}}(
-      {{argument_type_declaration}},
-      {{scope_argument_type_declaration}},
-      order : String,
-      count : Int32? = nil,
-      page : Int32? = nil
-    )
-      {{method_name.id}}(
-        {{argument_type_declaration.var}},
-        {{scope_argument_type_declaration.var}},
-        QueryOrder.from_string(order),
-        count,
-        page
       )
     end
 
@@ -243,7 +209,7 @@ module Blockfrost
       {% unless argument_type_declaration.nil? %}
         {{argument_type_declaration}},
       {% end %}
-      order : QueryOrder? = nil,
+      order : QueryOrder | String? = nil,
       count : Int32? = nil,
       page : Int32? = nil,
       from : String? = nil,
@@ -257,28 +223,6 @@ module Blockfrost
           "from"  => from,
           "to"    => to,
         })
-      )
-    end
-
-    def self.{{method_name.id}}(
-      {% unless argument_type_declaration.nil? %}
-        {{argument_type_declaration}},
-      {% end %}
-      order : String,
-      count : Int32? = nil,
-      page : Int32? = nil,
-      from : String? = nil,
-      to : String? = nil
-    )
-      {{method_name.id}}(
-        {% unless argument_type_declaration.nil? %}
-          {{argument_type_declaration.var}},
-        {% end %}
-        QueryOrder.from_string(order),
-        count,
-        page,
-        from,
-        to
       )
     end
 
@@ -331,7 +275,7 @@ module Blockfrost
     exceptions = [] of Exception
 
     fetch = ->(tries : Int32, page : Int32, i : Int32) {}
-    channel = Channel({Int32, Exception?, {{return_type}}?}).new(pages.size)
+    channel = Channel({Int32, Exception?, {{return_type}}?}).new
 
     # proc for recursive calling with retries
     fetch = ->(tries : Int32, page : Int32, i : Int32) do
