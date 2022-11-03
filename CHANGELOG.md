@@ -9,8 +9,12 @@
 - Added CHANGELOG
 - Changed query param sanitizer to limit `page` and `count` values within their
   respective ranges
-- Added global `max_parallel_requests` setting
+- Added global `retries_in_concurrent_requests` setting
 - Added global `sleep_between_retries_ms` setting
+- Added method overload with a `pages : Range` argument to fetch multiple pages
+  concurrently and return them as one large array
+- Changed query param sanitizer to ensure a valid value for the `order` param
+- Changed the usage of the `order` param in the macros with pagination
 
 ## 0.2.1 (2022-10-30)
 
