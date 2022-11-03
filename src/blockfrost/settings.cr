@@ -36,9 +36,9 @@ module Blockfrost
       validation: :validate_ipfs_api_key
     setting ipfs_api_version : String = "v0",
       validation: :validate_api_version
-    setting default_order : QueryOrder | String?,
+    setting default_order : QueryOrder | String? = nil,
       validation: :validate_default_order
-    setting default_count_per_page : Int32?,
+    setting default_count_per_page : Int32? = nil,
       validation: :validate_count_per_page
     setting retries_in_concurrent_requests : Int32 = 5,
       validation: :validate_retries_in_concurrent_requests
