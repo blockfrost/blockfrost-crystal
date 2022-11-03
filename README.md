@@ -64,7 +64,7 @@ Blockfrost.configure do |config|
 end
 ```
 
-There are several configuration options available. Here's an overview are with
+There are several configuration options available. Here's an overview with
 some added information:
 
 ```crystal
@@ -81,7 +81,7 @@ Blockfrost.configure do |config|
   # the api version of the IPFS enpoints (currently only "v0") 
   config.ipfs_api_version = "v0"
 
-  # "asc", "desc", Blockfrost::QueryOrder::ASC or Blockfrost::QueryOrder::DESC
+  # Blockfrost::QueryOrder::ASC or Blockfrost::QueryOrder::DESC
   config.default_order = Blockfrost::QueryOrder::DESC
 
   # default count per page in collection endpoints (min: 1; max: 100; default: 100)
@@ -169,7 +169,7 @@ assets = Blockfrost::Asset.all(
 ```
 
 **NOTE**: *The `count` parameter should be a value between `1` and `100`. Lower
-or higher values will be coerced to fit with that range.*
+or higher values will be coerced to fit within that range.*
 
 The `order` parameter is converted to an enum in the background, so the 
 underlying enum values are also accepted:

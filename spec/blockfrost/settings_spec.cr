@@ -73,19 +73,6 @@ describe Blockfrost do
     end
   end
 
-  describe ".validate_default_order" do
-    it "raises with and invalid order value" do
-      expect_raises(
-        Habitat::InvalidSettingFormatError,
-        "Default order is invalid (either asc or desc)"
-      ) do
-        Blockfrost.configure do |settings|
-          settings.default_order = "abc"
-        end
-      end
-    end
-  end
-
   describe ".validate_default_count_per_page" do
     it "raises with a count per page lower than 1" do
       expect_raises(Habitat::InvalidSettingFormatError) do

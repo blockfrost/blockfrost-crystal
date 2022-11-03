@@ -14,6 +14,8 @@
 - Added method overload with a `pages : Range` argument to fetch multiple pages
   concurrently and return them as one large array
 - Changed query param sanitizer to ensure a valid value for the `order` param
+- Changed query param sanitizer to include defaults deviating from the api's
+  defaults
 - Changed the usage of the `order` param in the macros with pagination
 
 ## 0.2.1 (2022-10-30)

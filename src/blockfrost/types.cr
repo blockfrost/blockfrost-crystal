@@ -1,5 +1,5 @@
 module Blockfrost
-  alias QueryData = Hash(String, Int32 | String?)
+  alias QueryData = Hash(String, Int32 | QueryOrder | String?)
   alias BodyData = IO | String
 
   enum QueryOrder

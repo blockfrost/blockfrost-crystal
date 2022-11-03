@@ -22,6 +22,9 @@ end
 module Blockfrost
   extend self
 
+  DEFAULT_API_COUNT_PER_PAGE = 100
+  DEFAULT_API_ORDER          = Blockfrost::QueryOrder::ASC
+
   MAX_COUNT_PER_PAGE                 =        100
   MAX_NUMBER_OF_CONCURRENT_REQUESTS  =        200
   MAX_PAGINATION_PAGES               = 21_474_836
@@ -36,8 +39,7 @@ module Blockfrost
       validation: :validate_ipfs_api_key
     setting ipfs_api_version : String = "v0",
       validation: :validate_api_version
-    setting default_order : QueryOrder | String? = nil,
-      validation: :validate_default_order
+    setting default_order : QueryOrder? = nil
     setting default_count_per_page : Int32? = nil,
       validation: :validate_count_per_page
     setting retries_in_concurrent_requests : Int32 = 5,
