@@ -44,6 +44,12 @@ API key.
 
 ## Usage
 
+Every endpoint of the [Blockfrost API](https://docs.blockfrost.io/) is covered
+by this library. It's too much to list them all here, but below are a few
+examples of their usage.
+
+### Configuration
+
 ```crystal
 require "blockfrost"
 ```
@@ -58,17 +64,49 @@ Blockfrost.configure do |config|
 end
 ```
 
-Or wrap your code in a block where different credentials are required:
- 
+There are several configuration options available. Here's an overview are with
+some added information:
+
 ```crystal
-Blockfrost.temp_config(cardano_api_key: "preprodAbC...xYz") do
-  # your code here
+Blockfrost.configure do |config|
+  # an API KEY starting with "testnet", "preview", "preprod" or "mainnet"
+  config.cardano_api_key = ENV.fetch("BLOCKFROST_CARDANO_API_KEY")
+
+  # the api version of the Cardano enpoints (currently only "v0") 
+  config.cardano_api_version = "v0"
+
+  # an API KEY starting with "ipfs"
+  config.ipfs_api_key = ENV.fetch("BLOCKFROST_IPFS_API_KEY")
+
+  # the api version of the IPFS enpoints (currently only "v0") 
+  config.ipfs_api_version = "v0"
+
+  # "asc", "desc", Blockfrost::QueryOrder::ASC or Blockfrost::QueryOrder::DESC
+  config.default_order = Blockfrost::QueryOrder::DESC
+
+  # default count per page in collection endpoints (min: 1; max: 100; default: 100)
+  config.default_count_per_page = 42
+
+  # number of times to retry in concurrent requests (min: 0; max: 10; default: 5)
+  config.retries_in_concurrent_requests = 5
+
+  # sleep between retries in concurrent requests (in ms; min: 0; default: 500)
+  config.validate_sleep_between_retries_ms = 1000
 end
 ```
 
-Every endpoint of the [Blockfrost API](https://docs.blockfrost.io/) is covered
-by this library. It's too much to list them all here, but below are a few
-examples of their usage.
+To use one or more different configuration values locally in your code, use the
+`temp_config` method with a block:
+ 
+```crystal
+# any code here will use the global configuration
+
+Blockfrost.temp_config(cardano_api_key: "preprodAbC...xYz") do
+  # this code will use the "preprodAbC...xYz" api key
+end
+
+# any code following here will use the global configuration again
+```
 
 ### Single resources
 
@@ -130,8 +168,8 @@ assets = Blockfrost::Asset.all(
 )
 ```
 
-**NOTE**: The `count` parameter should be a value between `1` and `100`. Lower
-or higher values will be coerced to fit with that range.
+**NOTE**: *The `count` parameter should be a value between `1` and `100`. Lower
+or higher values will be coerced to fit with that range.*
 
 The `order` parameter is converted to an enum in the background, so the 
 underlying enum values are also accepted:
@@ -143,6 +181,11 @@ assets = Blockfrost::Asset.all(
   page: 1
 )
 ```
+
+**NOTE**: *Using the enum values is considered the safer option. If a string with
+a typo is passed (e.g. "decs"), the `default_order` from the settings will be
+used, whereas passing an enum with a typo will fail to compile. It's a choice
+of security over convenience.*
 
 Some endpoints don't have an order parameter, like `.previous`/`next` on blocks:
 
@@ -190,8 +233,9 @@ assets.size
 # => 1000
 ```
 
-In the background, this method will make a concurrent request, fetching 100
-records for every single page number in the range. Then those results are concatenated into one big array and returned as the result.
+In the background, this method will make concurrent requests fetching 100
+records for every single page number in the range. Then those results are
+concatenated into one big array and returned as the result.
 
 Except for `count` and `page`, all other arguments are also still accepted. So
 the results can also be ordered:
@@ -366,13 +410,14 @@ This will automatically:
 
 1. Fork it (<https://github.com/wout/blockfrost-crystal/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'feat: something new'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+3. Test your changes (`crystal spec`, `crystal tool format` and `bin/ameba`)
+4. Commit your changes (`git commit -am 'feat: something new'`)
+5. Push to the branch (`git push origin my-new-feature`)
+6. Create a new Pull Request
 
-**NOTE**: Please have a look at
-[conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) for commit
-messages.
+**NOTE**: *Please have a look at
+[conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) for
+commit messages.*
 
 ## Contributors
 
