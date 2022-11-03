@@ -9,12 +9,13 @@ describe Blockfrost do
       end
     end
 
-    describe ".from_string" do
-      it "creates an enum value from a string" do
-        Blockfrost::QueryOrder.from_string("asc")
+    describe ".from_string?" do
+      it "tries to create an enum value from a string" do
+        Blockfrost::QueryOrder.from_string?("asc")
           .should eq(Blockfrost::QueryOrder::ASC)
-        Blockfrost::QueryOrder.from_string("desc")
+        Blockfrost::QueryOrder.from_string?("desc")
           .should eq(Blockfrost::QueryOrder::DESC)
+        Blockfrost::QueryOrder.from_string?("abc").should be_nil
       end
     end
   end
