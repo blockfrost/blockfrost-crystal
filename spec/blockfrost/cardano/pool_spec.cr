@@ -14,7 +14,6 @@ describe Blockfrost::Pool do
     end
 
     it "accepts ordering and pagination parameters" do
-      puts "BLA: #{Blockfrost.settings.default_count_per_page}"
       WebMock.stub(:get,
         "https://cardano-testnet.blockfrost.io/api/v0/pools?order=desc&count=10&page=10")
         .to_return(body_io: read_fixture("pool/all-ids.200.json"))
