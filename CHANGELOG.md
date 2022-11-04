@@ -1,7 +1,7 @@
 # Changelog
 [keepachangelog.com](https://keepachangelog.com/en/0.3.0/)
 
-## 0.3.0 (Unreleased)
+## 0.3.0 (2022-11-04)
 
 - Added `User-Agent` request header (`blockfrost-crystal/0.3.0 crystal/1.6.0`)
 - Added global `default_order` setting for collections 
@@ -14,9 +14,13 @@
 - Added method overload with a `pages : Range` argument to fetch multiple pages
   concurrently and return them as one large array
 - Changed query param sanitizer to ensure a valid value for the `order` param
-- Changed query param sanitizer to include defaults deviating from the api's
+- Changed query param sanitizer to include defaults deviating from the API's
   defaults
 - Changed the usage of the `order` param in the macros with pagination
+- Fixed `"Content-Type"` header in the IPFS upload endpoint
+- Changed IPFS endpoint to spawn a new fiber to avoid blocking the main fiber 
+  when large files are loaded
+- Changed `Blockfrost::Client.sdk_version_string` to be a public class method
 
 ## 0.2.1 (2022-10-30)
 
