@@ -26,6 +26,10 @@ module Blockfrost::Client
     )
   end
 
+  def sdk_version_string
+    "blockfrost-crystal/#{Blockfrost::VERSION} crystal/#{Crystal::VERSION}"
+  end
+
   private def perform_http_call(
     method : Method,
     path : String,
@@ -72,7 +76,7 @@ module Blockfrost::Client
   ) : HTTP::Headers
     HTTP::Headers{
       "Accept"       => "application/json",
-      "Content-Type" => content_type.to_s,
+      "Content-Type" => content_type,
       "User-Agent"   => sdk_version_string,
       "project_id"   => Blockfrost.api_key_for_path(path),
     }
@@ -95,9 +99,5 @@ module Blockfrost::Client
         raise response.body
       end
     {% end %}
-  end
-
-  private def sdk_version_string
-    "blockfrost-crystal/#{Blockfrost::VERSION} crystal/#{Crystal::VERSION}"
   end
 end
