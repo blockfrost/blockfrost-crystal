@@ -256,18 +256,6 @@ is temporarily rate-limited (`Blockfrost::Client::OverLimitException`), it will
 retry 10 times and raise anyway after that. All other exceptions will be raised
 immediately.
 
-Here's how fetching sequentially vs concurrently compares in terms of loading
-times:
-
-| Description            |              | Elapsed  |
-| :--------------------- | ------------ | -------: |
-| 1 page                 |   100 assets |    187ms |
-| 10 pages sequentially  |  1000 assets | 1s 873ms |
-| 10 pages concurrently  |  1000 assets |    265ms |
-| 100 pages concurrently | 10000 assets |    427ms |
-
-_(tested on a 1 Gb home connection from Spain)_
-
 There are two settings related to rate-limiting:
 
 ```crystal
@@ -279,6 +267,18 @@ Blockfrost.configure do |config|
   config.validate_sleep_between_retries_ms = 1000
 end
 ```
+
+Here's how fetching sequentially vs concurrently compares in terms of loading
+times:
+
+| Description            |              | Elapsed  |
+| :--------------------- | ------------ | -------: |
+| 1 page                 |   100 assets |    187ms |
+| 10 pages sequentially  |  1000 assets | 1s 873ms |
+| 10 pages concurrently  |  1000 assets |    265ms |
+| 100 pages concurrently | 10000 assets |    427ms |
+
+_(tested on a 1 Gb home connection from Spain)_
 
 ### Post endpoints
 
