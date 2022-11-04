@@ -1,20 +1,29 @@
 module Blockfrost::IPFS
   def self.add(file_path : String)
     reader, writer = IO.pipe
+    channel = Channel(String).new(1)
 
-    HTTP::FormData.build(writer) do |formdata|
-      File.open(file_path) do |file|
-        formdata.file("file", file)
+    spawn do
+      HTTP::FormData.build(writer) do |formdata|
+        channel.send(formdata.content_type)
+
+        File.open(file_path) do |file|
+          formdata.file(
+            "file", file,
+            HTTP::FormData::FileMetadata.new(filename: File.basename(file_path)),
+            HTTP::Headers{"Content-Type" => MIME.from_filename(file_path)}
+          )
+        end
       end
-    end
 
-    writer.close
+      writer.close
+    end
 
     Object.from_json(
       Client.post(
         "ipfs/add",
         reader,
-        content_type: MIME.from_filename(file_path)
+        content_type: channel.receive
       )
     )
   end

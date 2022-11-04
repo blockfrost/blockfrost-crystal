@@ -6,14 +6,18 @@ describe Blockfrost::IPFS do
   end
 
   describe ".add" do
-    it "adds a file to ipfs" do
+    it "adds a file to IPFS" do
+      # NOTE: to debug the body and content type, uncomment both lines below.
       WebMock.stub(:post, "https://ipfs.blockfrost.io/api/v0/ipfs/add")
-        .with(headers: {
-          "Accept"       => "application/json",
-          "Content-Type" => "text/markdown",
-          "project_id"   => test_ipfs_api_key,
-        })
-        .to_return(body_io: read_fixture("ipfs/add.200.json"))
+        .with(
+          # body: "test",
+          headers: {
+            "Accept"     => "application/json",
+            "User-Agent" => Blockfrost::Client.sdk_version_string,
+            # "Content-Type" => "test",
+            "project_id" => "ipfsVas4TOfOvQeVjTVGxxYNRLOt6Fb4FAKE",
+          }
+        ).to_return(body_io: read_fixture("ipfs/add.200.json"))
 
       object = Blockfrost::IPFS.add("spec/fixtures/ipfs/README.md")
       object.should be_a(Blockfrost::IPFS::Object)
