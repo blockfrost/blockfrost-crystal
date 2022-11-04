@@ -2,8 +2,8 @@ struct Blockfrost::Asset
   include JSON::Serializable
 
   getter asset : String
-  @[JSON::Field(converter: Blockfrost::Int64FromString)]
-  getter quantity : Int64
+  @[JSON::Field(converter: Blockfrost::Int128FromString)]
+  getter quantity : Int128
   getter policy_id : String
   getter asset_name : String?
   getter fingerprint : String
@@ -47,8 +47,8 @@ struct Blockfrost::Asset
     include JSON::Serializable
 
     getter asset : String
-    @[JSON::Field(converter: Blockfrost::Int64FromString)]
-    getter quantity : Int64
+    @[JSON::Field(converter: Blockfrost::Int128FromString)]
+    getter quantity : Int128
   end
 
   struct OnchainMetadata
@@ -73,8 +73,8 @@ struct Blockfrost::Asset
     include JSON::Serializable
 
     getter address : String
-    @[JSON::Field(converter: Blockfrost::Int64FromString)]
-    getter quantity : Int64
+    @[JSON::Field(converter: Blockfrost::Int128FromString)]
+    getter quantity : Int128
   end
 
   struct Event
@@ -86,8 +86,8 @@ struct Blockfrost::Asset
     })
 
     getter tx_hash : String
-    @[JSON::Field(converter: Blockfrost::Int64FromString)]
-    getter amount : Int64
+    @[JSON::Field(converter: Blockfrost::Int128FromString)]
+    getter amount : Int128
     getter action : Action
   end
 

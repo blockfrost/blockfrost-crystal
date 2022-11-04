@@ -1,6 +1,10 @@
 # Changelog
 [keepachangelog.com](https://keepachangelog.com/en/0.3.0/)
 
+## 0.4.0 (2022-11-04)
+
+- Fix use `Int128` for lovelace and token quantities
+
 ## 0.3.0 (2022-11-04)
 
 - Added `User-Agent` request header (`blockfrost-crystal/0.3.0 crystal/1.6.0`)

@@ -11,14 +11,14 @@ struct Blockfrost::Block
   getter slot_leader : String
   getter size : Int32
   getter tx_count : Int32
-  @[JSON::Field(converter: Blockfrost::Int64FromString)]
-  getter output : Int64?
-  @[JSON::Field(converter: Blockfrost::Int64FromString)]
-  getter fees : Int64?
+  @[JSON::Field(converter: Blockfrost::Int128FromString)]
+  getter output : Int128?
+  @[JSON::Field(converter: Blockfrost::Int128FromString)]
+  getter fees : Int128?
   getter block_vrf : String?
   getter op_cert : String?
-  @[JSON::Field(converter: Blockfrost::Int64FromString)]
-  getter op_cert_counter : Int64?
+  @[JSON::Field(converter: Blockfrost::Int128FromString)]
+  getter op_cert_counter : Int128?
   getter previous_block : String?
   getter next_block : String?
   getter confirmations : Int32

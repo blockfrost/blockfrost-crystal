@@ -9,10 +9,10 @@ struct Blockfrost::Transaction
   getter slot : Int32
   getter index : Int32
   getter output_amount : Array(Token)
-  @[JSON::Field(converter: Blockfrost::Int64FromString)]
-  getter fees : Int64
-  @[JSON::Field(converter: Blockfrost::Int64FromString)]
-  getter deposit : Int64
+  @[JSON::Field(converter: Blockfrost::Int128FromString)]
+  getter fees : Int128
+  @[JSON::Field(converter: Blockfrost::Int128FromString)]
+  getter deposit : Int128
   getter size : Int32
   @[JSON::Field(converter: Blockfrost::Int32FromString)]
   getter invalid_before : Int32?
@@ -170,8 +170,8 @@ struct Blockfrost::Transaction
     include JSON::Serializable
 
     getter address : String
-    @[JSON::Field(converter: Blockfrost::Int64FromString)]
-    getter amount : Int64
+    @[JSON::Field(converter: Blockfrost::Int128FromString)]
+    getter amount : Int128
   end
 
   struct Mir
@@ -185,8 +185,8 @@ struct Blockfrost::Transaction
     getter pot : Pot
     getter cert_index : Int32
     getter address : String
-    @[JSON::Field(converter: Blockfrost::Int64FromString)]
-    getter amount : Int64
+    @[JSON::Field(converter: Blockfrost::Int128FromString)]
+    getter amount : Int128
   end
 
   struct PoolUpdate
@@ -195,11 +195,11 @@ struct Blockfrost::Transaction
     getter cert_index : Int32
     getter pool_id : String
     getter vrf_key : String
-    @[JSON::Field(converter: Blockfrost::Int64FromString)]
-    getter pledge : Int64
+    @[JSON::Field(converter: Blockfrost::Int128FromString)]
+    getter pledge : Int128
     getter margin_cost : Float64
-    @[JSON::Field(converter: Blockfrost::Int64FromString)]
-    getter fixed_cost : Int64
+    @[JSON::Field(converter: Blockfrost::Int128FromString)]
+    getter fixed_cost : Int128
     getter reward_account : String
     getter owners : Array(String)
     getter metadata : Metadata?

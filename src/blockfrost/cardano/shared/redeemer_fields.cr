@@ -10,10 +10,10 @@ module Blockfrost::Shared::RedeemerFields
   getter purpose : Purpose
   getter redeemer_data_hash : String
   getter datum_hash : String
-  @[JSON::Field(converter: Blockfrost::Int64FromString)]
-  getter unit_mem : Int64
-  @[JSON::Field(converter: Blockfrost::Int64FromString)]
-  getter unit_steps : Int64
-  @[JSON::Field(converter: Blockfrost::Int64FromString)]
-  getter fee : Int64
+  @[JSON::Field(converter: Blockfrost::Int128FromString)]
+  getter unit_mem : Int128
+  @[JSON::Field(converter: Blockfrost::Int128FromString)]
+  getter unit_steps : Int128
+  @[JSON::Field(converter: Blockfrost::Int128FromString)]
+  getter fee : Int128
 end

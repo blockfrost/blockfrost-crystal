@@ -8,21 +8,21 @@ struct Blockfrost::Pool
   getter vrf_key : String
   getter blocks_minted : Int32
   getter blocks_epoch : Int32
-  @[JSON::Field(converter: Blockfrost::Int64FromString)]
-  getter live_stake : Int64
+  @[JSON::Field(converter: Blockfrost::Int128FromString)]
+  getter live_stake : Int128
   getter live_size : Float64
   getter live_saturation : Float64
   getter live_delegators : Int32
-  @[JSON::Field(converter: Blockfrost::Int64FromString)]
-  getter active_stake : Int64
+  @[JSON::Field(converter: Blockfrost::Int128FromString)]
+  getter active_stake : Int128
   getter active_size : Float64
-  @[JSON::Field(converter: Blockfrost::Int64FromString)]
-  getter declared_pledge : Int64
-  @[JSON::Field(converter: Blockfrost::Int64FromString)]
-  getter live_pledge : Int64
+  @[JSON::Field(converter: Blockfrost::Int128FromString)]
+  getter declared_pledge : Int128
+  @[JSON::Field(converter: Blockfrost::Int128FromString)]
+  getter live_pledge : Int128
   getter margin_cost : Float64
-  @[JSON::Field(converter: Blockfrost::Int64FromString)]
-  getter fixed_cost : Int64
+  @[JSON::Field(converter: Blockfrost::Int128FromString)]
+  getter fixed_cost : Int128
   getter reward_account : String
   getter owners : Array(String)
   getter registration : Array(String)
@@ -105,10 +105,10 @@ struct Blockfrost::Pool
 
     getter pool_id : String
     getter hex : String
-    @[JSON::Field(converter: Blockfrost::Int64FromString)]
-    getter active_stake : Int64
-    @[JSON::Field(converter: Blockfrost::Int64FromString)]
-    getter live_stake : Int64
+    @[JSON::Field(converter: Blockfrost::Int128FromString)]
+    getter active_stake : Int128
+    @[JSON::Field(converter: Blockfrost::Int128FromString)]
+    getter live_stake : Int128
   end
 
   struct Retired
@@ -130,14 +130,14 @@ struct Blockfrost::Pool
 
     getter epoch : Int32
     getter blocks : Int32
-    @[JSON::Field(converter: Blockfrost::Int64FromString)]
-    getter active_stake : Int64
+    @[JSON::Field(converter: Blockfrost::Int128FromString)]
+    getter active_stake : Int128
     getter active_size : Float64
     getter delegators_count : Int32
-    @[JSON::Field(converter: Blockfrost::Int64FromString)]
-    getter rewards : Int64
-    @[JSON::Field(converter: Blockfrost::Int64FromString)]
-    getter fees : Int64
+    @[JSON::Field(converter: Blockfrost::Int128FromString)]
+    getter rewards : Int128
+    @[JSON::Field(converter: Blockfrost::Int128FromString)]
+    getter fees : Int128
   end
 
   struct Metadata
@@ -157,8 +157,8 @@ struct Blockfrost::Pool
     include JSON::Serializable
 
     getter address : String
-    @[JSON::Field(converter: Blockfrost::Int64FromString)]
-    getter live_stake : Int64
+    @[JSON::Field(converter: Blockfrost::Int128FromString)]
+    getter live_stake : Int128
   end
 
   struct Update

@@ -1,10 +1,10 @@
 module Blockfrost
-  struct Int64FromString
+  struct Int128FromString
     def self.from_json(pull : JSON::PullParser)
-      pull.read_string.to_s.to_i64
+      pull.read_string.to_s.to_i128
     end
 
-    def self.to_json(value : Int64, json : JSON::Builder)
+    def self.to_json(value : Int128, json : JSON::Builder)
       json.string(value.to_s)
     end
   end

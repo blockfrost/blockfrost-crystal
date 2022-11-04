@@ -1,5 +1,5 @@
 module Blockfrost::Shared::TokenFields
   getter unit : String
-  @[JSON::Field(converter: Blockfrost::Int64FromString)]
-  getter quantity : Int64
+  @[JSON::Field(converter: Blockfrost::Int128FromString)]
+  getter quantity : Int128
 end

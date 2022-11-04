@@ -26,8 +26,8 @@ struct Blockfrost::Metadata
 
     getter label : String
     getter cip10 : String?
-    @[JSON::Field(converter: Blockfrost::Int64FromString)]
-    getter count : Int64
+    @[JSON::Field(converter: Blockfrost::Int128FromString)]
+    getter count : Int128
   end
 
   struct ContentJSON

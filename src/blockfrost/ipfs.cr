@@ -37,8 +37,8 @@ module Blockfrost::IPFS
 
     getter name : String
     getter ipfs_hash : String
-    @[JSON::Field(converter: Blockfrost::Int64FromString)]
-    getter size : Int64
+    @[JSON::Field(converter: Blockfrost::Int128FromString)]
+    getter size : Int128
 
     def pin
       Pin.add(ipfs_hash)
@@ -62,8 +62,8 @@ module Blockfrost::IPFS
     getter time_created : Time
     @[JSON::Field(converter: Blockfrost::TimeFromInt)]
     getter time_pinned : Time
-    @[JSON::Field(converter: Blockfrost::Int64FromString)]
-    getter size : Int64
+    @[JSON::Field(converter: Blockfrost::Int128FromString)]
+    getter size : Int128
 
     def self.add(ipfs_path : String)
       Change.from_json(Client.post("ipfs/pin/add/#{ipfs_path}", ""))
