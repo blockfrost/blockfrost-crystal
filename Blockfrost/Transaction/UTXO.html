@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Crystal Docs 1.5.0">
+<meta name="crystal_docs.project_version" content="main">
+<meta name="crystal_docs.project_name" content="blockfrost">
+
+
+
+<link href="../../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../js/doc.js"></script>
+
+  <meta name="repository-name" content="blockfrost">
+  <title>Blockfrost::Transaction::UTXO - blockfrost main</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../../";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../../index.html">
+          blockfrost
+        </a>
+      </h1>
+
+      <span class="project-version">
+        main
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="blockfrost/Blockfrost" data-name="blockfrost">
+      <a href="../../Blockfrost.html">Blockfrost</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/Account" data-name="blockfrost::account">
+      <a href="../../Blockfrost/Account.html">Account</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Account/Address" data-name="blockfrost::account::address">
+      <a href="../../Blockfrost/Account/Address.html">Address</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Account/Delegation" data-name="blockfrost::account::delegation">
+      <a href="../../Blockfrost/Account/Delegation.html">Delegation</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Account/Event" data-name="blockfrost::account::event">
+      <a href="../../Blockfrost/Account/Event.html">Event</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Account/Mir" data-name="blockfrost::account::mir">
+      <a href="../../Blockfrost/Account/Mir.html">Mir</a>
+      
+    </li>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/Account/Registration" data-name="blockfrost::account::registration">
+      <a href="../../Blockfrost/Account/Registration.html">Registration</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Account/Registration/Action" data-name="blockfrost::account::registration::action">
+      <a href="../../Blockfrost/Account/Registration/Action.html">Action</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/Account/Reward" data-name="blockfrost::account::reward">
+      <a href="../../Blockfrost/Account/Reward.html">Reward</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Account/Reward/Type" data-name="blockfrost::account::reward::type">
+      <a href="../../Blockfrost/Account/Reward/Type.html">Type</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Account/Total" data-name="blockfrost::account::total">
+      <a href="../../Blockfrost/Account/Total.html">Total</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Account/Withdrawal" data-name="blockfrost::account::withdrawal">
+      <a href="../../Blockfrost/Account/Withdrawal.html">Withdrawal</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/Address" data-name="blockfrost::address">
+      <a href="../../Blockfrost/Address.html">Address</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Address/Extended" data-name="blockfrost::address::extended">
+      <a href="../../Blockfrost/Address/Extended.html">Extended</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Address/Total" data-name="blockfrost::address::total">
+      <a href="../../Blockfrost/Address/Total.html">Total</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Address/Transaction" data-name="blockfrost::address::transaction">
+      <a href="../../Blockfrost/Address/Transaction.html">Transaction</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Address/Type" data-name="blockfrost::address::type">
+      <a href="../../Blockfrost/Address/Type.html">Type</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Address/UTXO" data-name="blockfrost::address::utxo">
+      <a href="../../Blockfrost/Address/UTXO.html">UTXO</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/Asset" data-name="blockfrost::asset">
+      <a href="../../Blockfrost/Asset.html">Asset</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Asset/Abbreviated" data-name="blockfrost::asset::abbreviated">
+      <a href="../../Blockfrost/Asset/Abbreviated.html">Abbreviated</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Asset/Address" data-name="blockfrost::asset::address">
+      <a href="../../Blockfrost/Asset/Address.html">Address</a>
+      
+    </li>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/Asset/Event" data-name="blockfrost::asset::event">
+      <a href="../../Blockfrost/Asset/Event.html">Event</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Asset/Event/Action" data-name="blockfrost::asset::event::action">
+      <a href="../../Blockfrost/Asset/Event/Action.html">Action</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Asset/Metadata" data-name="blockfrost::asset::metadata">
+      <a href="../../Blockfrost/Asset/Metadata.html">Metadata</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Asset/OnchainMetadata" data-name="blockfrost::asset::onchainmetadata">
+      <a href="../../Blockfrost/Asset/OnchainMetadata.html">OnchainMetadata</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Asset/Transaction" data-name="blockfrost::asset::transaction">
+      <a href="../../Blockfrost/Asset/Transaction.html">Transaction</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/Block" data-name="blockfrost::block">
+      <a href="../../Blockfrost/Block.html">Block</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Block/Address" data-name="blockfrost::block::address">
+      <a href="../../Blockfrost/Block/Address.html">Address</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Block/Transaction" data-name="blockfrost::block::transaction">
+      <a href="../../Blockfrost/Block/Transaction.html">Transaction</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/BodyData" data-name="blockfrost::bodydata">
+      <a href="../../Blockfrost/BodyData.html">BodyData</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/CardanoNetworks" data-name="blockfrost::cardanonetworks">
+      <a href="../../Blockfrost/CardanoNetworks.html">CardanoNetworks</a>
+      
+    </li>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/Client" data-name="blockfrost::client">
+      <a href="../../Blockfrost/Client.html">Client</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Client/BadRequestException" data-name="blockfrost::client::badrequestexception">
+      <a href="../../Blockfrost/Client/BadRequestException.html">BadRequestException</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Client/ForbiddenException" data-name="blockfrost::client::forbiddenexception">
+      <a href="../../Blockfrost/Client/ForbiddenException.html">ForbiddenException</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Client/IpBannedException" data-name="blockfrost::client::ipbannedexception">
+      <a href="../../Blockfrost/Client/IpBannedException.html">IpBannedException</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Client/Method" data-name="blockfrost::client::method">
+      <a href="../../Blockfrost/Client/Method.html">Method</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Client/NotFoundException" data-name="blockfrost::client::notfoundexception">
+      <a href="../../Blockfrost/Client/NotFoundException.html">NotFoundException</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Client/OverLimitException" data-name="blockfrost::client::overlimitexception">
+      <a href="../../Blockfrost/Client/OverLimitException.html">OverLimitException</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Client/ServerErrorException" data-name="blockfrost::client::servererrorexception">
+      <a href="../../Blockfrost/Client/ServerErrorException.html">ServerErrorException</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Client/TimeoutException" data-name="blockfrost::client::timeoutexception">
+      <a href="../../Blockfrost/Client/TimeoutException.html">TimeoutException</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/ConcurrencyLimitException" data-name="blockfrost::concurrencylimitexception">
+      <a href="../../Blockfrost/ConcurrencyLimitException.html">ConcurrencyLimitException</a>
+      
+    </li>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/Datum" data-name="blockfrost::datum">
+      <a href="../../Blockfrost/Datum.html">Datum</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Datum/CBOR" data-name="blockfrost::datum::cbor">
+      <a href="../../Blockfrost/Datum/CBOR.html">CBOR</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Datum/JSON" data-name="blockfrost::datum::json">
+      <a href="../../Blockfrost/Datum/JSON.html">JSON</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/Epoch" data-name="blockfrost::epoch">
+      <a href="../../Blockfrost/Epoch.html">Epoch</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Epoch/Parameters" data-name="blockfrost::epoch::parameters">
+      <a href="../../Blockfrost/Epoch/Parameters.html">Parameters</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Epoch/Stake" data-name="blockfrost::epoch::stake">
+      <a href="../../Blockfrost/Epoch/Stake.html">Stake</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Exception" data-name="blockfrost::exception">
+      <a href="../../Blockfrost/Exception.html">Exception</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/HabitatSettings" data-name="blockfrost::habitatsettings">
+      <a href="../../Blockfrost/HabitatSettings.html">HabitatSettings</a>
+      
+    </li>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/Health" data-name="blockfrost::health">
+      <a href="../../Blockfrost/Health.html">Health</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Health/Clock" data-name="blockfrost::health::clock">
+      <a href="../../Blockfrost/Health/Clock.html">Clock</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Int128FromString" data-name="blockfrost::int128fromstring">
+      <a href="../../Blockfrost/Int128FromString.html">Int128FromString</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Int32FromString" data-name="blockfrost::int32fromstring">
+      <a href="../../Blockfrost/Int32FromString.html">Int32FromString</a>
+      
+    </li>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/IPFS" data-name="blockfrost::ipfs">
+      <a href="../../Blockfrost/IPFS.html">IPFS</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/IPFS/Object" data-name="blockfrost::ipfs::object">
+      <a href="../../Blockfrost/IPFS/Object.html">Object</a>
+      
+    </li>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/IPFS/Pin" data-name="blockfrost::ipfs::pin">
+      <a href="../../Blockfrost/IPFS/Pin.html">Pin</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/IPFS/Pin/Change" data-name="blockfrost::ipfs::pin::change">
+      <a href="../../Blockfrost/IPFS/Pin/Change.html">Change</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/IPFS/Pin/State" data-name="blockfrost::ipfs::pin::state">
+      <a href="../../Blockfrost/IPFS/Pin/State.html">State</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/Ledger" data-name="blockfrost::ledger">
+      <a href="../../Blockfrost/Ledger.html">Ledger</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Ledger/Genesis" data-name="blockfrost::ledger::genesis">
+      <a href="../../Blockfrost/Ledger/Genesis.html">Genesis</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/Metadata" data-name="blockfrost::metadata">
+      <a href="../../Blockfrost/Metadata.html">Metadata</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Metadata/ContentCBOR" data-name="blockfrost::metadata::contentcbor">
+      <a href="../../Blockfrost/Metadata/ContentCBOR.html">ContentCBOR</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Metadata/ContentJSON" data-name="blockfrost::metadata::contentjson">
+      <a href="../../Blockfrost/Metadata/ContentJSON.html">ContentJSON</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Metadata/Label" data-name="blockfrost::metadata::label">
+      <a href="../../Blockfrost/Metadata/Label.html">Label</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/Metric" data-name="blockfrost::metric">
+      <a href="../../Blockfrost/Metric.html">Metric</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Metric/Endpoint" data-name="blockfrost::metric::endpoint">
+      <a href="../../Blockfrost/Metric/Endpoint.html">Endpoint</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/Network" data-name="blockfrost::network">
+      <a href="../../Blockfrost/Network.html">Network</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Network/Stake" data-name="blockfrost::network::stake">
+      <a href="../../Blockfrost/Network/Stake.html">Stake</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Network/Supply" data-name="blockfrost::network::supply">
+      <a href="../../Blockfrost/Network/Supply.html">Supply</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/Nutlink" data-name="blockfrost::nutlink">
+      <a href="../../Blockfrost/Nutlink.html">Nutlink</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/Nutlink/Ticker" data-name="blockfrost::nutlink::ticker">
+      <a href="../../Blockfrost/Nutlink/Ticker.html">Ticker</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Nutlink/Ticker/Record" data-name="blockfrost::nutlink::ticker::record">
+      <a href="../../Blockfrost/Nutlink/Ticker/Record.html">Record</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/Pool" data-name="blockfrost::pool">
+      <a href="../../Blockfrost/Pool.html">Pool</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Pool/Abbreviated" data-name="blockfrost::pool::abbreviated">
+      <a href="../../Blockfrost/Pool/Abbreviated.html">Abbreviated</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Pool/Delegator" data-name="blockfrost::pool::delegator">
+      <a href="../../Blockfrost/Pool/Delegator.html">Delegator</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Pool/Event" data-name="blockfrost::pool::event">
+      <a href="../../Blockfrost/Pool/Event.html">Event</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Pool/Metadata" data-name="blockfrost::pool::metadata">
+      <a href="../../Blockfrost/Pool/Metadata.html">Metadata</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Pool/Relay" data-name="blockfrost::pool::relay">
+      <a href="../../Blockfrost/Pool/Relay.html">Relay</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Pool/Retired" data-name="blockfrost::pool::retired">
+      <a href="../../Blockfrost/Pool/Retired.html">Retired</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Pool/Retiring" data-name="blockfrost::pool::retiring">
+      <a href="../../Blockfrost/Pool/Retiring.html">Retiring</a>
+      
+    </li>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/Pool/Update" data-name="blockfrost::pool::update">
+      <a href="../../Blockfrost/Pool/Update.html">Update</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Pool/Update/Action" data-name="blockfrost::pool::update::action">
+      <a href="../../Blockfrost/Pool/Update/Action.html">Action</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/QueryData" data-name="blockfrost::querydata">
+      <a href="../../Blockfrost/QueryData.html">QueryData</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/QueryOrder" data-name="blockfrost::queryorder">
+      <a href="../../Blockfrost/QueryOrder.html">QueryOrder</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/QueryString" data-name="blockfrost::querystring">
+      <a href="../../Blockfrost/QueryString.html">QueryString</a>
+      
+    </li>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/RequestException" data-name="blockfrost::requestexception">
+      <a href="../../Blockfrost/RequestException.html">RequestException</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/RequestException/Mapper" data-name="blockfrost::requestexception::mapper">
+      <a href="../../Blockfrost/RequestException/Mapper.html">Mapper</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/RequestExceptions" data-name="blockfrost::requestexceptions">
+      <a href="../../Blockfrost/RequestExceptions.html">RequestExceptions</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Root" data-name="blockfrost::root">
+      <a href="../../Blockfrost/Root.html">Root</a>
+      
+    </li>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/Script" data-name="blockfrost::script">
+      <a href="../../Blockfrost/Script.html">Script</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Script/Abbreviated" data-name="blockfrost::script::abbreviated">
+      <a href="../../Blockfrost/Script/Abbreviated.html">Abbreviated</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Script/PlutusCBOR" data-name="blockfrost::script::plutuscbor">
+      <a href="../../Blockfrost/Script/PlutusCBOR.html">PlutusCBOR</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Script/Redeemer" data-name="blockfrost::script::redeemer">
+      <a href="../../Blockfrost/Script/Redeemer.html">Redeemer</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Script/TimelockJSON" data-name="blockfrost::script::timelockjson">
+      <a href="../../Blockfrost/Script/TimelockJSON.html">TimelockJSON</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Script/Type" data-name="blockfrost::script::type">
+      <a href="../../Blockfrost/Script/Type.html">Type</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/Shared" data-name="blockfrost::shared">
+      <a href="../../Blockfrost/Shared.html">Shared</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Shared/AddressFields" data-name="blockfrost::shared::addressfields">
+      <a href="../../Blockfrost/Shared/AddressFields.html">AddressFields</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Shared/PoolMetadataFields" data-name="blockfrost::shared::poolmetadatafields">
+      <a href="../../Blockfrost/Shared/PoolMetadataFields.html">PoolMetadataFields</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Shared/PoolRelayFields" data-name="blockfrost::shared::poolrelayfields">
+      <a href="../../Blockfrost/Shared/PoolRelayFields.html">PoolRelayFields</a>
+      
+    </li>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/Shared/RedeemerFields" data-name="blockfrost::shared::redeemerfields">
+      <a href="../../Blockfrost/Shared/RedeemerFields.html">RedeemerFields</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Shared/RedeemerFields/Purpose" data-name="blockfrost::shared::redeemerfields::purpose">
+      <a href="../../Blockfrost/Shared/RedeemerFields/Purpose.html">Purpose</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Shared/TokenFields" data-name="blockfrost::shared::tokenfields">
+      <a href="../../Blockfrost/Shared/TokenFields.html">TokenFields</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Shared/UTXOFields" data-name="blockfrost::shared::utxofields">
+      <a href="../../Blockfrost/Shared/UTXOFields.html">UTXOFields</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/TimeFromInt" data-name="blockfrost::timefromint">
+      <a href="../../Blockfrost/TimeFromInt.html">TimeFromInt</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/TimeMsFromInt" data-name="blockfrost::timemsfromint">
+      <a href="../../Blockfrost/TimeMsFromInt.html">TimeMsFromInt</a>
+      
+    </li>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/Token" data-name="blockfrost::token">
+      <a href="../../Blockfrost/Token.html">Token</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Token/Extended" data-name="blockfrost::token::extended">
+      <a href="../../Blockfrost/Token/Extended.html">Extended</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent open current" data-id="blockfrost/Blockfrost/Transaction" data-name="blockfrost::transaction">
+      <a href="../../Blockfrost/Transaction.html">Transaction</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Transaction/Delegation" data-name="blockfrost::transaction::delegation">
+      <a href="../../Blockfrost/Transaction/Delegation.html">Delegation</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Transaction/MetadataCBOR" data-name="blockfrost::transaction::metadatacbor">
+      <a href="../../Blockfrost/Transaction/MetadataCBOR.html">MetadataCBOR</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Transaction/MetadataJSON" data-name="blockfrost::transaction::metadatajson">
+      <a href="../../Blockfrost/Transaction/MetadataJSON.html">MetadataJSON</a>
+      
+    </li>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/Transaction/Mir" data-name="blockfrost::transaction::mir">
+      <a href="../../Blockfrost/Transaction/Mir.html">Mir</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Transaction/Mir/Pot" data-name="blockfrost::transaction::mir::pot">
+      <a href="../../Blockfrost/Transaction/Mir/Pot.html">Pot</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Transaction/PoolRetire" data-name="blockfrost::transaction::poolretire">
+      <a href="../../Blockfrost/Transaction/PoolRetire.html">PoolRetire</a>
+      
+    </li>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/Transaction/PoolUpdate" data-name="blockfrost::transaction::poolupdate">
+      <a href="../../Blockfrost/Transaction/PoolUpdate.html">PoolUpdate</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Transaction/PoolUpdate/Metadata" data-name="blockfrost::transaction::poolupdate::metadata">
+      <a href="../../Blockfrost/Transaction/PoolUpdate/Metadata.html">Metadata</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Transaction/PoolUpdate/Relay" data-name="blockfrost::transaction::poolupdate::relay">
+      <a href="../../Blockfrost/Transaction/PoolUpdate/Relay.html">Relay</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Transaction/Redeemer" data-name="blockfrost::transaction::redeemer">
+      <a href="../../Blockfrost/Transaction/Redeemer.html">Redeemer</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Transaction/Stake" data-name="blockfrost::transaction::stake">
+      <a href="../../Blockfrost/Transaction/Stake.html">Stake</a>
+      
+    </li>
+  
+  <li class="parent open current" data-id="blockfrost/Blockfrost/Transaction/UTXO" data-name="blockfrost::transaction::utxo">
+      <a href="../../Blockfrost/Transaction/UTXO.html">UTXO</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Transaction/UTXO/Input" data-name="blockfrost::transaction::utxo::input">
+      <a href="../../Blockfrost/Transaction/UTXO/Input.html">Input</a>
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Transaction/UTXO/Output" data-name="blockfrost::transaction::utxo::output">
+      <a href="../../Blockfrost/Transaction/UTXO/Output.html">Output</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Transaction/Withdrawal" data-name="blockfrost::transaction::withdrawal">
+      <a href="../../Blockfrost/Transaction/Withdrawal.html">Withdrawal</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="blockfrost/Blockfrost/Utils" data-name="blockfrost::utils">
+      <a href="../../Blockfrost/Utils.html">Utils</a>
+      
+        <ul>
+  
+  <li class=" " data-id="blockfrost/Blockfrost/Utils/Address" data-name="blockfrost::utils::address">
+      <a href="../../Blockfrost/Utils/Address.html">Address</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">struct</span> Blockfrost::Transaction::UTXO
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Blockfrost/Transaction/UTXO.html">Blockfrost::Transaction::UTXO</a></li><li class="superclass">Struct</li><li class="superclass">Value</li><li class="superclass">Object</li></ul>
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="included-modules" class="anchor" href="#included-modules">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Included Modules
+  </h2>
+  <ul class="other-types-list">
+    
+      <li class="other-type">JSON::Serializable</li>
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/blockfrost/blockfrost-crystal/blob/6eb82b54c40ab1d70c875774706c164397700717/src/blockfrost/cardano/transaction.cr#L126" target="_blank">
+        blockfrost/cardano/transaction.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+
+
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new%28pull%3AJSON%3A%3APullParser%29-class-method" class="signature"><strong>.new</strong>(pull : JSON::PullParser)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#hash%3AString-instance-method" class="signature"><strong>#hash</strong> : String</a>
+        
+          <div class="summary"><p>Generates an <code>UInt64</code> hash value for this object.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#inputs%3AArray%28Input%29-instance-method" class="signature"><strong>#inputs</strong> : Array(Input)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#outputs%3AArray%28Output%29-instance-method" class="signature"><strong>#outputs</strong> : Array(Output)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+<div class="methods-inherited">
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+</div>
+
+
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new(pull:JSON::PullParser)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(pull : JSON::PullParser)
+
+        <a class="method-permalink" href="#new%28pull%3AJSON%3A%3APullParser%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/blockfrost/blockfrost-crystal/blob/6eb82b54c40ab1d70c875774706c164397700717/src/blockfrost/cardano/transaction.cr#L127" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="hash:String-instance-method">
+      <div class="signature">
+        
+        def <strong>hash</strong> : String
+
+        <a class="method-permalink" href="#hash%3AString-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+            <div class="doc-inherited">
+              Description copied from class Object
+            </div>
+          
+          <p>Generates an <code>UInt64</code> hash value for this object.</p>
+<p>This method must have the property that <code>a == b</code> implies <code>a.hash == b.hash</code>.</p>
+<p>The hash value is used along with <code>==</code> by the <code>Hash</code> class to determine if two objects
+reference the same hash key.</p>
+<p>Subclasses must not override this method. Instead, they must define <code>hash(hasher)</code>,
+though usually the macro <code>def_hash</code> can be used to generate this method.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/blockfrost/blockfrost-crystal/blob/6eb82b54c40ab1d70c875774706c164397700717/src/blockfrost/cardano/transaction.cr#L129" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="inputs:Array(Input)-instance-method">
+      <div class="signature">
+        
+        def <strong>inputs</strong> : Array(<a href="../../Blockfrost/Transaction/UTXO/Input.html">Input</a>)
+
+        <a class="method-permalink" href="#inputs%3AArray%28Input%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/blockfrost/blockfrost-crystal/blob/6eb82b54c40ab1d70c875774706c164397700717/src/blockfrost/cardano/transaction.cr#L130" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="outputs:Array(Output)-instance-method">
+      <div class="signature">
+        
+        def <strong>outputs</strong> : Array(<a href="../../Blockfrost/Transaction/UTXO/Output.html">Output</a>)
+
+        <a class="method-permalink" href="#outputs%3AArray%28Output%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/blockfrost/blockfrost-crystal/blob/6eb82b54c40ab1d70c875774706c164397700717/src/blockfrost/cardano/transaction.cr#L131" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+</div>
+
+</body>
+</html>
