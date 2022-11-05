@@ -400,7 +400,7 @@ end
 
 ## Documentation
 
-- [API (main)](https://wout.github.io/blockfrost-crystal/)
+- [API (main)](https://blockfrost.github.io/blockfrost-crystal/)
 - [Blockfrost API](https://docs.blockfrost.io/)
 
 ## Development
