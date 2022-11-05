@@ -1,6 +1,6 @@
-![GitHub](https://img.shields.io/github/license/wout/blockfrost-crystal)
-![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/wout/blockfrost-crystal)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/wout/blockfrost-crystal/blockfrost-crystal%20CI)
+![GitHub](https://img.shields.io/github/license/blockfrost/blockfrost-crystal)
+![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/blockfrost/blockfrost-crystal)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/blockfrost/blockfrost-crystal/blockfrost-crystal%20CI)
 <a href="https://fivebinaries.com/"><img src="https://img.shields.io/badge/made%20by-Five%20Binaries-darkviolet.svg?style=flat-square" /></a>
 
 <img src="https://blockfrost.io/images/logo.svg"
@@ -12,7 +12,7 @@
 
 <br>
 
-<p align="center">A Crystal SDK for Blockfrost.io API.</p>
+<p align="center">A Crystal SDK for the Blockfrost.io API.</p>
 <p align="center">
   <a href="#getting-started">Getting started</a> •
   <a href="#installation">Installation</a> •
@@ -37,7 +37,7 @@ API key.
   ```yaml
   dependencies:
     blockfrost:
-      github: wout/blockfrost-crystal
+      github: blockfrost/blockfrost-crystal
   ```
 
 2. Run `shards install`
@@ -420,7 +420,7 @@ This will automatically:
 
 ## Contributing
 
-1. Fork it (<https://github.com/wout/blockfrost-crystal/fork>)
+1. Fork it (<https://github.com/blockfrost/blockfrost-crystal/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Test your changes (`crystal spec`, `crystal tool format` and `bin/ameba`)
 4. Commit your changes (`git commit -am 'feat: something new'`)
