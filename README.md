@@ -91,7 +91,7 @@ Blockfrost.configure do |config|
   config.retries_in_concurrent_requests = 5
 
   # sleep between retries in concurrent requests (in ms; min: 0; default: 500)
-  config.validate_sleep_between_retries_ms = 1000
+  config.sleep_between_retries_ms = 1000
 end
 ```
 
